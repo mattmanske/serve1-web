@@ -4,12 +4,13 @@ This is the main web application service for Serve1, built off Rails 4.2 using p
 
 Important gems to be aware of:
 - Rails: application framework (https://github.com/rails/rails)
+- Devise: user authentication (https://github.com/plataformatec/devise)
 
 ### Local Setup
 
-Serve1 uses postgres as it's database. You'll need to have postgres installed and a user with database creation privileges.
+Serve1 uses postgreSQL as it's database. You'll need to have postgreSQL installed and a user with database creation privileges.
 
-Run the following commands in the project directory once you've downloaded the code and have postgres installed:
+Run the following commands in the project directory once you've downloaded the code and have postgreSQL installed:
 
 ```
 $ bundle install
