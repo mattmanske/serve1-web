@@ -8,6 +8,18 @@
     <%= f.email_field :email, autofocus: true %>
   </div>
 
+  <%= f.fields_for :organization do |builder| %>
+    <div class="field">
+      <%= builder.label :name %><br />
+      <%= builder.text_field :name %>
+    </div>
+
+    <div class="field">
+      <%= builder.label :subdomain %><br />
+      <%= builder.text_field :subdomain %>
+    </div>
+  <% end %>
+
   <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
     <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
   <% end %>
