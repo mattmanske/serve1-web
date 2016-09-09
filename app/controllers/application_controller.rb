@@ -27,4 +27,14 @@ class ApplicationController < ActionController::Base
       ]
     )
   end
+
+  private
+
+  def after_sign_in_path_for(resource)
+    dashboard_index_url(subdomain: resource.organization.subdomain)
+  end
+
+  def after_sign_out_path_for(resource)
+    root_url(subdomain: false)
+  end
 end

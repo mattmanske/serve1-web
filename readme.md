@@ -5,6 +5,7 @@ This is the main web application service for Serve1, built off Rails 4.2 using p
 Important gems to be aware of:
 - Rails: application framework (https://github.com/rails/rails)
 - Devise: user authentication (https://github.com/plataformatec/devise)
+- Apartment: multi-tenant management (https://github.com/influitive/apartment)
 
 ### Local Setup
 
