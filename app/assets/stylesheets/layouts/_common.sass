@@ -1,0 +1,58 @@
+/*-----------  Full Spans  -----------*/
+
+.full-span
+  @include full-span()
+
+/*-----------  Content Wrappers  -----------*/
+
+.bounds-wrapper
+  @include bounds-wrapper($gutter)
+
+  position: relative
+
+.compact-wrapper
+  @include bounds-wrapper($padding: $gutterLg $gutter, $max: $blockWidth)
+
+  position: relative
+  text-align: center
+
+.small-wrapper
+  @include bounds-wrapper($padding: $gutterLg $gutter, $max: $smallWidth)
+
+  position: relative
+  text-align: center
+
+/*-----------  Common List Elements  -----------*/
+
+.center-bubble,
+.no-entries
+  @include center-align()
+
+  background: $grayLightest
+  border-radius: $radius
+  color: $white
+  font-size: 1.25em
+  height: 14rem
+  line-height: 125%
+  text-align: center
+  width: 14rem
+
+  span
+    @include center-align()
+    @include bold-font()
+
+    width: 10rem
+
+    .button
+      font-size: 0.8em
+      margin-top: 1rem
+
+      & + .button
+        margin-top: 0.5rem
+
+.no-entries
+  font-size: 1rem
+
+  .button
+    border-color: $grayLightest
+    color: $grayLighter

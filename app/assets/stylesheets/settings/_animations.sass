@@ -1,0 +1,64 @@
+/*-----------  ANIMATION: Flash  -----------*/
+
+@keyframes flash
+  0%
+    transform: scale(1)
+    box-shadow: 0 0 1px $red
+  25%
+    transform: scale(1.15)
+    box-shadow: 0 0 1em $red
+  50%
+    transform: scale(0.85)
+    box-shadow: 0 0 1px $red
+  75%
+    transform: scale(1.33)
+    box-shadow: 0 0 1em $red
+  100%
+    transform: scale(1)
+    box-shadow: 0 0 1px $red
+
+/*-----------  ANIMATION: Bounce  -----------*/
+
+@keyframes bounce
+  0%
+    transform: scale(1)
+  15%
+    transform: scale(0.85)
+  30%
+    transform: scale(1.1)
+  50%
+    transform: scale(0.95)
+  75%
+    transform: scale(1.05)
+  100%
+    transform: scale(1)
+
+/*-----------  ANIMATION: Change Colors  -----------*/
+
+@keyframes change-colors
+  0%
+    background-color: $purple
+  50%
+    background-color: $red
+  100%
+    background-color: $purple
+
+/*-----------  ANIMATION: Swing  -----------*/
+
+@keyframes swing
+  0%
+    margin-top: 0em
+  50%
+    margin-top: -1.5em
+  100%
+    margin-top: 0em
+
+/*-----------  ANIMATION: Fade In  -----------*/
+
+@keyframes fade-in
+  0%
+    opacity: 0
+    margin-top: -2em
+  100%
+    opacity: 1
+    margin-top: 0

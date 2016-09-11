@@ -1,0 +1,83 @@
+/*-----------  Forms, Fieldsets & Legends  -----------*/
+
+form
+  width: 100%
+
+  input[type=submit]
+    float: right
+    font-size: 1.25rem
+    margin-top: $gutterSm
+
+  .devise-actions
+    @include flex-layout($justify: flex-end, $items: baseline)
+
+    color: $purple
+    margin-top: $gutter
+
+    > *:first-child
+      flex: 1 0 auto
+
+      text-align: left
+
+    > input[type=submit]
+      flex: 0 0 auto
+
+      margin-top: 0
+
+  .devise-links
+    border-top: 1px solid $grayLightest
+    margin: $gutterLg -2em 0
+    padding-top: $gutter
+    text-align: center
+
+    a
+      color: $purple
+      opacity: 0.85
+
+      &::before
+        @include inline-block()
+
+        content: '•'
+        padding: 0 0.67em
+
+      &:first-child::before
+        content: ''
+
+/*-----------  Labels  -----------*/
+
+label
+  @include antialiased()
+
+  color: $grayDark
+  display: block
+  font-size: 1em
+  margin: 1.25em 0 0.33em
+  text-align: left
+  text-transform: capitalize
+
+  small
+    color: $gray
+    margin-left: 0.33rem
+    text-transform: lowercase
+
+label + input,
+label + textarea,
+label + .select-wrapper
+  margin-top: 0 !important
+
+/*-----------  Devise Errors  -----------*/
+
+#error_explanation
+  background-color: $red
+  @extend .flash-notifications
+
+  h2
+    color: $white
+    font-size: 1em
+
+  ul
+    padding: 0
+    margin: 0
+
+    li::before
+      content: '• '
