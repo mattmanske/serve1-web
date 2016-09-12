@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160911212514) do
+ActiveRecord::Schema.define(version: 20160912175239) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,12 +25,27 @@ ActiveRecord::Schema.define(version: 20160911212514) do
 
   add_index "counties", ["state_id"], name: "index_counties_on_state_id", using: :btree
 
+  create_table "organization_users", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "role",       default: 0, null: false
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
   create_table "organizations", force: :cascade do |t|
     t.string   "name",       null: false
     t.string   "subdomain",  null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string   "address"
+    t.string   "phone"
+    t.string   "email"
+    t.integer  "state_id"
+    t.integer  "county_id"
   end
+
+  add_index "organizations", ["county_id"], name: "index_organizations_on_county_id", using: :btree
+  add_index "organizations", ["state_id"], name: "index_organizations_on_state_id", using: :btree
 
   create_table "states", force: :cascade do |t|
     t.string   "name"
@@ -41,6 +56,8 @@ ActiveRecord::Schema.define(version: 20160911212514) do
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
+    t.string   "first_name",             default: "", null: false
+    t.string   "last_name",              default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
@@ -60,4 +77,6 @@ ActiveRecord::Schema.define(version: 20160911212514) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   add_foreign_key "counties", "states"
+  add_foreign_key "organizations", "counties"
+  add_foreign_key "organizations", "states"
 end

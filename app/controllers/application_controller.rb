@@ -10,9 +10,11 @@ class ApplicationController < ActionController::Base
       :sign_up,
       keys: [
         :email,
+        :first_name,
+        :last_name,
         :password,
         :password_confirmation,
-        { organization_attributes: [ :name, :subdomain ] }
+        { organization_attributes: [ :name, :subdomain, :address, :state_id, :county_id, :phone, :email ] }
       ]
     )
 
@@ -23,7 +25,8 @@ class ApplicationController < ActionController::Base
         :password,
         :current_password,
         :password_confirmation,
-        { organization_attributes: [ :id, :name ] }
+        { user_data_attributes: [ :id, :first_name, :last_name ] },
+        { organization_attributes: [ :id, :name, :address, :state_id, :county_id, :phone, :email ] }
       ]
     )
   end

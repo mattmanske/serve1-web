@@ -8,15 +8,33 @@ section
       = f.label :email
       = f.email_field :email, autofocus: true, placeholder: 'me@email.com'
 
+      = f.label :first_name
+      = f.text_field :first_name
+
+      = f.label :last_name
+      = f.text_field :last_name
+
       - if devise_mapping.confirmable? && resource.pending_reconfirmation?
         div Currently waiting confirmation for: <%= resource.unconfirmed_email
 
-      = f.fields_for :organization do |builder|
-        = builder.label :name, 'Organization Name'
-        = builder.text_field :name
+      = f.fields_for :organization do |org|
+        = org.label :name, 'Organization Name'
+        = org.text_field :name
 
-        = builder.label :subdomain, 'Organization Subdomain'
-        = builder.text_field :subdomain
+        = org.label :state_id, 'Organization State'
+        = org.collection_select(:state_id, State.where(id: 60), :id, :name)
+
+        = org.label :county_id, 'Organization County'
+        = org.collection_select(:county_id, County.where(state: 60).order(:name), :id, :name)
+
+        = org.label :address, 'Organization Address'
+        = org.text_field :address
+
+        = org.label :phone, 'Organization Contact Phone'
+        = org.text_field :phone
+
+        = org.label :email, 'Organization Primary Contact Email'
+        = org.text_field :email
 
       - if @minimum_password_length
         = f.label :password do
@@ -35,7 +53,6 @@ section
 
       .devise-actions
         = f.submit "Update"
-        = button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete
 
       .devise-links
         = render "devise/shared/links"
