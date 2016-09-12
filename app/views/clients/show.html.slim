@@ -1,0 +1,21 @@
+p#notice = notice
+
+p
+  strong Key:
+  = @client.key
+p
+  strong Name:
+  = @client.name
+p
+  strong Email:
+  = @client.email
+p
+  strong Address:
+  = @client.address
+p
+  strong Phone:
+  = @client.phone
+
+= link_to 'Edit', edit_client_path(@client)
+'|
+= link_to 'Back', clients_path

@@ -1,0 +1,21 @@
+p#notice = notice
+
+p
+  strong Client:
+  = @client_contact.client
+p
+  strong Name:
+  = @client_contact.name
+p
+  strong Email:
+  = @client_contact.email
+p
+  strong Address:
+  = @client_contact.address
+p
+  strong Phone:
+  = @client_contact.phone
+
+= link_to 'Edit', edit_client_contact_path(@client_contact)
+'|
+= link_to 'Back', client_contacts_path

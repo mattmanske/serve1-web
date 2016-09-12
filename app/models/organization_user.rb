@@ -1,8 +1,7 @@
 class OrganizationUser < ActiveRecord::Base
-  enum role: { server: 0, admin: 1 }
+  enum role: { server: 0, manager: 1, admin: 2 }
 
-  validates :user_id, presence: true
-  validates :user_id, uniqueness: true
+  validates :user_id, presence: true, uniqueness: true
 
   before_create :switch_tenant
 

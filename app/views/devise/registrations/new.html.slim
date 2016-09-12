@@ -10,11 +10,8 @@ section
       = f.label :email
       = f.email_field :email, autofocus: true, placeholder: 'me@email.com'
 
-      = f.label :first_name
-      = f.text_field :first_name
-
-      = f.label :last_name
-      = f.text_field :last_name
+      = f.label :name
+      = f.text_field :name
 
       = f.fields_for :organization do |org|
         = org.label :name, 'Organization Name'

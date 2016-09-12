@@ -11,10 +11,34 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160912175239) do
+ActiveRecord::Schema.define(version: 20160912191131) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "client_contacts", force: :cascade do |t|
+    t.integer  "client_id"
+    t.string   "name",       null: false
+    t.string   "email",      null: false
+    t.string   "address"
+    t.string   "phone"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "client_contacts", ["client_id"], name: "index_client_contacts_on_client_id", using: :btree
+
+  create_table "clients", force: :cascade do |t|
+    t.string   "key",        null: false
+    t.string   "name",       null: false
+    t.string   "email",      null: false
+    t.string   "address"
+    t.string   "phone"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "clients", ["key"], name: "index_clients_on_key", unique: true, using: :btree
 
   create_table "counties", force: :cascade do |t|
     t.string   "name"
@@ -56,8 +80,7 @@ ActiveRecord::Schema.define(version: 20160912175239) do
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
-    t.string   "first_name",             default: "", null: false
-    t.string   "last_name",              default: "", null: false
+    t.string   "name",                   default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
@@ -76,6 +99,7 @@ ActiveRecord::Schema.define(version: 20160912175239) do
   add_index "users", ["organization_id"], name: "index_users_on_organization_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "client_contacts", "clients"
   add_foreign_key "counties", "states"
   add_foreign_key "organizations", "counties"
   add_foreign_key "organizations", "states"

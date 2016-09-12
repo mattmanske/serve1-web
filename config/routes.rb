@@ -7,6 +7,8 @@ end
 
 Rails.application.routes.draw do
 
+  resources :client_contacts
+  resources :clients
   resources :dashboard
 
   devise_for :users

@@ -8,11 +8,8 @@ section
       = f.label :email
       = f.email_field :email, autofocus: true, placeholder: 'me@email.com'
 
-      = f.label :first_name
-      = f.text_field :first_name
-
-      = f.label :last_name
-      = f.text_field :last_name
+      = f.label :name
+      = f.text_field :name
 
       - if devise_mapping.confirmable? && resource.pending_reconfirmation?
         div Currently waiting confirmation for: <%= resource.unconfirmed_email
