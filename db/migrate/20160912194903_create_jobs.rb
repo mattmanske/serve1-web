@@ -6,7 +6,7 @@ class CreateJobs < ActiveRecord::Migration
       t.references :case, index: true, foreign_key: true
 
       t.integer :status, null: false, default: 0
-      
+
       t.datetime :date_sent
       t.datetime :date_received
       t.monetize :amount
@@ -14,5 +14,7 @@ class CreateJobs < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+
+    add_index :jobs, [:key, :case_id], unique: true
   end
 end

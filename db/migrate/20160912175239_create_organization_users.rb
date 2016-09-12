@@ -6,5 +6,7 @@ class CreateOrganizationUsers < ActiveRecord::Migration
 
       t.timestamps null: false
     end
+
+    add_index :organization_users, :user_id, unique: true
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160912194903) do
+ActiveRecord::Schema.define(version: 20160912204336) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(version: 20160912194903) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "counties", ["name", "state_id"], name: "index_counties_on_name_and_state_id", unique: true, using: :btree
   add_index "counties", ["state_id"], name: "index_counties_on_state_id", using: :btree
 
   create_table "jobs", force: :cascade do |t|
@@ -84,6 +85,18 @@ ActiveRecord::Schema.define(version: 20160912194903) do
   end
 
   add_index "jobs", ["case_id"], name: "index_jobs_on_case_id", using: :btree
+  add_index "jobs", ["key", "case_id"], name: "index_jobs_on_key_and_case_id", unique: true, using: :btree
+
+  create_table "municipalities", force: :cascade do |t|
+    t.integer  "county_id"
+    t.string   "name"
+    t.string   "category"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "municipalities", ["county_id"], name: "index_municipalities_on_county_id", using: :btree
+  add_index "municipalities", ["name", "county_id", "category"], name: "index_municipalities_on_name_and_county_id_and_category", unique: true, using: :btree
 
   create_table "organization_users", force: :cascade do |t|
     t.integer  "user_id"
@@ -91,6 +104,8 @@ ActiveRecord::Schema.define(version: 20160912194903) do
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
   end
+
+  add_index "organization_users", ["user_id"], name: "index_organization_users_on_user_id", unique: true, using: :btree
 
   create_table "organizations", force: :cascade do |t|
     t.string   "name",       null: false
@@ -142,6 +157,7 @@ ActiveRecord::Schema.define(version: 20160912194903) do
   add_foreign_key "client_contacts", "clients"
   add_foreign_key "counties", "states"
   add_foreign_key "jobs", "cases"
+  add_foreign_key "municipalities", "counties"
   add_foreign_key "organizations", "counties"
   add_foreign_key "organizations", "states"
 end
