@@ -1,0 +1,46 @@
+= form_for @service do |f|
+  - if @service.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@service.errors.count, "error")} prohibited this service from being saved:"
+      ul
+        - @service.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :job
+    = f.collection_select(:status, Job.all(), :id, :name)
+  .field
+    = f.label :party
+    = f.collection_select(:status, Party.all(), :id, :name)
+  .field
+    = f.label :status
+    = f.collection_select(:status, Service.statuses.keys, :to_s, :titlecase)
+  .field
+    = f.label :service_type
+    = f.collection_select(:service_type, Service.service_types.keys, :to_s, :titlecase)
+  .field
+    = f.label :person_name
+    = f.text_field :person_name
+  .field
+    = f.label :person_title
+    = f.text_field :person_title
+  .field
+    = f.label :person_capacity
+    = f.text_field :person_capacity
+  .field
+    = f.label :service_date
+    = f.datetime_select :service_date
+  .field
+    = f.label :attempts
+    = f.number_field :attempts
+  .field
+    = f.label :mileage
+    = f.number_field :mileage
+  .field
+    = f.label :payment_cents
+    = f.text_field :payment_cents
+  .field
+    = f.label :notes
+    = f.text_area :notes
+
+  .actions = f.submit

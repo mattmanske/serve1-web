@@ -1,0 +1,25 @@
+= form_for @affidavit do |f|
+  - if @affidavit.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@affidavit.errors.count, "error")} prohibited this affidavit from being saved:"
+      ul
+        - @affidavit.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :service_id
+    = f.collection_select(:service_id, Service.all(), :id, :name)
+  .field
+    = f.label :caption_type
+    = f.collection_select(:caption_type, Affidavit.caption_types.keys, :to_s, :titlecase)
+  .field
+    = f.label :court
+    = f.text_field :court
+  .field
+    = f.label :state
+    = f.collection_select(:state_id, State.where(id: 60), :id, :name)
+  .field
+    = f.label :url
+    = f.text_field :url
+
+  .actions = f.submit

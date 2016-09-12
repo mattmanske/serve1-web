@@ -10,8 +10,8 @@
     = f.label :key
     = f.text_field :key
   .field
-    = f.label :case
-    = f.text_field :case
+    = f.label :case_id
+    = f.collection_select(:case_id, Case.all(), :id, :name)
   .field
     = f.label :status
     = f.collection_select(:status, Job.statuses.keys, :to_s, :titlecase)
@@ -22,10 +22,10 @@
     = f.label :date_received
     = f.datetime_select :date_received
   .field
-    = f.label :amount
-    = f.text_field :amount
+    = f.label :amount_cents
+    = f.text_field :amount_cents
   .field
     = f.label :notes
     = f.text_area :notes
-    
+
   .actions = f.submit

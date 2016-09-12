@@ -7,6 +7,10 @@ end
 
 Rails.application.routes.draw do
 
+  resources :documents
+  resources :affidavits
+  resources :services
+  resources :parties
   resources :jobs
   resources :cases
   resources :client_contacts

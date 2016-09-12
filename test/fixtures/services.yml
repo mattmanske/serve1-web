@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  job_id: 
+  party_id: 
+  status: 1
+  service_type: 1
+  service_date: 2016-09-12 16:39:19
+  person_name: MyString
+  person_title: MyString
+  person_capacity: MyString
+  attempts: 1
+  mileage: 1
+  payment: 
+  notes: MyText
+
+two:
+  job_id: 
+  party_id: 
+  status: 1
+  service_type: 1
+  service_date: 2016-09-12 16:39:19
+  person_name: MyString
+  person_title: MyString
+  person_capacity: MyString
+  attempts: 1
+  mileage: 1
+  payment: 
+  notes: MyText

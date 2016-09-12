@@ -1,0 +1,43 @@
+h1 Listing services
+
+table
+  thead
+    tr
+      th Job
+      th Party
+      th Status
+      th Service type
+      th Service date
+      th Person name
+      th Person title
+      th Person capacity
+      th Attempts
+      th Mileage
+      th Payment
+      th Notes
+      th
+      th
+      th
+
+  tbody
+    - @services.each do |service|
+      tr
+        td = service.job
+        td = service.party
+        td = service.status
+        td = service.service_type
+        td = service.service_date
+        td = service.person_name
+        td = service.person_title
+        td = service.person_capacity
+        td = service.attempts
+        td = service.mileage
+        td = service.payment
+        td = service.notes
+        td = link_to 'Show', service
+        td = link_to 'Edit', edit_service_path(service)
+        td = link_to 'Destroy', service, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Service', new_service_path

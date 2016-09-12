@@ -1,0 +1,21 @@
+p#notice = notice
+
+p
+  strong Service:
+  = @affidavit.service
+p
+  strong Caption type:
+  = @affidavit.caption_type
+p
+  strong Court:
+  = @affidavit.court
+p
+  strong State:
+  = @affidavit.state
+p
+  strong Url:
+  = @affidavit.url
+
+= link_to 'Edit', edit_affidavit_path(@affidavit)
+'|
+= link_to 'Back', affidavits_path

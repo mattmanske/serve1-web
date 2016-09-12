@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  service_id: 
+  caption_type: 1
+  court: MyString
+  state_id: 
+  url: MyString
+
+two:
+  service_id: 
+  caption_type: 1
+  court: MyString
+  state_id: 
+  url: MyString

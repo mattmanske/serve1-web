@@ -1,0 +1,2 @@
+module AffidavitsHelper
+end

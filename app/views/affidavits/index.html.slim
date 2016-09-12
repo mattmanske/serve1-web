@@ -1,0 +1,29 @@
+h1 Listing affidavits
+
+table
+  thead
+    tr
+      th Service
+      th Caption type
+      th Court
+      th State
+      th Url
+      th
+      th
+      th
+
+  tbody
+    - @affidavits.each do |affidavit|
+      tr
+        td = affidavit.service
+        td = affidavit.caption_type
+        td = affidavit.court
+        td = affidavit.state
+        td = affidavit.url
+        td = link_to 'Show', affidavit
+        td = link_to 'Edit', edit_affidavit_path(affidavit)
+        td = link_to 'Destroy', affidavit, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Affidavit', new_affidavit_path

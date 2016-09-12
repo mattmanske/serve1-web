@@ -1,0 +1,15 @@
+p#notice = notice
+
+p
+  strong Service:
+  = @document.service
+p
+  strong Title:
+  = @document.title
+p
+  strong Document type:
+  = @document.document_type
+
+= link_to 'Edit', edit_document_path(@document)
+'|
+= link_to 'Back', documents_path

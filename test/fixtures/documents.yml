@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  service_id: 
+  title: MyString
+  document_type: 1
+
+two:
+  service_id: 
+  title: MyString
+  document_type: 1

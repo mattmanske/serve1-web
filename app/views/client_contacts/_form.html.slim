@@ -7,8 +7,8 @@
           li = message
 
   .field
-    = f.label :client
-    = f.text_field :client
+    = f.label :client_id
+    = f.collection_select(:client_id, Client.all(), :id, :name)
   .field
     = f.label :name
     = f.text_field :name
@@ -21,5 +21,5 @@
   .field
     = f.label :phone
     = f.text_field :phone
-    
+
   .actions = f.submit

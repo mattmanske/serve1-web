@@ -1,0 +1,42 @@
+p#notice = notice
+
+p
+  strong Job:
+  = @service.job
+p
+  strong Party:
+  = @service.party
+p
+  strong Status:
+  = @service.status
+p
+  strong Service type:
+  = @service.service_type
+p
+  strong Service date:
+  = @service.service_date
+p
+  strong Person name:
+  = @service.person_name
+p
+  strong Person title:
+  = @service.person_title
+p
+  strong Person capacity:
+  = @service.person_capacity
+p
+  strong Attempts:
+  = @service.attempts
+p
+  strong Mileage:
+  = @service.mileage
+p
+  strong Payment:
+  = @service.payment
+p
+  strong Notes:
+  = @service.notes
+
+= link_to 'Edit', edit_service_path(@service)
+'|
+= link_to 'Back', services_path
