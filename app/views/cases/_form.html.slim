@@ -1,0 +1,40 @@
+= form_for @case do |f|
+  - if @case.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@case.errors.count, "error")} prohibited this case from being saved:"
+      ul
+        - @case.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :key
+    = f.text_field :key
+  .field
+    = f.label :client
+    = f.text_field :client
+  .field
+    = f.label :client_contact
+    = f.text_field :client_contact
+  .field
+    = f.label :state
+    = f.collection_select(:state_id, State.where(id: 60), :id, :name)
+  .field
+    = f.label :county
+    = f.collection_select(:county_id, County.where(state: 60).order(:name), :id, :name)
+  .field
+    = f.label :court_type
+    = f.collection_select(:court_type, Case.court_types.keys, :to_s, :titlecase)
+  .field
+    = f.label :plantiff
+    = f.text_field :plantiff
+  .field
+    = f.label :plantiff_et_al
+    = f.check_box :plantiff_et_al
+  .field
+    = f.label :defendant
+    = f.text_field :defendant
+  .field
+    = f.label :defendant_et_al
+    = f.check_box :defendant_et_al
+
+  .actions = f.submit

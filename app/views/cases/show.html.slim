@@ -1,0 +1,36 @@
+p#notice = notice
+
+p
+  strong Key:
+  = @case.key
+p
+  strong Client:
+  = @case.client
+p
+  strong Client contact:
+  = @case.client_contact
+p
+  strong State:
+  = @case.state
+p
+  strong County:
+  = @case.county
+p
+  strong Court type:
+  = @case.court_type
+p
+  strong Plantiff:
+  = @case.plantiff
+p
+  strong Plantiff et al:
+  = @case.plantiff_et_al
+p
+  strong Defendant:
+  = @case.defendant
+p
+  strong Defendant et al:
+  = @case.defendant_et_al
+
+= link_to 'Edit', edit_case_path(@case)
+'|
+= link_to 'Back', cases_path

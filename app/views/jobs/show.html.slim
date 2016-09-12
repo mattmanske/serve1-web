@@ -1,0 +1,27 @@
+p#notice = notice
+
+p
+  strong Key:
+  = @job.key
+p
+  strong Case:
+  = @job.case
+p
+  strong Status:
+  = @job.status
+p
+  strong Date sent:
+  = @job.date_sent
+p
+  strong Date received:
+  = @job.date_received
+p
+  strong Amount:
+  = @job.amount
+p
+  strong Notes:
+  = @job.notes
+
+= link_to 'Edit', edit_job_path(@job)
+'|
+= link_to 'Back', jobs_path

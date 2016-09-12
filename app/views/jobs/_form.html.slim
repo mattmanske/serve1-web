@@ -1,0 +1,31 @@
+= form_for @job do |f|
+  - if @job.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@job.errors.count, "error")} prohibited this job from being saved:"
+      ul
+        - @job.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :key
+    = f.text_field :key
+  .field
+    = f.label :case
+    = f.text_field :case
+  .field
+    = f.label :status
+    = f.collection_select(:status, Job.statuses.keys, :to_s, :titlecase)
+  .field
+    = f.label :date_sent
+    = f.datetime_select :date_sent
+  .field
+    = f.label :date_received
+    = f.datetime_select :date_received
+  .field
+    = f.label :amount
+    = f.text_field :amount
+  .field
+    = f.label :notes
+    = f.text_area :notes
+    
+  .actions = f.submit

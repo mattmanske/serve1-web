@@ -1,0 +1,33 @@
+h1 Listing jobs
+
+table
+  thead
+    tr
+      th Key
+      th Case
+      th Status
+      th Date sent
+      th Date received
+      th Amount
+      th Notes
+      th
+      th
+      th
+
+  tbody
+    - @jobs.each do |job|
+      tr
+        td = job.key
+        td = job.case
+        td = job.status
+        td = job.date_sent
+        td = job.date_received
+        td = job.amount
+        td = job.notes
+        td = link_to 'Show', job
+        td = link_to 'Edit', edit_job_path(job)
+        td = link_to 'Destroy', job, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Job', new_job_path

@@ -11,10 +11,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160912191131) do
+ActiveRecord::Schema.define(version: 20160912194903) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "cases", force: :cascade do |t|
+    t.string   "key",                               null: false
+    t.integer  "client_id"
+    t.integer  "client_contact_id"
+    t.integer  "state_id"
+    t.integer  "county_id"
+    t.integer  "court_type",                        null: false
+    t.string   "plantiff",                          null: false
+    t.boolean  "plantiff_et_al",    default: false, null: false
+    t.string   "defendant",                         null: false
+    t.boolean  "defendant_et_al",   default: false, null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
+
+  add_index "cases", ["client_contact_id"], name: "index_cases_on_client_contact_id", using: :btree
+  add_index "cases", ["client_id"], name: "index_cases_on_client_id", using: :btree
+  add_index "cases", ["county_id"], name: "index_cases_on_county_id", using: :btree
+  add_index "cases", ["key"], name: "index_cases_on_key", unique: true, using: :btree
+  add_index "cases", ["state_id"], name: "index_cases_on_state_id", using: :btree
 
   create_table "client_contacts", force: :cascade do |t|
     t.integer  "client_id"
@@ -48,6 +69,21 @@ ActiveRecord::Schema.define(version: 20160912191131) do
   end
 
   add_index "counties", ["state_id"], name: "index_counties_on_state_id", using: :btree
+
+  create_table "jobs", force: :cascade do |t|
+    t.string   "key",                             null: false
+    t.integer  "case_id"
+    t.integer  "status",          default: 0,     null: false
+    t.datetime "date_sent"
+    t.datetime "date_received"
+    t.integer  "amount_cents",    default: 0,     null: false
+    t.string   "amount_currency", default: "USD", null: false
+    t.text     "notes"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+  end
+
+  add_index "jobs", ["case_id"], name: "index_jobs_on_case_id", using: :btree
 
   create_table "organization_users", force: :cascade do |t|
     t.integer  "user_id"
@@ -99,8 +135,13 @@ ActiveRecord::Schema.define(version: 20160912191131) do
   add_index "users", ["organization_id"], name: "index_users_on_organization_id", using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
+  add_foreign_key "cases", "client_contacts"
+  add_foreign_key "cases", "clients"
+  add_foreign_key "cases", "counties"
+  add_foreign_key "cases", "states"
   add_foreign_key "client_contacts", "clients"
   add_foreign_key "counties", "states"
+  add_foreign_key "jobs", "cases"
   add_foreign_key "organizations", "counties"
   add_foreign_key "organizations", "states"
 end
