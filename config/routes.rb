@@ -1,6 +1,6 @@
 class SubdomainConstraint
   def self.matches?(request)
-    subdomains = %w{ www admin }
+    subdomains = Rails.application.secrets.excluded_subdomains
     request.subdomain.present? && !subdomains.include?(request.subdomain)
   end
 end

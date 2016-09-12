@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+ruby '2.3.1'
 
 gem 'apartment',          '~> 1.2.0'
 gem 'autoprefixer-rails', '~> 6.4.1'
@@ -6,12 +7,12 @@ gem 'bourbon',            '~> 5.0.0.beta.6'
 gem 'coffee-rails',       '~> 4.1.0'
 gem 'devise',             '~> 4.2.0'
 gem 'jquery-rails'
-gem 'figaro'
 gem 'flutie',             '~> 2.0'
 gem 'money-rails',        '~> 1.7.0'
 gem 'neat',               '~> 2.0.0.beta.1'
 gem 'normalize-rails',    '~> 4.1.1'
 gem 'pg',                 '~> 0.15'
+gem 'puma',               '~> 3.6.0'
 gem 'rails',              '4.2.7.1'
 gem 'sass-rails',         '~> 5.0.4'
 gem 'sdoc',               '~> 0.4.0', group: :doc
@@ -25,5 +26,9 @@ end
 
 group :development do
   gem 'spring'
-  gem 'web-console',      '~> 2.0'
+  gem 'web-console','~> 2.0'
+end
+
+group :production do
+  gem 'rails_12factor'
 end

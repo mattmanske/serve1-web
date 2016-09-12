@@ -10,20 +10,28 @@ Important gems to be aware of:
 ### Local Setup
 
 Serve1 uses postgreSQL as it's database. You'll need to have postgreSQL installed and a user with database creation privileges.
+Once you have a user setup in postgres, setup your initial environment variables like so:
 
-Run the following commands in the project directory once you've downloaded the code and have postgreSQL installed:
+```
+echo "DATABASE_HOST=localhost" >> .env
+echo "DATABASE_USER=your_chosen_username" >> .env
+echo "DATABASE_PASSWORD=your_chosen_password" >> .env
+echo "SESSION_DOMAIN=lvh.me" >> .env
+echo "RACK_ENV=development" >> .env
+echo "PORT=3000" >> .env
+```
+
+Run the following commands in the project directory once you've downloaded the code and have postgreSQL installed.
 
 ```
 $ bundle install
-$ cp config/application.yml.sample config/application.yml
-```
-
-Fill out the database keys in the newly created `config/application.yml` file, then run:
-
-```
 $ rake db:create db:migrate db:seed
 ```
 
-You should now have a functioning application.
+Serve1 uses Puma as the default webserver instead of the rails default, webrick. Start up your server with: _(may need to run `gem install foreman` first)_
+
+```
+foreman start
+```
 
 _**NOTE:** This application relies on subdomains to identify the proper data tenants. Instead of visiting `http://localhost:3000` for your local server, you'll need to use `http://lvh.me:3000`_

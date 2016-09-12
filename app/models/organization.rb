@@ -7,7 +7,7 @@ class Organization < ActiveRecord::Base
   validates :name,      presence: true
   validates :state,     presence: true
   validates :county,    presence: true
-  validates :subdomain, presence: true, uniqueness: { case_sensitive: false }, exclusion: { in: %w(www admin), message: "%{value} is reserved." }
+  validates :subdomain, presence: true, uniqueness: { case_sensitive: false }, exclusion: { in: Rails.application.secrets.excluded_subdomains, message: "%{value} is reserved." }
 
   after_create :create_tenant
 
