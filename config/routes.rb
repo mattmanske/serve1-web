@@ -1,23 +1,28 @@
-class SubdomainConstraint
-  def self.matches?(request)
-    subdomains = Rails.application.secrets.excluded_subdomains
-    request.subdomain.present? && !subdomains.include?(request.subdomain)
-  end
-end
-
 Rails.application.routes.draw do
 
-  resources :documents
-  resources :affidavits
-  resources :services
-  resources :parties
-  resources :jobs
-  resources :cases
-  resources :client_contacts
-  resources :clients
-  resources :dashboard
+  devise_for :users, path: '', :path_names => {
+    :sign_in      => 'login',
+    :sign_out     => 'logout',
+    :sign_up      => 'register',
+    :registration => 'account',
+    :password     => 'user/password'
+  }
 
-  devise_for :users
-  root 'welcome#index'
+  authenticate :user do
+    resources :documents
+    resources :affidavits
+    resources :services
+    resources :parties
+    resources :jobs
+    resources :cases
+    resources :client_contacts
+    resources :clients
+  end
+
+  authenticated :user do
+    root :to => 'dashboard#index', :as => :organization_root
+  end
+
+  root :to => 'welcome#index'
 
 end

@@ -1,6 +1,5 @@
 class User < ActiveRecord::Base
   belongs_to :organization
-  accepts_nested_attributes_for :organization
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
@@ -9,6 +8,10 @@ class User < ActiveRecord::Base
   validates :email, presence: true, uniqueness: { scope: :organization_id }
 
   after_create :create_organization_user_record
+
+  def tenant
+    self.organization.subdomain
+  end
 
   private
 

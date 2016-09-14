@@ -22,6 +22,7 @@ gem 'uglifier',           '>= 1.3.0'
 
 group :development, :test do
   gem 'pry'
+  gem 'foreman', '~> 0.76.0'
 end
 
 group :development do

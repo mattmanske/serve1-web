@@ -1,9 +1,19 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
+  before_action :enforce_subdomains
   before_action :configure_permitted_parameters, if: :devise_controller?
 
+  def default_url_options
+    { subdomain: user_signed_in? ? current_user.tenant : 'www' }
+  end
+
   protected
+
+  def enforce_subdomains
+    tenant = user_signed_in? ? current_user.tenant : 'www'
+    redirect_to(subdomain: tenant) unless request.subdomain == tenant
+  end
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(
@@ -33,10 +43,10 @@ class ApplicationController < ActionController::Base
   private
 
   def after_sign_in_path_for(resource)
-    dashboard_index_url(subdomain: resource.organization.subdomain)
+    organization_root_url()
   end
 
   def after_sign_out_path_for(resource)
-    root_url(subdomain: false)
+    root_url()
   end
 end

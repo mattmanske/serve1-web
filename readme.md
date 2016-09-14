@@ -25,10 +25,10 @@ Run the following commands in the project directory once you've downloaded the c
 
 ```
 $ bundle install
-$ rake db:create db:migrate db:seed
+$ foreman run rake db:create db:migrate db:seed
 ```
 
-Serve1 uses Puma as the default webserver instead of the rails default, webrick. Start up your server with: _(may need to run `gem install foreman` first)_
+Serve1 uses Puma as the default webserver instead of the rails default, webrick. Start up your server with:
 
 ```
 foreman start
