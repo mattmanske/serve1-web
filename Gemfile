@@ -14,7 +14,7 @@ gem 'normalize-rails',    '~> 4.1.1'
 gem 'pg',                 '~> 0.15'
 gem 'puma',               '~> 3.6.0'
 gem 'rails',              '4.2.7.1'
-gem 'sass-rails',         '~> 5.0.4'
+gem 'sassc-rails',        '~> 1.3.0'
 gem 'sdoc',               '~> 0.4.0', group: :doc
 gem 'slim-rails',         '~> 3.0.1'
 gem 'turbolinks'

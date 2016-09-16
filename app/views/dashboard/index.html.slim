@@ -1,11 +1,13 @@
-h1= "#{current_user.organization.name} Dashboard"
+section
+  .block-wrapper
+    h1= "#{current_user.organization.name} Dashboard"
 
-ul
-  li= link_to "Clients", clients_path
-  li= link_to "Client Contacts", client_contacts_path
-  li= link_to "Cases", cases_path
-  li= link_to "Jobs", jobs_path
-  li= link_to "Parties", parties_path
-  li= link_to "Services", services_path
-  li= link_to "Affidavits", affidavits_path
-  li= link_to "Documents", documents_path
+    ul
+      li= link_to "Clients", clients_path
+      li= link_to "Client Contacts", client_contacts_path
+      li= link_to "Cases", cases_path
+      li= link_to "Jobs", jobs_path
+      li= link_to "Parties", parties_path
+      li= link_to "Services", services_path
+      li= link_to "Affidavits", affidavits_path
+      li= link_to "Documents", documents_path

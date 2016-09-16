@@ -1,0 +1,32 @@
+body
+  display: flex
+  min-height: 100vh
+  flex-direction: column
+
+  > header
+    flex: 0 0 auto
+
+  > .container
+    flex: 1 0 auto
+    padding: 2rem 4rem 4rem
+
+  > footer
+    flex: 0 0 auto
+    margin-bottom: 0 !important
+    border-top: 1px solid lightgray !important
+
+    .navbar-text
+      margin-left: 0
+
+.container
+  max-width: 65rem
+
+input, select, textarea
+  display: block
+
+  &[type='checkbox']
+    margin-right: 1rem
+    display: inline-block
+
+label
+  margin-top: 1rem
