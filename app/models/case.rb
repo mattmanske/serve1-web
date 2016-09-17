@@ -1,5 +1,5 @@
 class Case < ActiveRecord::Base
-  enum court_type: { circuit: 0, district: 1 }
+  enum court_type: { municipal: 0, circuit: 1, district: 2, court_of_appeals: 3, supreme_court: 4, dept_of_workforce_development: 5 }
 
   has_many :jobs, inverse_of: :cases, dependent: :destroy
 
@@ -8,8 +8,7 @@ class Case < ActiveRecord::Base
   belongs_to :state
   belongs_to :county
 
-  validates :plantiff,   presence: true
-  validates :defendant,  presence: true
-  validates :court_type, presence: true
-  validates :key,        presence: true, uniqueness: { case_sensitive: false }
+  validates :plantiff,  presence: true
+  validates :defendant, presence: true
+  validates :key,       presence: true, uniqueness: { case_sensitive: false }
 end

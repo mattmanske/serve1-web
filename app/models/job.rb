@@ -1,5 +1,5 @@
 class Job < ActiveRecord::Base
-  enum status: { active: 0, closed: 1 }
+  enum status: { received: 0, dispatched: 1, completed: 2, sent: 3, closed: 4 }
 
   belongs_to :case
   has_many :services

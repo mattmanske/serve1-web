@@ -1,7 +1,9 @@
 //-----------  Imports  -----------//
 
-import React          from 'react'
-import { FormsyText } from 'formsy-material-ui'
+import _                 from 'lodash'
+
+import React             from 'react'
+import { Input, Select } from 'formsy-react-components'
 
 //-----------  Class Setup  -----------//
 
@@ -10,58 +12,113 @@ class RegistrationFrom extends React.Component {
   displayName: 'RegistrationFrom'
 
   static propTypes = {
-    user: React.PropTypes.object.isRequired
+    resource   : React.PropTypes.object.isRequired,
+    selections : React.PropTypes.object.isRequired,
+  }
+
+  state = {
+    subdomain: ''
+  }
+
+  //-----------  Event Handlers  -----------//
+
+  _updateSubdomain = (name, value) => {
+    this.setState({ subdomain: _.kebabCase(value) })
   }
 
   //-----------  HTML Element Render  -----------//
 
   render(){
-    console.log(this.props.user);
+    const states = this.props.selections.states
+    const counties = this.props.selections.counties
 
     return (
       <div className="child-form registration-form">
+        <h1>Sign Up</h1>
 
-        {/* Email Field */}
-        <FormsyText required
-          type="email"
-          name="email"
-          floatingLabelText="Email"
-          value={this.props.user.email}
-          validations="isEmail"
-          validationError="Must enter a valid email address."
-        />
+        <fieldset>
+          <legend>Account Information</legend>
 
-        {/* Name Field */}
-        <FormsyText required
-          type="text"
-          name="name"
-          floatingLabelText="Full Name"
-          value={this.props.user.name}
-          validations="isExisty"
-          validationError="Must enter a name."
-        />
+          {/* User Email */}
+          <Input required
+            type="email"
+            label="Email"
+            name="user.email"
+            validations="isEmail"
+            validationError="Must enter a valid email address."
+          />
 
-        {/* Password Field */}
-        <FormsyText required
-          type="password"
-          name="password"
-          floatingLabelText="Password"
-          value={this.props.user.password}
-          autoComplete="off"
-          validations="minLength:6"
-          validationError="Passowrds must be at least 6 character."
-        />
+        {/* User Name */}
+          <Input required
+            type="text"
+            label="Full Name"
+            name="user.name"
+            validations="isExisty"
+            validationError="Must enter a name."
+          />
 
-        {/* Password Confirmation */}
-        <FormsyText required
-          type="password"
-          name="password_confirmation"
-          floatingLabelText="Confirm Password"
-          value={this.props.user.password_confirmation}
-          autoComplete="off"
-          validations="equalsField:password"
-          validationError="Passowrds don't match."
-        />
+          {/* Password */}
+          <Input required
+            autoComplete="off"
+            type="password"
+            label="Password"
+            name="user.password"
+            validations="minLength:6"
+            validationError="Passowrds must be at least 6 character."
+          />
+
+          {/* Password Confirmation */}
+          <Input required
+            autoComplete="off"
+            type="password"
+            label="Confirm Password"
+            name="user.password_confirmation"
+            validations="equalsField:user.password"
+            validationError="Passowrds don't match."
+          />
+        </fieldset>
+
+        <fieldset>
+          <legend>Organization Information</legend>
+
+          {/* Organization Name */}
+          <Input required
+            type="text"
+            label="Name"
+            name="organization.name"
+            validations="isExisty"
+            validationError="Must enter a name."
+            onChange={this._updateSubdomain}
+          />
+
+          {/* Organization Subdomain */}
+          <Input required disabled
+            type="text"
+            label="Subdomain"
+            name="organization.subdomain"
+            validations="isExisty"
+            validationError="Must be a valid url string."
+            value={this.state.subdomain}
+            addonBefore={'https://'}
+            addonAfter={'.serve1.com'}
+          />
+
+          {/* Organization State */}
+          <Select required
+            label="State"
+            name="organization.state_id"
+            value={states[0].value.toString()}
+            options={states}
+          />
+
+          {/* Organization County */}
+          <Select required
+            label="County"
+            name="organization.county_id"
+            value={counties[0].value.toString()}
+            options={counties}
+          />
+        </fieldset>
       </div>
     )
   }

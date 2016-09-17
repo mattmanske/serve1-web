@@ -14,4 +14,3 @@ injectTapEventPlugin();
 //-----------  Component Registration  -----------//
 
 RWR.registerComponent('FormWrapper', FormWrapper);
-RWR.registerComponent('HelloWorld', HelloWorld);

@@ -10,9 +10,6 @@
     = f.label :service_id
     = f.collection_select(:service_id, Service.all(), :id, :name)
   .field
-    = f.label :caption_type
-    = f.collection_select(:caption_type, Affidavit.caption_types.keys, :to_s, :titlecase)
-  .field
     = f.label :court
     = f.text_field :court
   .field

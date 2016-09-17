@@ -4,7 +4,6 @@ table.table
   thead
     tr
       th Service
-      th Caption type
       th Court
       th State
       th Url
@@ -16,7 +15,6 @@ table.table
     - @affidavits.each do |affidavit|
       tr
         td = affidavit.service
-        td = affidavit.caption_type
         td = affidavit.court
         td = affidavit.state
         td = affidavit.url

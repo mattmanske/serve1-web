@@ -6,12 +6,12 @@ class OrganizationUser < ActiveRecord::Base
   before_create :switch_tenant
 
   def user
-    User.find(user_id)
+    User.find(self.user_id)
   end
 
   private
 
   def switch_tenant
-    Apartment::Tenant.switch!(user.organization.subdomain)
+    Apartment::Tenant.switch!(self.user.organization.subdomain)
   end
 end

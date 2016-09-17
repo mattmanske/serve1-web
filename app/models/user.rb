@@ -1,13 +1,13 @@
 class User < ActiveRecord::Base
-  belongs_to :organization
-
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  belongs_to :organization
+
+  after_commit :create_organization_user_record, on: :create
+
   validates :name,  presence: true
   validates :email, presence: true, uniqueness: { scope: :organization_id }
-
-  after_create :create_organization_user_record
 
   def tenant
     self.organization.subdomain
@@ -16,6 +16,6 @@ class User < ActiveRecord::Base
   private
 
   def create_organization_user_record
-    OrganizationUser.create(user_id: id).admin!
+    OrganizationUser.create(user_id: self.id).admin!
   end
 end

@@ -4,8 +4,6 @@ class CreateAffidavits < ActiveRecord::Migration
       t.references :service, index: true, foreign_key: true
       t.references :state,   index: true, foreign_key: true
 
-      t.integer :caption_type, null: false, default: 0
-
       t.string :court, null: false
       t.string :url
 

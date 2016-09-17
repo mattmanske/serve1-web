@@ -1,6 +1,6 @@
 class Service < ActiveRecord::Base
-  enum status: { active: 0, closed: 1 }
-  enum service_type: { in_person: 0, by_proxy: 1 }
+  enum status: { dispatched: 0, in_progress: 1, blocked: 2, served: 3 }
+  enum service_type: { personal: 0, substitute: 1, corporate: 2, governmental: 3, attempted: 4 }
 
   belongs_to :job
   has_one :party
@@ -9,6 +9,5 @@ class Service < ActiveRecord::Base
   has_many :attachments
 
   validates :person_name,     presence: true
-  validates :person_title,    presence: true
   validates :person_capacity, presence: true
 end
