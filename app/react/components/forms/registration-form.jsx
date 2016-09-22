@@ -14,6 +14,7 @@ class RegistrationFrom extends React.Component {
   static propTypes = {
     resource   : React.PropTypes.object.isRequired,
     selections : React.PropTypes.object.isRequired,
+    canSubmit  : React.PropTypes.bool.isRequired
   }
 
   state = {
@@ -41,6 +42,7 @@ class RegistrationFrom extends React.Component {
 
           {/* User Email */}
           <Input required
+            autoFocus={true}
             type="email"
             label="Email"
             name="user.email"
@@ -48,7 +50,7 @@ class RegistrationFrom extends React.Component {
             validationError="Must enter a valid email address."
           />
 
-        {/* User Name */}
+          {/* User Name */}
           <Input required
             type="text"
             label="Full Name"
@@ -84,7 +86,7 @@ class RegistrationFrom extends React.Component {
           {/* Organization Name */}
           <Input required
             type="text"
-            label="Name"
+            label="Organization Name"
             name="organization.name"
             validations="isExisty"
             validationError="Must enter a name."
@@ -94,7 +96,7 @@ class RegistrationFrom extends React.Component {
           {/* Organization Subdomain */}
           <Input required disabled
             type="text"
-            label="Subdomain"
+            label="Organization Subdomain"
             name="organization.subdomain"
             validations="isExisty"
             validationError="Must be a valid url string."
@@ -105,7 +107,7 @@ class RegistrationFrom extends React.Component {
 
           {/* Organization State */}
           <Select required
-            label="State"
+            label="Organization State"
             name="organization.state_id"
             value={states[0].value.toString()}
             options={states}
@@ -113,12 +115,19 @@ class RegistrationFrom extends React.Component {
 
           {/* Organization County */}
           <Select required
-            label="County"
+            label="Organization County"
             name="organization.county_id"
             value={counties[0].value.toString()}
             options={counties}
           />
         </fieldset>
+
+        <button className="btn btn-lg btn-default pull-right"
+          type="submit"
+          disabled={!this.props.canSubmit}
+        >
+          Create Account
+        </button>
       </div>
     )
   }

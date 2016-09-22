@@ -7,6 +7,7 @@ import requestCSRF      from 'superagent-rails-csrf'
 import React            from 'react'
 import Formsy           from 'formsy-react'
 
+import LoginForm        from '../components/forms/login-form'
 import RegistrationFrom from '../components/forms/registration-form'
 
 //-----------  Init  -----------//
@@ -26,8 +27,8 @@ class FormWrapper extends React.Component {
   }
 
   state = {
-    canSubmit        : false,
-    validationErrors : {}
+    canSubmit    : false,
+    globalErrors : ''
   }
 
   //-----------  Helpers  -----------//
@@ -36,6 +37,8 @@ class FormWrapper extends React.Component {
     switch (this.props.type){
       case 'registration':
         return RegistrationFrom
+      case 'login':
+        return LoginForm
     }
   }
 
@@ -55,12 +58,12 @@ class FormWrapper extends React.Component {
     return flat.unflatten(inputs)
   }
 
-  _onSubmit = (model) => {
-    this.setState({ validationErrors: {} })
+  _onSubmit = (model, reset, invalidate) => {
+    this.setState({ globalErrors: '' })
 
     request.post(this.props.path).send(model).setCsrfToken().end( (error, response) => {
       const { body } = response
-      return (error || !response.ok) ? this._onFailure(body, error) : this._onSuccess(body)
+      return (error || !response.ok) ? this._onFailure(body, error, invalidate) : this._onSuccess(body)
     })
   }
 
@@ -70,9 +73,13 @@ class FormWrapper extends React.Component {
     if (response.redirect){ return window.location.href = response.redirect }
   }
 
-  _onFailure = (response, error) => {
+  _onFailure = (response, error, invalidate) => {
     const errors = flat.flatten(response, { safe : true })
-    this.setState({ validationErrors: errors })
+    const globalErrors = errors.global || 'Something went wrong. Try again.'
+    delete errors.global
+
+    invalidate(errors)
+    this.setState({ globalErrors: globalErrors })
   }
 
   //-----------  HTML Element Render  -----------//
@@ -86,16 +93,9 @@ class FormWrapper extends React.Component {
         onValid={this._enableSubmit}
         onInvalid={this._disableSubmit}
         onValidSubmit={this._onSubmit}
-        validationErrors={this.state.validationErrors}
       >
-        <FormClass {...this.props} />
-
-        <button className="btn btn-lg btn-default pull-right"
-          type="submit"
-          disabled={!this.state.canSubmit}
-        >
-          Create Account
-        </button>
+        <FormClass {...this.props} canSubmit={this.state.canSubmit} />
+        <h4 className="label label-danger">{this.state.globalErrors}</h4>
       </Formsy.Form>
     )
   }

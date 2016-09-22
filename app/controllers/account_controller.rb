@@ -1,19 +1,20 @@
- class AccountController < Devise::RegistrationsController
+class AccountController < Devise::RegistrationsController
   include ApplicationHelper
 
   respond_to :json, only: [:create]
   skip_before_filter :verify_authenticity_token, only: [:create]
 
   def new
+    user = User.new().build_organization
     states = select_format State.where(id: 60)
     counties = select_format County.where(state: 60).order(:name)
 
     render react_component: 'FormWrapper', props: {
       :type       => 'registration',
-      :path       => registration_path(resource_name),
-      :resource   => User.new(),
+      :path       => registration_path(:user),
+      :resource   => user,
       :selections => { states: states, counties: counties },
-      :errors     => resource.errors.class
+      :errors     => user.errors.class
     }
   end
 
@@ -28,7 +29,7 @@
       render json: { user: user.errors, organization: org.errors }, status: :unprocessable_entity
     else
       sign_in(:user, user)
-      render json: { :user => user, :redirect => organization_root_url( welcome: true ) }
+      render json: { user: user, redirect: organization_root_url( welcome: true ) }
     end
   end
 

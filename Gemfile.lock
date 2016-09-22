@@ -66,6 +66,8 @@ GEM
       responders
       warden (~> 1.2.3)
     dotenv (1.0.2)
+    dotenv-rails (1.0.2)
+      dotenv (= 1.0.2)
     erubis (2.7.0)
     execjs (2.7.0)
     ffi (1.9.14)
@@ -221,6 +223,7 @@ DEPENDENCIES
   bourbon (~> 5.0.0.beta.6)
   coffee-rails (~> 4.1.0)
   devise (~> 4.2.0)
+  dotenv-rails
   flutie (~> 2.0)
   foreman (~> 0.76.0)
   jquery-rails
