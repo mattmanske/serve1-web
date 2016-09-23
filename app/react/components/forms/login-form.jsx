@@ -10,9 +10,7 @@ class LoginForm extends React.Component {
   displayName: 'LoginForm'
 
   static propTypes = {
-    resource   : React.PropTypes.object.isRequired,
-    selections : React.PropTypes.object,
-    canSubmit  : React.PropTypes.bool
+    resource: React.PropTypes.object.isRequired,
   }
 
   //-----------  HTML Element Render  -----------//

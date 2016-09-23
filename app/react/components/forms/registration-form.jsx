@@ -1,9 +1,11 @@
 //-----------  Imports  -----------//
 
-import _                 from 'lodash'
+import _         from 'lodash'
 
-import React             from 'react'
-import { Input, Select } from 'formsy-react-components'
+import React     from 'react'
+import { Input } from 'formsy-react-components'
+
+import Select    from '../formsy-select'
 
 //-----------  Class Setup  -----------//
 
@@ -14,7 +16,7 @@ class RegistrationFrom extends React.Component {
   static propTypes = {
     resource   : React.PropTypes.object.isRequired,
     selections : React.PropTypes.object.isRequired,
-    canSubmit  : React.PropTypes.bool.isRequired
+    can_submit : React.PropTypes.bool.isRequired
   }
 
   state = {
@@ -30,8 +32,7 @@ class RegistrationFrom extends React.Component {
   //-----------  HTML Element Render  -----------//
 
   render(){
-    const states = this.props.selections.states
-    const counties = this.props.selections.counties
+    const { states, counties } = this.props.selections
 
     return (
       <div className="child-form registration-form">
@@ -106,10 +107,10 @@ class RegistrationFrom extends React.Component {
           />
 
           {/* Organization State */}
-          <Select required
+          <Select required disabled
             label="Organization State"
             name="organization.state_id"
-            value={states[0].value.toString()}
+            value={60}
             options={states}
           />
 
@@ -124,7 +125,7 @@ class RegistrationFrom extends React.Component {
 
         <button className="btn btn-lg btn-default pull-right"
           type="submit"
-          disabled={!this.props.canSubmit}
+          disabled={!this.props.can_submit}
         >
           Create Account
         </button>

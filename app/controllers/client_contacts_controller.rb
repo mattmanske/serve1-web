@@ -1,18 +1,40 @@
 class ClientContactsController < ApplicationController
   before_action :set_client_contact, only: [:show, :edit, :update, :destroy]
 
+  respond_to :json, only: [:index, :new, :create]
+
   # GET /client_contacts
   def index
-    @client_contacts = ClientContact.all
+    @client_contacts = ClientContact.all.order(:name)
+
+    respond_to do |format|
+      format.html
+      format.json { render :json => select_format(@client_contacts) }
+    end
   end
 
   # GET /client_contacts/1
   def show
+    respond_to do |format|
+      format.html
+      format.json { render :json => @client_contact }
+    end
   end
 
   # GET /client_contacts/new
   def new
     @client_contact = ClientContact.new
+
+    clients = select_format Client.all().order(:name)
+
+    props = {
+      :resource      => @client_contact,
+      :resource_type => 'contacts',
+      :submit_path   => client_contacts_path(),
+      :selections    => { :clients => clients }
+    }
+
+    form_repsonse(props)
   end
 
   # GET /client_contacts/1/edit
@@ -24,9 +46,9 @@ class ClientContactsController < ApplicationController
     @client_contact = ClientContact.new(client_contact_params)
 
     if @client_contact.save
-      redirect_to @client_contact, notice: 'Client contact was successfully created.'
+      render json: { resource: @client_contact, redirect: client_contacts_path() }
     else
-      render :new
+      render json: { client_contact: @client_contact.errors }, status: :unprocessable_entity
     end
   end
 
