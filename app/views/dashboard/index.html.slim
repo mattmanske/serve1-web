@@ -1,13 +1,69 @@
-section
-  .block-wrapper
-    h1= "#{current_user.organization.name} Dashboard"
+.row
+  .col-lg-12
+    h1.page-header= "#{current_user.organization.name} Dashboard"
 
-    ul
-      li= link_to "Clients", clients_path
-      li= link_to "Client Contacts", client_contacts_path
-      li= link_to "Cases", cases_path
-      li= link_to "Jobs", jobs_path
-      li= link_to "Parties", parties_path
-      li= link_to "Services", services_path
-      li= link_to "Affidavits", affidavits_path
-      li= link_to "Documents", documents_path
+.row
+  .col-lg-3.col-md-6
+    .panel.panel-primary
+      .panel-heading
+        .row
+          .col-xs-3
+            i.fa.fa-comments.fa-5x
+          .col-xs-9.text-right
+            .huge 26
+            div Active Jobs
+      a href="#"
+      .panel-footer
+        span.pull-left View Details
+        span.pull-right
+          i.fa.fa-arrow-circle-right
+        .clearfix
+  .col-lg-3.col-md-6
+    .panel.panel-green
+      .panel-heading
+        .row
+          .col-xs-3
+            i.fa.fa-tasks.fa-5x
+          .col-xs-9.text-right
+            .huge 12
+            div Completed Jobs
+      a href="#"
+      .panel-footer
+        span.pull-left View Details
+        span.pull-right
+          i.fa.fa-arrow-circle-right
+        .clearfix
+  .col-lg-3.col-md-6
+    .panel.panel-yellow
+      .panel-heading
+        .row
+          .col-xs-3
+            i.fa.fa-shopping-cart.fa-5x
+          .col-xs-9.text-right
+            .huge 124
+            div Unassigned Jobs
+      a href="#"
+      .panel-footer
+        span.pull-left View Details
+        span.pull-right
+          i.fa.fa-arrow-circle-right
+        .clearfix
+  .col-lg-3.col-md-6
+    .panel.panel-red
+      .panel-heading
+        .row
+          .col-xs-3
+            i.fa.fa-support.fa-5x
+          .col-xs-9.text-right
+            .huge 13
+            div Ageing Cases
+      a href="#"
+      .panel-footer
+        span.pull-left View Details
+        span.pull-right
+          i.fa.fa-arrow-circle-right
+        .clearfix
+
+.row
+  .col-lg-12
+    = link_to 'Add New Case', new_case_path, class: 'btn btn-lg btn-primary'

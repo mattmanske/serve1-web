@@ -1,0 +1,55 @@
+#sidebar.navbar-default.sidebar(role="navigation" data-turbolinks-permanent)
+  .sidebar-nav.navbar-collapse
+    ul#side-menu.nav
+      li.sidebar-search
+        .input-group.custom-search-form
+          input.form-control placeholder="Search..." type="text" /
+          span.input-group-btn
+            button.btn.btn-default type="button"
+              i.fa.fa-search
+        /! /input-group
+
+      li= active_link_to organization_root_path, :active => :exclusive do
+          i.fa.fa-bar-chart-o.fa-fw
+          | Dashboard
+
+      li
+        a href="#"
+          i.fa.fa-sitemap.fa-fw
+          | Jobs & Cases
+          span.fa.arrow
+        ul.nav.nav-second-level
+          li= active_link_to "Jobs", jobs_path
+          li= active_link_to "Cases", cases_path
+          li= active_link_to "Services", services_path
+
+      li
+        a href="#"
+          i.fa.fa-files-o.fa-fw
+          | Documents
+          span.fa.arrow
+        ul.nav.nav-second-level
+          li= active_link_to 'Affidavits', organization_root_path
+          li= active_link_to 'Other Documents', organization_root_path
+
+      li
+        a href="#"
+          i.fa.fa-server.fa-fw
+          | Logs
+          span.fa.arrow
+        ul.nav.nav-second-level
+          li= active_link_to 'Server Logs', organization_root_path
+          li= active_link_to 'Other Logs', organization_root_path
+
+      li
+        a href="#"
+          i.fa.fa-group.fa-fw
+          | Clients & Invoicing
+          span.fa.arrow
+        ul.nav.nav-second-level
+          li= active_link_to "Clients", clients_path
+          li= active_link_to "Invoicing", clients_path
+
+      li= active_link_to clients_path do
+        i.fa.fa-gears.fa-fw
+        | Organization Settings

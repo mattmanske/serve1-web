@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 ruby '2.3.1'
 
+gem 'active_link_to'
 gem 'apartment',            '~> 1.2.0'
 gem 'autoprefixer-rails',   '~> 6.4.1'
 gem 'bourbon',              '~> 5.0.0.beta.6'

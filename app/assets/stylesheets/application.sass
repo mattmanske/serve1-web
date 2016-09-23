@@ -1,22 +1,27 @@
+//= require _custom
+//= require _metismenu
+//= require_self
+
 body
-  display: flex
   min-height: 100vh
-  flex-direction: column
 
-  > header
-    flex: 0 0 auto
+  #wrapper
+    display: flex
+    min-height: 100vh
+    flex-direction: column
 
-  > .container
-    flex: 1 0 auto
-    padding: 2rem 4rem 4rem
+    > nav
+      flex: 0 0 auto
 
-  > footer
-    flex: 0 0 auto
-    margin-bottom: 0 !important
-    border-top: 1px solid lightgray !important
+      #side-menu
+        min-height: calc(100vh - 51px)
 
-    .navbar-text
-      margin-left: 0
+        a.active
+          background-color: transparent
 
-.container
-  max-width: 65rem
+    > #page-wrapper
+      flex: 1 0 auto
+
+a > .fa
+  margin-right: 0.67rem
+  display: inline-block

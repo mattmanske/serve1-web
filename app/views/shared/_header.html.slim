@@ -1,26 +1,38 @@
-.navbar.navbar-inverse.navbar-static-top
+#header.nav.navbar.navbar-default.navbar-static-top(role="navigation" style=("margin-bottom: 0") data-turbolinks-permanent)
+  .navbar-header
+    button.navbar-toggle data-target=".navbar-collapse" data-toggle="collapse" type="button"
+      span.sr-only Toggle navigation
+      span.icon-bar
+      span.icon-bar
+      span.icon-bar
+    - if user_signed_in?
+      = link_to Rails.application.class.parent_name, organization_root_path, class: 'navbar-brand'
+    - else
+      = link_to Rails.application.class.parent_name, root_path, class: 'navbar-brand'
 
-  .container
+  ul.nav.navbar-top-links.navbar-right
+    - if !user_signed_in?
+      li= active_link_to "Login", new_user_session_path
+      li= button_to "Sign Up", new_user_registration_path, :method => :get, class: 'btn btn-default navbar-btn'
+    - else
+      li= link_to organization_root_path do
+        i.fa.fa-bar-chart-o.fa-fw
+        | Dashboard
+      li.dropdown
+        a.dropdown-toggle data-toggle="dropdown" href="#"
+          i.fa.fa-user.fa-fw
+          i.fa.fa-caret-down
+        ul.dropdown-menu.dropdown-user
+          li= link_to edit_user_registration_path do
+            i.fa.fa-user.fa-fw
+            | Organization Settings
+          li= link_to edit_user_registration_path do
+            i.fa.fa-gear.fa-fw
+            | User Settings
+          li.divider
+          li= link_to destroy_user_session_path, :method => :delete do
+            i.fa.fa-sign-out.fa-fw
+            | Logout
 
-    .navbar-header
-
-      button.navbar-toggle.collapsed
-        span.icon-bar
-        span.icon-bar
-        span.icon-bar
-
-      - if user_signed_in?
-        = link_to Rails.application.class.parent_name, organization_root_path, class: 'navbar-brand'
-      - else
-        = link_to Rails.application.class.parent_name, root_path, class: 'navbar-brand'
-
-    .collapse.navbar-collapse.navbar-right
-
-      ul.nav.navbar-nav
-        - if user_signed_in?
-          li= link_to "Dashbaord", organization_root_path
-          li= link_to "My Account", edit_user_registration_path
-          li= link_to "Log Out", destroy_user_session_path, :method => :delete
-        - else
-          li= link_to "Login", new_user_session_path
-          li= button_to "Sign Up", new_user_registration_path, :method => :get, class: 'btn btn-default navbar-btn'
+  - if user_signed_in?
+    = render 'shared/sidebar'
