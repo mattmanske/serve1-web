@@ -48,6 +48,7 @@
     "style-loader": "^0.13.1",
     "superagent": "^2.2.0",
     "superagent-rails-csrf": "0.0.2",
+    "urijs": "^1.18.2",
     "webpack": "^1.13.0"
   },
   "scripts": {

@@ -33,6 +33,7 @@ class RegistrationFrom extends React.Component {
 
   render(){
     const { states, counties } = this.props.selections
+    const resource = this.props.resource
 
     return (
       <div className="child-form registration-form">
@@ -42,40 +43,54 @@ class RegistrationFrom extends React.Component {
           <legend>Account Information</legend>
 
           {/* User Email */}
-          <Input required
+          <Input required ref="email"
             autoFocus={true}
             type="email"
             label="Email"
             name="user.email"
+            value={resource.email}
             validations="isEmail"
             validationError="Must enter a valid email address."
-          />
+            />
 
-          {/* User Name */}
-          <Input required
+          {/* First Name */}
+          <Input required ref="first_name"
             type="text"
-            label="Full Name"
-            name="user.name"
+            label="First Name"
+            name="user.first_name"
+            value={resource.first_name}
             validations="isExisty"
-            validationError="Must enter a name."
-          />
+            validationError="Must enter a first name."
+            />
+
+          {/* Last Name */}
+          <Input required ref="last_name"
+            type="text"
+            label="Last Name"
+            name="user.last_name"
+            value={resource.last_name}
+            validations="isExisty"
+            validationError="Must enter a last name."
+            />
 
           {/* Password */}
-          <Input required
+          <Input required ref="password"
             autoComplete="off"
             type="password"
             label="Password"
             name="user.password"
+            value={resource.password}
             validations="minLength:6"
             validationError="Passowrds must be at least 6 character."
           />
 
           {/* Password Confirmation */}
-          <Input required
+          <Input required ref="password_confirmation"
             autoComplete="off"
             type="password"
             label="Confirm Password"
             name="user.password_confirmation"
+            value={resource.password_confirmation}
             validations="equalsField:user.password"
             validationError="Passowrds don't match."
           />
@@ -85,40 +100,41 @@ class RegistrationFrom extends React.Component {
           <legend>Organization Information</legend>
 
           {/* Organization Name */}
-          <Input required
+          <Input required ref="name"
             type="text"
             label="Organization Name"
             name="organization.name"
+            value={resource.name}
             validations="isExisty"
             validationError="Must enter a name."
             onChange={this._updateSubdomain}
           />
 
           {/* Organization Subdomain */}
-          <Input required disabled
+          <Input required disabled ref="subdomain"
             type="text"
             label="Organization Subdomain"
             name="organization.subdomain"
+            value={this.state.subdomain}
             validations="isExisty"
             validationError="Must be a valid url string."
-            value={this.state.subdomain}
             addonBefore={'https://'}
             addonAfter={'.serve1.com'}
           />
 
           {/* Organization State */}
-          <Select required disabled
+          <Select required disabled ref="state_id"
             label="Organization State"
             name="organization.state_id"
-            value={60}
+            value={resource.state_id}
             options={states}
           />
 
           {/* Organization County */}
-          <Select required
+          <Select required ref="county_id"
             label="Organization County"
             name="organization.county_id"
-            value={counties[0].value.toString()}
+            value={resource.county_id}
             options={counties}
           />
         </fieldset>

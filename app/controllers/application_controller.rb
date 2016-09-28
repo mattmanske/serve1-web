@@ -10,6 +10,10 @@ class ApplicationController < ActionController::Base
     { subdomain: user_signed_in? ? current_user.tenant : 'www' }
   end
 
+  def default_state
+    user_signed_in? ? current_user.organization.state_id || nil : nil
+  end
+
   protected
 
   def enforce_subdomains
@@ -21,23 +25,25 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(
       :sign_up,
       keys: [
-        :name,
+        :first_name,
+        :last_name,
         :email,
         :password,
         :password_confirmation,
-        { organization_attributes: [ :name, :subdomain, :address, :state_id, :county_id, :phone, :email ] }
+        { organization_attributes: [ :name, :subdomain, :address, :state_id, :county_id ] }
       ]
     )
 
     devise_parameter_sanitizer.permit(
       :account_update,
       keys: [
-        :name,
+        :first_name,
+        :last_name,
         :email,
         :password,
         :current_password,
         :password_confirmation,
-        { organization_attributes: [ :id, :name, :address, :state_id, :county_id, :phone, :email ] }
+        { organization_attributes: [ :id, :name, :address, :state_id, :county_id ] }
       ]
     )
   end
@@ -46,14 +52,14 @@ class ApplicationController < ActionController::Base
 
   def form_repsonse(props)
     respond_to do |format|
-      format.html { render react_component: 'FormWrapper', props: props, server_side: true }
+      format.html { render react_component: 'FormWrapper', props: props }
       format.json { render :json => props }
     end
   end
 
   def select_format(objects, value = 'id', name = 'name')
     objects.map { |elem| { value: elem.send(value), label: elem.send(name) } }
-  end  
+  end
 
   def after_sign_in_path_for(resource)
     organization_root_url()

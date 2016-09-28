@@ -28,6 +28,6 @@ module Serve1
       g.javascripts     false
     end
 
-    # config.react.server_side = true
+    config.react.server_side = true
   end
 end

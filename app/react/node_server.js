@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const http = require('http');
 const dispatcher = require('httpdispatcher');
-const { integrationsManager } = require('react-webpack-rails');
+const integrationsManager = require('react-webpack-rails').integrationsManager;
 
 const PORT = 8081;
 const ASSETS_MAPPING_PATH = 'tmp/cache/assets-mapping.json';
@@ -20,10 +20,9 @@ fs.readFile(ASSETS_MAPPING_PATH, (err, data) => {
 });
 
 const handleRequest = (req, res) => {
-  const { method, url } = req;
   const reqStartTime = (new Date()).toLocaleTimeString();
 
-  console.log(`${method} "${url}" - ${reqStartTime}`);
+  console.log(`${req.method} "${req.url}" - ${reqStartTime}`);
   dispatcher.dispatch(req, res);
 }
 

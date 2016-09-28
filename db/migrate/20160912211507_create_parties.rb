@@ -4,9 +4,9 @@ class CreateParties < ActiveRecord::Migration
       t.string :name, null: false
       t.string :address
 
-      t.references :state, index: true, foreign_key: true
-      t.references :county, index: true, foreign_key: true
-      t.references :municipality, index: true, foreign_key: true
+      t.integer :state_id, null: false
+      t.integer :county_id, null: false
+      t.integer :municipality_id, null: false
 
       t.timestamps null: false
     end

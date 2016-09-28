@@ -1,17 +1,12 @@
 class AuthenticationController < Devise::SessionsController
   skip_before_action :allow_params_authentication!, only: :create
 
-  respond_to :json, only: [:create]
+  respond_to :json, only: [:new, :create]
 
   def new
     @user = User.new(sign_in_params)
     clean_up_passwords(@user)
-
-    render react_component: 'FormWrapper', props: {
-      :resource      => @user,
-      :resource_type => 'login',
-      :submit_path   => session_path(:user),
-    }, server_side: true
+    form_repsonse(form_props)
   end
 
   def create
@@ -28,7 +23,15 @@ class AuthenticationController < Devise::SessionsController
 
   private
 
-  def invalid_login_attempt
-    render json: { global: 'Username or password are incorrect.', user: { email: '', password: '' } }, status: :unauthorized
-  end
+    def invalid_login_attempt
+      render json: { global: 'Username or password are incorrect.', user: { email: '', password: '' } }, status: :unauthorized
+    end
+
+    def form_props
+      {
+        :resource      => @user,
+        :resource_type => 'login',
+        :action        => session_path(:user),
+      }
+    end
 end

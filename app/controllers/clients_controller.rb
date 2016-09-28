@@ -1,7 +1,7 @@
 class ClientsController < ApplicationController
   before_action :set_client, only: [:show, :edit, :update, :destroy]
 
-  respond_to :json, only: [:index, :new, :create]
+  respond_to :json, only: [:index, :show, :new, :create]
 
   # GET /clients
   def index
@@ -15,27 +15,17 @@ class ClientsController < ApplicationController
 
   # GET /clients/1
   def show
-    respond_to do |format|
-      format.html
-      format.json { render :json => @client }
-    end
   end
 
   # GET /clients/new
   def new
     @client = Client.new
-
-    props = {
-      :resource      => @client,
-      :resource_type => 'clients',
-      :submit_path   => clients_path(),
-    }
-
-    form_repsonse(props)
+    form_repsonse(form_props)
   end
 
   # GET /clients/1/edit
   def edit
+    form_repsonse(form_props)
   end
 
   # POST /clients
@@ -52,9 +42,9 @@ class ClientsController < ApplicationController
   # PATCH/PUT /clients/1
   def update
     if @client.update(client_params)
-      redirect_to @client, notice: 'Client was successfully updated.'
+      render json: { resource: @client, redirect: clients_path() }
     else
-      render :edit
+      render json: { client: @client.errors }, status: :unprocessable_entity
     end
   end
 
@@ -73,5 +63,14 @@ class ClientsController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def client_params
       params.require(:client).permit(:key, :name, :address, :phone, :email)
+    end
+
+    # Setup form
+    def form_props
+      {
+        :resource      => @client,
+        :resource_type => 'clients',
+        :action        => polymorphic_path(@client),
+      }
     end
 end

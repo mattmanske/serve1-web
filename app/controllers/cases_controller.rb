@@ -1,15 +1,15 @@
 class CasesController < ApplicationController
   before_action :set_case, only: [:show, :edit, :update, :destroy]
 
-  respond_to :json, only: [:index, :new, :create]
+  respond_to :json, only: [:index, :show, :new, :create]
 
   # GET /cases
   def index
-    @cases = Case.all
+    @cases = Case.all.order(:key)
 
     respond_to do |format|
       format.html
-      format.json { render :json => @cases }
+      format.json { render :json => select_format(@cases) }
     end
   end
 
@@ -19,40 +19,13 @@ class CasesController < ApplicationController
 
   # GET /cases/new
   def new
-    @case = Case.new
-
-    clients     = select_format Client.all().order(:name)
-    contacts    = select_format ClientContact.all().order(:name)
-    states      = select_format State.all.order(:name)
-    counties    = select_format County.where(state: 60).order(:name)
-    court_types = select_format Case.court_types.keys, :to_s, :titlecase
-
-    props = {
-      :resource      => @case,
-      :resource_type => 'cases',
-      :submit_path   => cases_path(),
-      :selections => {
-        :clients     => clients,
-        :contacts    => contacts,
-        :states      => states,
-        :counties    => counties,
-        :court_types => court_types
-      },
-      :selection_urls => {
-        :clients  => clients_path(:format => :json),
-        :contacts => client_contacts_path(:format => :json),
-      },
-      :modal_urls => {
-        :clients  => new_client_path(:format => :json),
-        :contacts => new_client_contact_path(:format => :json)
-      }
-    }
-
-    form_repsonse(props)
+    @case = Case.new({ state_id: default_state })
+    form_repsonse(form_props)
   end
 
   # GET /cases/1/edit
   def edit
+    form_repsonse(form_props)
   end
 
   # POST /cases
@@ -69,9 +42,9 @@ class CasesController < ApplicationController
   # PATCH/PUT /cases/1
   def update
     if @case.update(case_params)
-      redirect_to @case, notice: 'Case was successfully updated.'
+      render json: { resource: @case, redirect: cases_path() }
     else
-      render :edit
+      render json: { case: @case.errors }, status: :unprocessable_entity
     end
   end
 
@@ -90,5 +63,36 @@ class CasesController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def case_params
       params.require(:case).permit(:key, :client_id, :client_contact_id, :state_id, :county_id, :court_type, :plantiff, :plantiff_et_al, :defendant, :defendant_et_al)
+    end
+
+    # Setup form
+    def form_props
+      clients     = select_format Client.all().order(:name)
+      contacts    = select_format ClientContact.where(client: @case.client_id).to_a.sort_by(&:name)
+      counties    = select_format County.where(state: @case.state_id).order(:name)
+      states      = select_format State.all.order(:name)
+      court_types = select_format Case.court_types.keys, :to_s, :titlecase
+
+      {
+        :resource      => @case,
+        :resource_type => 'cases',
+        :action        => polymorphic_path(@case),
+        :selections => {
+          :clients     => clients,
+          :contacts    => contacts,
+          :states      => states,
+          :counties    => counties,
+          :court_types => court_types
+        },
+        :selection_urls => {
+          :clients  => clients_path,
+          :contacts => client_contacts_path,
+          :counties => counties_path
+        },
+        :modal_urls => {
+          :clients  => new_client_path,
+          :contacts => new_client_contact_path
+        }
+      }
     end
 end

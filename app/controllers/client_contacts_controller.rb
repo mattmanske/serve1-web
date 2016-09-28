@@ -1,11 +1,13 @@
 class ClientContactsController < ApplicationController
   before_action :set_client_contact, only: [:show, :edit, :update, :destroy]
 
-  respond_to :json, only: [:index, :new, :create]
+  respond_to :json, only: [:index, :show, :new, :create]
+
+  has_scope :client
 
   # GET /client_contacts
   def index
-    @client_contacts = ClientContact.all.order(:name)
+    @client_contacts = apply_scopes(ClientContact).all.to_a.sort_by(&:name)
 
     respond_to do |format|
       format.html
@@ -15,30 +17,17 @@ class ClientContactsController < ApplicationController
 
   # GET /client_contacts/1
   def show
-    respond_to do |format|
-      format.html
-      format.json { render :json => @client_contact }
-    end
   end
 
   # GET /client_contacts/new
   def new
-    @client_contact = ClientContact.new
-
-    clients = select_format Client.all().order(:name)
-
-    props = {
-      :resource      => @client_contact,
-      :resource_type => 'contacts',
-      :submit_path   => client_contacts_path(),
-      :selections    => { :clients => clients }
-    }
-
-    form_repsonse(props)
+    @client_contact = ClientContact.new({ client_id: params[:client] })
+    form_repsonse(form_props)
   end
 
   # GET /client_contacts/1/edit
   def edit
+    form_repsonse(form_props)
   end
 
   # POST /client_contacts
@@ -55,9 +44,9 @@ class ClientContactsController < ApplicationController
   # PATCH/PUT /client_contacts/1
   def update
     if @client_contact.update(client_contact_params)
-      redirect_to @client_contact, notice: 'Client contact was successfully updated.'
+      render json: { resource: @client_contact, redirect: client_contacts_path() }
     else
-      render :edit
+      render json: { client_contact: @client_contact.errors }, status: :unprocessable_entity
     end
   end
 
@@ -75,6 +64,20 @@ class ClientContactsController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def client_contact_params
-      params.require(:client_contact).permit(:client_id, :name, :email, :address, :phone)
+      params.require(:client_contact).permit(:client_id, :first_name, :last_name, :email, :address, :phone)
+    end
+
+    # Setup form
+    def form_props
+      clients = select_format Client.all().order(:name)
+
+      {
+        :resource      => @client_contact,
+        :resource_type => 'contacts',
+        :action        => polymorphic_path(@client_contact),
+        :selections    => {
+          :clients => clients
+        }
+      }
     end
 end

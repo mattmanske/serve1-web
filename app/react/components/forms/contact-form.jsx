@@ -19,6 +19,9 @@ class ContactForm extends React.Component {
 
   render(){
     const { clients } = this.props.selections
+    const resource = this.props.resource
+
+    const has_client_id = !!(resource.client_id)
 
     return (
       <div className="child-form contact-form">
@@ -28,47 +31,62 @@ class ContactForm extends React.Component {
           <legend>Contact Details</legend>
 
           {/* Client */}
-          <Select required
+          <Select required disabled={has_client_id} ref="client_id"
             autoFocus={true}
             label="Client"
             name="client_contact.client_id"
+            value={resource.client_id}
             options={clients}
             />
 
-          {/* Name */}
-          <Input required
+          {/* First Name */}
+          <Input required ref="first_name"
             type="text"
-            label="Name"
-            name="client_contact.name"
+            label="First Name"
+            name="client_contact.first_name"
+            value={resource.first_name}
             validations="isExisty"
-            validationError="Must have a name."
+            validationError="Must have a first name."
+            />
+
+          {/* Last Name */}
+          <Input required ref="last_name"
+            type="text"
+            label="Last Name"
+            name="client_contact.last_name"
+            value={resource.last_name}
+            validations="isExisty"
+            validationError="Must have a last name."
             />
 
           {/* Email */}
-          <Input required
+          <Input required ref="email"
             type="email"
             label="Email"
             name="client_contact.email"
+            value={resource.email}
             validations="isEmail"
             validationError="Must enter a valid email address."
             />
 
           {/* Address */}
-          <Input
+          <Input ref="address"
             type="text"
             label="Address"
             name="client_contact.address"
+            value={resource.address}
             />
 
           {/* Phone */}
-          <Input
+          <Input ref="phone"
             type="text"
             label="Phone"
             name="client_contact.phone"
+            value={resource.phone}
             />
         </fieldset>
 
-        <button type="submit" className="btn btn-lg btn-default pull-right">
+        <button type="submit" className="btn btn-default pull-right">
           Save
         </button>
       </div>

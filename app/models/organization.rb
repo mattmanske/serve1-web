@@ -14,6 +14,6 @@ class Organization < ActiveRecord::Base
   private
 
   def create_tenant
-    Apartment::Tenant.create(subdomain)
+    Apartment::Tenant.create(self.subdomain)
   end
 end

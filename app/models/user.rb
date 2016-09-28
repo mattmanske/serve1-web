@@ -4,18 +4,15 @@ class User < ActiveRecord::Base
 
   belongs_to :organization
 
-  after_commit :create_organization_user_record, on: :create
-
-  validates :name,  presence: true
-  validates :email, presence: true, uniqueness: { scope: :organization_id }
+  validates :first_name, presence: true
+  validates :last_name,  presence: true
+  validates :email,      presence: true, uniqueness: { scope: :organization_id }
 
   def tenant
     self.organization.subdomain
   end
 
-  private
-
-  def create_organization_user_record
-    OrganizationUser.create(user_id: self.id).admin!
+  def name
+    [self.first_name, self.last_name].reject(&:blank?).join(' ')
   end
 end

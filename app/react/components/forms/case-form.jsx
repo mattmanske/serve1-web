@@ -23,14 +23,49 @@ class CaseForm extends React.Component {
 
   componentWillReceiveProps(nextProps){
     if (this.props.resource.client_id != nextProps.resource.client_id){
-      this.props.refresh_selection('contacts', { client_id: nextProps.resource.client_id})
+      this.props.refresh_selection('contacts', 'client_contact_id', { client: nextProps.resource.client_id })
     }
   }
 
-  //-----------  Modal Event Handlers  -----------//
+  //-----------  Helpers  -----------//
 
-  _loadClientModal = () => this.props.load_modal('clients', 'client_id')
-  _loadContactModal = () => this.props.load_modal('contacts', 'client_contact_id')
+  _getVal(ref){
+    return this.refs[ref] && this.refs[ref].getValue()
+  }
+
+  //-----------  Modal Load Events  -----------//
+
+  _newClientModal = () => {
+    this.props.load_modal('clients', 'client_id',)
+  }
+
+  _editClientModal = () => {
+    const client_id = this._getVal('client_id')
+    this.props.load_modal('clients', 'client_id', { id: client_id })
+  }
+
+  _newContactModal = () => {
+    const client_id = this._getVal('client_id')
+    this.props.load_modal('contacts', 'client_contact_id', { client: client_id })
+  }
+
+  _editContactModal = () => {
+    const client_id  = this._getVal('client_id')
+    const contact_id = this._getVal('client_contact_id')
+    this.props.load_modal('contacts', 'client_contact_id', { id: contact_id, client: client_id })
+  }
+
+  //-----------  Selection Update Events  -----------//
+
+  _updateContactSelections = (value) => {
+    this.refs.client_contact_id.resetValue()
+    this.props.refresh_selection('contacts', 'client_contact_id', { client: value })
+  }
+
+  _updateCountySelections = (value) => {
+    this.refs.county_id.resetValue()
+    this.props.refresh_selection('counties', 'client_contact_id', { state: value })
+  }
 
   //-----------  HTML Element Render  -----------//
 
@@ -38,46 +73,57 @@ class CaseForm extends React.Component {
     const { clients, contacts, states, counties, court_types } = this.props.selections
     const resource = this.props.resource
 
-    console.log(this.refs);
+    const has_client_id  = !this._getVal('client_id')
+    const has_contact_id = !this._getVal('client_contact_id')
+    const has_state_id   = !this._getVal('state_id')
+
+    const title = `${resource.id ? 'Edit' : 'Create'} Case`
 
     return (
       <div className="child-form case-form">
-        <h1>Create Case</h1>
+        <h1>{title}</h1>
 
         <fieldset>
           <legend>Client Details</legend>
 
           {/* Client */}
-          <Select required
+          <Select required ref="client_id"
             autoFocus={true}
             label="Client"
             name="case.client_id"
             value={resource.client_id}
             options={clients}
+            onChange={this._updateContactSelections}
             />
-          <a className="btn btn-sm btn-default" onClick={this._loadClientModal}>
+
+          <a className="btn btn-sm btn-default" onClick={this._newClientModal}>
             <i className="fa fa-plus fa-fw" />
             Add New Client
           </a>
 
+          {!has_client_id && <small onClick={this._editClientModal}><a>Edit</a></small>}
+
           {/* Contact */}
-          <Select required
-            label="Primary Contact"
+          <Select required disabled={has_client_id} ref="client_contact_id"
+            label="Contact"
             name="case.client_contact_id"
             value={resource.client_contact_id}
             options={contacts}
             />
-          <a className="btn btn-sm btn-default" onClick={this._loadContactModal}>
+
+          <a className="btn btn-sm btn-default" onClick={this._newContactModal} disabled={has_client_id}>
             <i className="fa fa-plus fa-fw" />
             Add New Contact
           </a>
+
+          {!has_contact_id && <small onClick={this._editContactModal}><a>Edit</a></small>}
         </fieldset>
 
         <fieldset>
           <legend>Case Details</legend>
 
           {/* Case ID */}
-          <Input required
+          <Input required ref="key"
             type="text"
             label="Internal ID"
             name="case.key"
@@ -87,15 +133,16 @@ class CaseForm extends React.Component {
             />
 
           {/* Case State */}
-          <Select required disabled
+          <Select ref="state_id"
             label="State"
             name="case.state_id"
-            value={60}
+            value={resource.state_id}
             options={states}
+            onChange={this._updateCountySelections}
             />
 
           {/* Case County */}
-          <Select required
+          <Select disabled={has_state_id} ref="county_id"
             label="County"
             name="case.county_id"
             value={resource.county_id}
@@ -103,7 +150,7 @@ class CaseForm extends React.Component {
             />
 
           {/* Court Type */}
-          <Select required
+          <Select required ref="court_type"
             label="Courty Type"
             name="case.court_type"
             value={resource.court_type}
@@ -111,7 +158,7 @@ class CaseForm extends React.Component {
             />
 
           {/* Plantiff */}
-          <Input required
+          <Input required ref="plantiff"
             type="text"
             label="Plantiff"
             name="case.plantiff"
@@ -119,15 +166,14 @@ class CaseForm extends React.Component {
             validations="isExisty"
             validationError="Must have a plantiff."
             />
-          <Checkbox
-            value={false}
+          <Checkbox ref="plantiff_et_al"
             name="case.plantiff_et_al"
             value={resource.plantiff_et_al}
             rowLabel="Plantiff Et Al?"
             />
 
           {/* Defendant */}
-          <Input required
+          <Input required ref="defendant"
             type="text"
             label="Defendant"
             name="case.defendant"
@@ -135,15 +181,14 @@ class CaseForm extends React.Component {
             validations="isExisty"
             validationError="Must have a defendant."
             />
-          <Checkbox
-            value={false}
+          <Checkbox ref="defendant_et_al"
             name="case.defendant_et_al"
             value={resource.defendant_et_al}
             rowLabel="Defendant Et Al?"
             />
         </fieldset>
 
-        <button type="submit" className="btn btn-lg btn-default pull-right">
+        <button type="submit" className="btn btn-default pull-right">
           Save
         </button>
       </div>

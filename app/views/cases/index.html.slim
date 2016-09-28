@@ -6,33 +6,28 @@ table.table
       th Key
       th Client
       th Client contact
-      th State
       th County
-      th Court type
+      th Court Type
       th Plantiff
-      th Plantiff et al
       th Defendant
-      th Defendant et al
-      th
-      th
       th
 
   tbody
     - @cases.each do |kase|
       tr
         td = kase.key
-        td = kase.client
-        td = kase.client_contact
-        td = kase.state
-        td = kase.county
-        td = kase.court_type
-        td = kase.plantiff
-        td = kase.plantiff_et_al
-        td = kase.defendant
-        td = kase.defendant_et_al
-        td = link_to 'Show', kase
-        td = link_to 'Edit', edit_case_path(kase)
-        td = link_to 'Destroy', kase, data: {:confirm => 'Are you sure?'}, :method => :delete
+        td = kase.client.name
+        td = kase.client_contact.name
+        td = kase.location
+        td = kase.court_name
+        td = kase.plantiff_name
+        td = kase.defendant_name
+        td
+          = link_to 'Show', kase
+          br
+          = link_to 'Edit', edit_case_path(kase)
+          br
+          = link_to 'Destroy', kase, data: {:confirm => 'Are you sure?'}, :method => :delete
 
 br
 

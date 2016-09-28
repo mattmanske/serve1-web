@@ -5,31 +5,25 @@ p
   = @case.key
 p
   strong Client:
-  = @case.client
+  = @case.client.to_s
 p
   strong Client contact:
-  = @case.client_contact
+  = @case.client_contact.to_s
 p
   strong State:
-  = @case.state
+  = @case.state.to_s
 p
   strong County:
-  = @case.county
+  = @case.county.to_s
 p
   strong Court type:
   = @case.court_type
 p
   strong Plantiff:
-  = @case.plantiff
-p
-  strong Plantiff et al:
-  = @case.plantiff_et_al
+  = @case.plantiff.to_s
 p
   strong Defendant:
-  = @case.defendant
-p
-  strong Defendant et al:
-  = @case.defendant_et_al
+  = @case.defendant.to_s
 
 = link_to 'Edit', edit_case_path(@case)
 '|

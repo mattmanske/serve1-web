@@ -1,6 +1,7 @@
 //-----------  Imports  -----------//
 
 import _                from 'lodash'
+import URI              from 'urijs'
 import flat             from 'flat'
 import PubSub           from 'pubsub-js'
 import request          from 'superagent'
@@ -27,7 +28,7 @@ class FormWrapper extends React.Component {
   state = {
     resource       : this._cleanNulls(this.props.resource), // Object being edited
     resource_type  : this.props.resource_type,              // Subform model type
-    submit_path    : this.props.submit_path,                // Form submit path (AJAX)
+    action         : this.props.action,                     // Form submit action
     modal_urls     : this.props.modal_urls || {},           // Modal subform fetch URL
     selection_urls : this.props.selection_urls || {},       // Selection fetch URLs
     selections     : this.props.selections || {},           // Default selection arrays
@@ -39,7 +40,7 @@ class FormWrapper extends React.Component {
   static propTypes = {
     resource       : React.PropTypes.object.isRequired,
     resource_type  : React.PropTypes.string.isRequired,
-    submit_path    : React.PropTypes.string.isRequired,
+    action         : React.PropTypes.string.isRequired,
     modal_urls     : React.PropTypes.object,
     selection_urls : React.PropTypes.object,
     selections     : React.PropTypes.object,
@@ -58,12 +59,26 @@ class FormWrapper extends React.Component {
     }
   }
 
-  _successfulResponse(err, res){
+  _cleanNulls(resource){
+    return _.mapValues(resource, (val) => { return (null === val) ? undefined : val })
+  }
+
+  _isSuccess(err, res){
     return !(err || !res.ok)
   }
 
-  _cleanNulls(resource){
-    return _.mapValues(resource, (val) => { return (null === val) ? undefined : val })
+  _parseQuery(url, query){
+    const uri = URI(url)
+
+    if (query){
+      if (query.id){
+        uri.segment(-1, query.id.toString())
+        delete query.id
+      }
+      uri.addSearch(query)
+    }
+
+    return uri.suffix('json').valueOf()
   }
 
   //-----------  Formsy Validation Handlers  -----------//
@@ -82,15 +97,19 @@ class FormWrapper extends React.Component {
     return flat.unflatten(inputs)
   }
 
+  _onSubmit = (model, reset, invalidate) => {
+    this.setState({ global_errors: '' })
+
+    const type = !!(this.state.resource.id) ? 'PATCH' : 'POST'
+    request(type, this.state.action).send(model).setCsrfToken().end( (err, res) => {
+      this._isSuccess(err, res) ? this._onSubmitSuccess(res.body) : this._onSubmitFailure(res.body, err, invalidate)
+    })
+  }
+
   _onSubmitSuccess = (body) => {
-    // If callback present, send new resource
-    if (this.state.callback) { return this.state.callback(body.resource) }
-
-    // If redirect present, push new browser location
-    if (body.redirect){ return window.location.href = body.redirect }
-
-    // Else, refresh resource object
-    this.setState({ resource: body.resource })
+    if (this.state.callback) { return this.state.callback(body.resource) } // If callback present, send new resource
+    if (body.redirect){ return window.location.href = body.redirect }      // If redirect present, push new browser location
+    this.setState({ resource: body.resource })                             // Else, refresh resource object
   }
 
   _onSubmitFailure = (body, error, invalidate) => {
@@ -99,32 +118,20 @@ class FormWrapper extends React.Component {
 
     delete errors.global
 
-    invalidate(errors)
     this.setState({ global_errors: global_errors })
-  }
-
-  _onSubmit = (model, reset, invalidate) => {
-    this.setState({ global_errors: '' })
-
-    request.post(this.state.submit_path).send(model).setCsrfToken().end( (err, res) => {
-      if (this._successfulResponse(err, res)){
-        this._onSubmitSuccess(res.body)
-      } else {
-        this._onSubmitFailure(res.body, err, invalidate)
-      }
-    })
+    invalidate(errors)
   }
 
   //-----------  Subform Modal Handlers  -----------//
 
   _loadModal = (model, attribute, query) => {
-    const modal_url = _.get(this.state.modal_urls, model, null)
+    const modal_url = this._parseQuery(this.state.modal_urls[model], query)
     const callback  = this._refreshSelection.bind(this, model, attribute, query)
 
-    if (null === modal_url){ return false }
+    if ('' === modal_url){ return false }
 
     request.get(modal_url).end( (err, res) => {
-      if (this._successfulResponse(err, res)){
+      if (this._isSuccess(err, res)){
         PubSub.publish('modal.load', { props: res.body, callback: callback })
       }
     })
@@ -133,33 +140,20 @@ class FormWrapper extends React.Component {
   //-----------  Selection Refresh Handlers  -----------//
 
   _refreshSelection = (model, attribute, query, resource) => {
-    const selection_url = _.get(this.state.selection_urls, model, null)
+    const selection_url = this._parseQuery(this.state.selection_urls[model], query)
+    let newState = this.state
 
-    if (null === selection_url){ return false }
+    if ('' === selection_url){ return false }
 
     request.get(selection_url).end( (err, res) => {
-      if (this._successfulResponse(err, res)){
-        const newState = update(this.state, {
-          selections  : { [model] : { $set: res.body }},
-          resource : { [attribute] : { $set: resource.id }},
-        })
+      if (this._isSuccess(err, res)){
+        if (resource && attribute)
+          newState = update(newState, { resource: { [attribute]: { $set: resource.id }} })
+        if (model && res.body)
+          newState = update(newState, { selections: { [model]: { $set: res.body }} })
         this.setState(newState)
       }
     })
-  }
-
-  //-----------  Update Helpers  -----------//
-
-  _updateResource = (attribute, value) => {
-    this.setState( update( this.state, {
-      resource: { [attribute]: { $set: value }},
-    }))
-  }
-
-  _updateSelection = (model, value) => {
-    this.setState( update( this.state, {
-      selections: { [model]: { $set: value }},
-    }))
   }
 
   //-----------  HTML Element Render  -----------//
@@ -168,7 +162,7 @@ class FormWrapper extends React.Component {
     const FormClass = this._getFormClass()
 
     return (
-      <Formsy.Form className="react-form form-horizontal"
+      <Formsy.Form ref="formsy" className="react-form form-horizontal"
         mapping={this._mapInputs}
         onValid={this._enableSubmit}
         onInvalid={this._disableSubmit}
@@ -176,8 +170,8 @@ class FormWrapper extends React.Component {
         >
 
         <FormClass {...this.state}
-          update_resource={this._updateResource}
-          update_selection={this._updateSelection}
+          load_modal={this._loadModal}
+          refresh_selection={this._refreshSelection}
           />
 
         <h4 className="label label-danger">{this.state.global_errors}</h4>

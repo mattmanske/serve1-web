@@ -13,6 +13,8 @@ Rails.application.routes.draw do
     :registrations => 'account'
   }
 
+  resources :counties
+
   authenticate :user do
     resources :documents
     resources :affidavits
