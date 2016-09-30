@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   }
 
   resources :counties
+  resources :municipalities
 
   authenticate :user do
     resources :documents

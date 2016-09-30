@@ -19,9 +19,11 @@ class ClientForm extends React.Component {
   render(){
     const resource = this.props.resource
 
+    const title = `${resource.id ? 'Edit' : 'Create'} Client`
+
     return (
       <div className="child-form client-form">
-        <h1>Create Client</h1>
+        <h1>{title}</h1>
 
         <fieldset>
           {/* Client ID */}

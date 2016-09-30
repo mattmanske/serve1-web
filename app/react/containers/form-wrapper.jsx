@@ -14,6 +14,7 @@ import Formsy           from 'formsy-react'
 import JobForm          from '../components/forms/job-form'
 import CaseForm         from '../components/forms/case-form'
 import LoginForm        from '../components/forms/login-form'
+import PartyForm        from '../components/forms/party-form'
 import ClientForm       from '../components/forms/client-form'
 import ContactForm      from '../components/forms/contact-form'
 import ServiceForm      from '../components/forms/service-form'
@@ -56,6 +57,7 @@ class FormWrapper extends React.Component {
       case 'jobs'         : return JobForm
       case 'cases'        : return CaseForm
       case 'login'        : return LoginForm
+      case 'parties'      : return PartyForm
       case 'clients'      : return ClientForm
       case 'contacts'     : return ContactForm
       case 'services'     : return ServiceForm
@@ -76,7 +78,7 @@ class FormWrapper extends React.Component {
 
     if (query){
       if (query.id){
-        uri.segment(-1, query.id.toString())
+        uri.segment(-1, query.id.toString()).segment('edit')
         delete query.id
       }
       uri.addSearch(query)
@@ -130,7 +132,7 @@ class FormWrapper extends React.Component {
 
   _loadModal = (model, attribute, query) => {
     const modal_url = this._parseQuery(this.state.modal_urls[model], query)
-    const callback  = this._refreshSelection.bind(this, model, attribute, query)
+    const callback  = this._refreshSelection.bind(this, model, query, attribute)
 
     if ('' === modal_url){ return false }
 
@@ -143,7 +145,7 @@ class FormWrapper extends React.Component {
 
   //-----------  Selection Refresh Handlers  -----------//
 
-  _refreshSelection = (model, attribute, query, resource) => {
+  _refreshSelection = (model, query, attribute, resource) => {
     const selection_url = this._parseQuery(this.state.selection_urls[model], query)
     let newState = this.state
 

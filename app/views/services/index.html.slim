@@ -4,7 +4,7 @@ table.table
   thead
     tr
       th Job
-      / th Party
+      th Party
       th Status
       th Service Type
       th Service Date
@@ -21,9 +21,9 @@ table.table
     - @services.each do |service|
       tr
         td = service.job.name
-        / td = service.party
+        td = service.party.name
         td = service.status.titlecase
-        td = service.service_type.titlecase
+        td = service.service_type.try(:titlecase)
         td = service.date_served
         td = service.person_name
         td = service.person_title

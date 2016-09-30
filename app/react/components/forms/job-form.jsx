@@ -15,7 +15,7 @@ class JobForm extends React.Component {
   static propTypes = {
     resource   : React.PropTypes.object.isRequired,
     selections : React.PropTypes.object.isRequired,
-    can_submit : React.PropTypes.bool.isRequired,
+    can_submit : React.PropTypes.bool.isRequired
   }
 
   //-----------  Helpers  -----------//
@@ -35,7 +35,7 @@ class JobForm extends React.Component {
     const title = `${resource.id ? 'Edit' : 'Create'} Job`
 
     return (
-      <div className="child-form case-form">
+      <div className="child-form job-form">
         <h1>{title}</h1>
 
         <fieldset>

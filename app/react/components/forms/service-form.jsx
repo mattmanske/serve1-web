@@ -16,6 +16,7 @@ class ServiceForm extends React.Component {
     resource   : React.PropTypes.object.isRequired,
     selections : React.PropTypes.object.isRequired,
     can_submit : React.PropTypes.bool.isRequired,
+    load_modal : React.PropTypes.func.isRequired
   }
 
   //-----------  Helpers  -----------//
@@ -24,21 +25,31 @@ class ServiceForm extends React.Component {
     return this.refs[ref] && this.refs[ref].getValue()
   }
 
+  //-----------  Modal Load Events  -----------//
+
+  _newPartyModal = () => {
+    this.props.load_modal('parties', 'party_id')
+  }
+
+  _editPartyModal = () => {
+    const party_id = this._getVal('party_id')
+    this.props.load_modal('parties', 'party_id', { id: party_id })
+  }
+
   //-----------  HTML Element Render  -----------//
 
   render(){
-    const { jobs, status, types } = this.props.selections
+    const { jobs, parties, status, types } = this.props.selections
     const resource = this.props.resource
 
-    const is_served = ('served' == this._getVal('status'))
+    const is_served    = ('served' == this._getVal('status'))
     const service_type = is_served ? resource.service_type : undefined
-
-    console.log(resource);
+    const has_party_id = !this._getVal('party_id')
 
     const title = `${resource.id ? 'Edit' : 'Create'} Service`
 
     return (
-      <div className="child-form case-form">
+      <div className="child-form service-form">
         <h1>{title}</h1>
 
         <fieldset>
@@ -61,6 +72,21 @@ class ServiceForm extends React.Component {
             validations="isExisty"
             validationError="Must set a status."
             />
+
+          {/* Party */}
+          <Select required ref="party_id"
+            label="Party"
+            name="service.party_id"
+            value={resource.party_id}
+            options={parties}
+            />
+
+          <a className="btn btn-sm btn-default" onClick={this._newPartyModal}>
+            <i className="fa fa-plus fa-fw" />
+            Add New Party
+          </a>
+
+          {!has_party_id && <small onClick={this._editPartyModal}><a>Edit</a></small>}
         </fieldset>
 
         <fieldset>

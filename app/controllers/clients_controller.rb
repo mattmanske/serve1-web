@@ -1,7 +1,7 @@
 class ClientsController < ApplicationController
   before_action :set_client, only: [:show, :edit, :update, :destroy]
 
-  respond_to :json, only: [:index, :show, :new, :create]
+  respond_to :json, only: [:index, :edit, :new, :create]
 
   # GET /clients
   def index

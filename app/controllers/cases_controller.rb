@@ -1,7 +1,7 @@
 class CasesController < ApplicationController
   before_action :set_case, only: [:show, :edit, :update, :destroy]
 
-  respond_to :json, only: [:index, :show, :new, :create]
+  respond_to :json, only: [:index, :edit, :new, :create]
 
   # GET /cases
   def index
@@ -69,8 +69,8 @@ class CasesController < ApplicationController
     def form_props
       clients     = select_format Client.all().order(:name)
       contacts    = select_format ClientContact.where(client: @case.client_id).to_a.sort_by(&:name)
-      counties    = select_format County.where(state: @case.state_id).order(:name)
       states      = select_format State.all.order(:name)
+      counties    = select_format County.where(state: @case.state_id).order(:name)
       court_types = select_format Case.court_types.keys, :to_s, :titlecase
 
       {

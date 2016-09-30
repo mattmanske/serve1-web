@@ -17,6 +17,7 @@ class ClientContactsController < ApplicationController
 
   # GET /client_contacts/1
   def show
+    form_repsonse(form_props)
   end
 
   # GET /client_contacts/new

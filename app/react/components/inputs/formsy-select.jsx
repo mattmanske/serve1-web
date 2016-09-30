@@ -17,7 +17,7 @@ class Select extends React.Component {
     const newValue = (this.props.multiple) ? selectedOptions.map(option => option.value) : value
 
     if (this.props.onChange) // Fire change event
-      this.props.onChange(newValue && newValue.value)
+      this.props.onChange(newValue)
 
     this.props.setValue(newValue)
   }

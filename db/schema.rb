@@ -164,13 +164,13 @@ ActiveRecord::Schema.define(version: 20160912215738) do
     t.integer  "job_id"
     t.integer  "party_id"
     t.integer  "status",             default: 0, null: false
-    t.integer  "service_type",       default: 0, null: false
-    t.string   "person_name",                    null: false
+    t.integer  "service_type"
+    t.string   "person_name"
     t.string   "person_title"
-    t.string   "person_capacity",                null: false
+    t.string   "person_capacity"
     t.string   "person_description"
     t.datetime "service_date"
-    t.integer  "attempts",           default: 1, null: false
+    t.integer  "attempts"
     t.integer  "mileage"
     t.text     "notes"
     t.datetime "created_at",                     null: false

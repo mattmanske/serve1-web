@@ -23,7 +23,7 @@ class CaseForm extends React.Component {
 
   componentWillReceiveProps(nextProps){
     if (this.props.resource.client_id != nextProps.resource.client_id){
-      this.props.refresh_selection('contacts', 'client_contact_id', { client: nextProps.resource.client_id })
+      this.props.refresh_selection('contacts', { client: nextProps.resource.client_id })
     }
   }
 
@@ -36,7 +36,7 @@ class CaseForm extends React.Component {
   //-----------  Modal Load Events  -----------//
 
   _newClientModal = () => {
-    this.props.load_modal('clients', 'client_id',)
+    this.props.load_modal('clients', 'client_id')
   }
 
   _editClientModal = () => {
@@ -59,12 +59,12 @@ class CaseForm extends React.Component {
 
   _updateContactSelections = (value) => {
     this.refs.client_contact_id.resetValue()
-    this.props.refresh_selection('contacts', 'client_contact_id', { client: value })
+    this.props.refresh_selection('contacts', { client: value })
   }
 
   _updateCountySelections = (value) => {
     this.refs.county_id.resetValue()
-    this.props.refresh_selection('counties', 'client_contact_id', { state: value })
+    this.props.refresh_selection('counties', { state: value })
   }
 
   //-----------  HTML Element Render  -----------//
@@ -101,9 +101,9 @@ class CaseForm extends React.Component {
 
           {!has_client_id && <small onClick={this._editClientModal}><a>Edit</a></small>}
 
-          {/* Contact */}
+          {/* Client Contact */}
           <Select required disabled={has_client_id} ref="client_contact_id"
-            label="Contact"
+            label="Client Contact"
             name="case.client_contact_id"
             value={resource.client_contact_id}
             options={contacts}
@@ -111,7 +111,7 @@ class CaseForm extends React.Component {
 
           <a className="btn btn-sm btn-default" onClick={this._newContactModal} disabled={has_client_id}>
             <i className="fa fa-plus fa-fw" />
-            Add New Contact
+            Add New Client Contact
           </a>
 
           {!has_contact_id && <small onClick={this._editContactModal}><a>Edit</a></small>}

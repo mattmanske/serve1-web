@@ -25,9 +25,11 @@ class ContactForm extends React.Component {
 
     const has_client_id = !!(resource.client_id)
 
+    const title = `${resource.id ? 'Edit' : 'Create'} Client Contact`
+
     return (
       <div className="child-form contact-form">
-        <h1>Create Client Contact</h1>
+        <h1>{title}</h1>
 
         <fieldset>
           {/* Client */}

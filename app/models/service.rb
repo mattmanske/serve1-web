@@ -3,13 +3,11 @@ class Service < ActiveRecord::Base
   enum service_type: { personal: 0, substitute: 1, corporate: 2, governmental: 3, attempted: 4 }
 
   belongs_to :job
-  has_one :party
+  belongs_to :party
+
   has_many :affidavits
   has_many :documents
   has_many :attachments
-
-  # validates :person_name,     presence: true
-  # validates :person_capacity, presence: true
 
   def name
     self.key

@@ -1,7 +1,7 @@
 class ServicesController < ApplicationController
   before_action :set_service, only: [:show, :edit, :update, :destroy]
 
-  respond_to :json, only: [:index, :show, :new, :create]
+  respond_to :json, only: [:index, :edit, :new, :create]
 
   # GET /services
   def index
@@ -62,22 +62,30 @@ class ServicesController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def service_params
-      params.require(:service).permit(:job_id, :party_id, :status, :service_type, :service_date, :person_name, :person_title, :person_capacity, :attempts, :mileage, :payment, :notes)
+      params.require(:service).permit(:job_id, :party_id, :status, :service_type, :service_date, :person_name, :person_title, :person_capacity, :attempts, :mileage, :payment_cents, :notes)
     end
 
     def form_props
-      jobs   = select_format Job.all()
-      status = select_format Service.statuses.keys, :to_s, :titlecase
-      types  = select_format Service.service_types.keys, :to_s, :titlecase
+      jobs    = select_format Job.all()
+      parties = select_format Party.all().order(:name)
+      status  = select_format Service.statuses.keys, :to_s, :titlecase
+      types   = select_format Service.service_types.keys, :to_s, :titlecase
 
       {
         :resource      => @service,
         :resource_type => 'services',
         :action        => polymorphic_path(@service),
         :selections => {
-          :jobs   => jobs,
-          :status => status,
-          :types  => types
+          :jobs    => jobs,
+          :status  => status,
+          :types   => types,
+          :parties => parties
+        },
+        :selection_urls => {
+          :parties => parties_path
+        },
+        :modal_urls => {
+          :parties => new_party_path
         }
       }
     end
