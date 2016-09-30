@@ -40,8 +40,6 @@ class RegistrationFrom extends React.Component {
         <h1>Sign Up</h1>
 
         <fieldset>
-          <legend>Account Information</legend>
-
           {/* User Email */}
           <Input required ref="email"
             autoFocus={true}

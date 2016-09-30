@@ -15,10 +15,11 @@ class CreateServices < ActiveRecord::Migration
       t.datetime :service_date
       t.integer :attempts, null: false, default: 1
       t.integer :mileage
-      t.monetize :payment
       t.text :notes
 
       t.timestamps null: false
     end
+
+    add_monetize :services, :payment, amount: { null: true, default: nil }, currency: { present: false }
   end
 end

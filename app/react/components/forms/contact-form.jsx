@@ -30,8 +30,6 @@ class ContactForm extends React.Component {
         <h1>Create Client Contact</h1>
 
         <fieldset>
-          <legend>Contact Details</legend>
-
           {/* Client */}
           <Select required disabled={has_client_id} ref="client_id"
             autoFocus={true}
@@ -88,7 +86,10 @@ class ContactForm extends React.Component {
             />
         </fieldset>
 
-        <button type="submit" className="btn btn-default pull-right">
+        <button className="btn btn-lg btn-default pull-right"
+          type="submit"
+          disabled={!this.props.can_submit}
+        >
           Save
         </button>
       </div>

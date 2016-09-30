@@ -101,16 +101,15 @@ ActiveRecord::Schema.define(version: 20160912215738) do
   add_index "documents", ["service_id"], name: "index_documents_on_service_id", using: :btree
 
   create_table "jobs", force: :cascade do |t|
-    t.string   "key",                             null: false
+    t.string   "key",                       null: false
     t.integer  "case_id"
-    t.integer  "status",          default: 0,     null: false
+    t.integer  "status",        default: 0, null: false
     t.datetime "date_sent"
     t.datetime "date_received"
-    t.integer  "amount_cents",    default: 0,     null: false
-    t.string   "amount_currency", default: "USD", null: false
     t.text     "notes"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.integer  "amount_cents"
   end
 
   add_index "jobs", ["case_id"], name: "index_jobs_on_case_id", using: :btree
@@ -164,20 +163,19 @@ ActiveRecord::Schema.define(version: 20160912215738) do
   create_table "services", force: :cascade do |t|
     t.integer  "job_id"
     t.integer  "party_id"
-    t.integer  "status",             default: 0,     null: false
-    t.integer  "service_type",       default: 0,     null: false
-    t.string   "person_name",                        null: false
+    t.integer  "status",             default: 0, null: false
+    t.integer  "service_type",       default: 0, null: false
+    t.string   "person_name",                    null: false
     t.string   "person_title"
-    t.string   "person_capacity",                    null: false
+    t.string   "person_capacity",                null: false
     t.string   "person_description"
     t.datetime "service_date"
-    t.integer  "attempts",           default: 1,     null: false
+    t.integer  "attempts",           default: 1, null: false
     t.integer  "mileage"
-    t.integer  "payment_cents",      default: 0,     null: false
-    t.string   "payment_currency",   default: "USD", null: false
     t.text     "notes"
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.integer  "payment_cents"
   end
 
   add_index "services", ["job_id"], name: "index_services_on_job_id", using: :btree

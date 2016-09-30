@@ -7,6 +7,10 @@ class Job < ActiveRecord::Base
   validates :status, presence: true
   validates :key,    presence: true, uniqueness: { case_sensitive: false, scope: :case_id }
 
+  def name
+    self.key
+  end
+
   def recieved_date
     self.date_received.strftime("%b #{self.date_received.day.ordinalize}, %y") if self.date_received
   end

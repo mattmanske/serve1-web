@@ -84,8 +84,6 @@ class CaseForm extends React.Component {
         <h1>{title}</h1>
 
         <fieldset>
-          <legend>Client Details</legend>
-
           {/* Client */}
           <Select required ref="client_id"
             autoFocus={true}
@@ -188,7 +186,10 @@ class CaseForm extends React.Component {
             />
         </fieldset>
 
-        <button type="submit" className="btn btn-default pull-right">
+        <button className="btn btn-lg btn-default pull-right"
+          type="submit"
+          disabled={!this.props.can_submit}
+        >
           Save
         </button>
       </div>

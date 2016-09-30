@@ -9,12 +9,12 @@ class CreateJobs < ActiveRecord::Migration
 
       t.datetime :date_sent
       t.datetime :date_received
-      t.monetize :amount
       t.text :notes
 
       t.timestamps null: false
     end
 
     add_index :jobs, [:key, :case_id], unique: true
+    add_monetize :jobs, :amount, amount: { null: true, default: nil }, currency: { present: false }
   end
 end

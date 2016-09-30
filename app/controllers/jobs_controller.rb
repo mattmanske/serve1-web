@@ -5,7 +5,7 @@ class JobsController < ApplicationController
 
   # GET /jobs
   def index
-    @jobs = Job.all.order(:key)
+    @jobs = Job.all
 
     respond_to do |format|
       format.html
@@ -35,7 +35,7 @@ class JobsController < ApplicationController
     if @job.save
       render json: { resource: @job, redirect: jobs_path() }
     else
-      render json: { case: @job.errors }, status: :unprocessable_entity
+      render json: { job: @job.errors }, status: :unprocessable_entity
     end
   end
 
@@ -44,7 +44,7 @@ class JobsController < ApplicationController
     if @job.update(job_params)
       render json: { resource: @job, redirect: jobs_path() }
     else
-      render json: { case: @job.errors }, status: :unprocessable_entity
+      render json: { job: @job.errors }, status: :unprocessable_entity
     end
   end
 

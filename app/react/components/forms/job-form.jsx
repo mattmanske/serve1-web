@@ -39,8 +39,6 @@ class JobForm extends React.Component {
         <h1>{title}</h1>
 
         <fieldset>
-          <legend>Details</legend>
-
           {/* Case */}
           <Select required ref="case_id"
             label="Case"
@@ -99,19 +97,23 @@ class JobForm extends React.Component {
             label="Amount"
             name="job.amount_cents"
             value={resource.amount_cents}
+            min={0}
             />
 
           {/* Notes */}
           <Textarea disabled={!is_completed} ref="notes"
             rows={3}
             type="number"
-            label="Amount"
+            label="Notes"
             name="job.notes"
             value={resource.notes}
             />
         </fieldset>
 
-        <button type="submit" className="btn btn-default pull-right">
+        <button className="btn btn-lg btn-default pull-right"
+          type="submit"
+          disabled={!this.props.can_submit}
+        >
           Save
         </button>
       </div>

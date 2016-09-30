@@ -36,6 +36,7 @@ class Select extends React.Component {
             onChange={this._changeValue}
             value={this.props.getValue()}
             simpleValue={true}
+            clearable={this.props.clearable || false}
             />
         </div>
       </div>

@@ -8,6 +8,14 @@ class Service < ActiveRecord::Base
   has_many :documents
   has_many :attachments
 
-  validates :person_name,     presence: true
-  validates :person_capacity, presence: true
+  # validates :person_name,     presence: true
+  # validates :person_capacity, presence: true
+
+  def name
+    self.key
+  end
+
+  def date_served
+    self.service_date.strftime("%b #{self.service_date.day.ordinalize}, %y") if self.service_date
+  end
 end

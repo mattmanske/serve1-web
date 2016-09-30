@@ -16,6 +16,7 @@ import CaseForm         from '../components/forms/case-form'
 import LoginForm        from '../components/forms/login-form'
 import ClientForm       from '../components/forms/client-form'
 import ContactForm      from '../components/forms/contact-form'
+import ServiceForm      from '../components/forms/service-form'
 import RegistrationFrom from '../components/forms/registration-form'
 
 //-----------  Init  -----------//
@@ -57,6 +58,7 @@ class FormWrapper extends React.Component {
       case 'login'        : return LoginForm
       case 'clients'      : return ClientForm
       case 'contacts'     : return ContactForm
+      case 'services'     : return ServiceForm
       case 'registration' : return RegistrationFrom
     }
   }

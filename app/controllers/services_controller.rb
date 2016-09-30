@@ -1,9 +1,16 @@
 class ServicesController < ApplicationController
   before_action :set_service, only: [:show, :edit, :update, :destroy]
 
+  respond_to :json, only: [:index, :show, :new, :create]
+
   # GET /services
   def index
     @services = Service.all
+
+    respond_to do |format|
+      format.html
+      format.json { render :json => select_format(@services) }
+    end
   end
 
   # GET /services/1
@@ -12,11 +19,13 @@ class ServicesController < ApplicationController
 
   # GET /services/new
   def new
-    @service = Service.new
+    @service = Service.new({ job_id: params[:job], status: :dispatched })
+    form_repsonse(form_props)
   end
 
   # GET /services/1/edit
   def edit
+    form_repsonse(form_props)
   end
 
   # POST /services
@@ -24,18 +33,18 @@ class ServicesController < ApplicationController
     @service = Service.new(service_params)
 
     if @service.save
-      redirect_to @service, notice: 'Service was successfully created.'
+      render json: { resource: @service, redirect: services_path() }
     else
-      render :new
+      render json: { service: @service.errors }, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /services/1
   def update
     if @service.update(service_params)
-      redirect_to @service, notice: 'Service was successfully updated.'
+      render json: { resource: @service, redirect: services_path() }
     else
-      render :edit
+      render json: { service: @service.errors }, status: :unprocessable_entity
     end
   end
 
@@ -54,5 +63,22 @@ class ServicesController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def service_params
       params.require(:service).permit(:job_id, :party_id, :status, :service_type, :service_date, :person_name, :person_title, :person_capacity, :attempts, :mileage, :payment, :notes)
+    end
+
+    def form_props
+      jobs   = select_format Job.all()
+      status = select_format Service.statuses.keys, :to_s, :titlecase
+      types  = select_format Service.service_types.keys, :to_s, :titlecase
+
+      {
+        :resource      => @service,
+        :resource_type => 'services',
+        :action        => polymorphic_path(@service),
+        :selections => {
+          :jobs   => jobs,
+          :status => status,
+          :types  => types
+        }
+      }
     end
 end

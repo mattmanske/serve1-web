@@ -24,8 +24,6 @@ class ClientForm extends React.Component {
         <h1>Create Client</h1>
 
         <fieldset>
-          <legend>Client Details</legend>
-
           {/* Client ID */}
           <Input required ref="key"
             autoFocus={true}
@@ -74,7 +72,10 @@ class ClientForm extends React.Component {
             />
         </fieldset>
 
-        <button type="submit" className="btn btn-default pull-right">
+        <button className="btn btn-lg btn-default pull-right"
+          type="submit"
+          disabled={!this.props.can_submit}
+        >
           Save
         </button>
       </div>
