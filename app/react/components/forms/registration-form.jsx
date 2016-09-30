@@ -5,7 +5,7 @@ import _         from 'lodash'
 import React     from 'react'
 import { Input } from 'formsy-react-components'
 
-import Select    from '../formsy-select'
+import Select    from '../inputs/formsy-select'
 
 //-----------  Class Setup  -----------//
 

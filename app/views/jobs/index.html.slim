@@ -6,27 +6,26 @@ table.table
       th Key
       th Case
       th Status
-      th Date sent
-      th Date received
-      th Amount
+      th Date Received
+      th Date Sent
       th Notes
-      th
-      th
       th
 
   tbody
     - @jobs.each do |job|
       tr
         td = job.key
-        td = job.case
-        td = job.status
-        td = job.date_sent
-        td = job.date_received
-        td = job.amount
+        td = job.case.name
+        td = job.status.titlecase
+        td = job.recieved_date
+        td = job.sent_date
         td = job.notes
-        td = link_to 'Show', job
-        td = link_to 'Edit', edit_job_path(job)
-        td = link_to 'Destroy', job, data: {:confirm => 'Are you sure?'}, :method => :delete
+        td
+          = link_to 'Show', job
+          br
+          = link_to 'Edit', edit_job_path(job)
+          br
+          = link_to 'Destroy', job, data: {:confirm => 'Are you sure?'}, :method => :delete
 
 br
 

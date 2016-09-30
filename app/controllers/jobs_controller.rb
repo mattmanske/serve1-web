@@ -1,9 +1,16 @@
 class JobsController < ApplicationController
   before_action :set_job, only: [:show, :edit, :update, :destroy]
 
+  respond_to :json, only: [:index, :show, :new, :create]
+
   # GET /jobs
   def index
-    @jobs = Job.all
+    @jobs = Job.all.order(:key)
+
+    respond_to do |format|
+      format.html
+      format.json { render :json => select_format(@jobs) }
+    end
   end
 
   # GET /jobs/1
@@ -12,11 +19,13 @@ class JobsController < ApplicationController
 
   # GET /jobs/new
   def new
-    @job = Job.new
+    @job = Job.new({ case_id: params[:case], date_received: Date.today, status: :received })
+    form_repsonse(form_props)
   end
 
   # GET /jobs/1/edit
   def edit
+    form_repsonse(form_props)
   end
 
   # POST /jobs
@@ -24,18 +33,18 @@ class JobsController < ApplicationController
     @job = Job.new(job_params)
 
     if @job.save
-      redirect_to @job, notice: 'Job was successfully created.'
+      render json: { resource: @job, redirect: jobs_path() }
     else
-      render :new
+      render json: { case: @job.errors }, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /jobs/1
   def update
     if @job.update(job_params)
-      redirect_to @job, notice: 'Job was successfully updated.'
+      render json: { resource: @job, redirect: jobs_path() }
     else
-      render :edit
+      render json: { case: @job.errors }, status: :unprocessable_entity
     end
   end
 
@@ -54,5 +63,21 @@ class JobsController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def job_params
       params.require(:job).permit(:key, :case_id, :status, :date_sent, :date_received, :amount, :notes)
+    end
+
+    # Setup form
+    def form_props
+      cases  = select_format Case.all().order(:key)
+      status = select_format Job.statuses.keys, :to_s, :titlecase
+
+      {
+        :resource      => @job,
+        :resource_type => 'jobs',
+        :action        => polymorphic_path(@job),
+        :selections => {
+          :cases  => cases,
+          :status => status,
+        }
+      }
     end
 end

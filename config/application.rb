@@ -27,7 +27,5 @@ module Serve1
       g.stylesheets     false
       g.javascripts     false
     end
-
-    config.react.server_side = true
   end
 end

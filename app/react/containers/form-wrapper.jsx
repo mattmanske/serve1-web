@@ -11,6 +11,7 @@ import update           from 'react-addons-update'
 import React            from 'react'
 import Formsy           from 'formsy-react'
 
+import JobForm          from '../components/forms/job-form'
 import CaseForm         from '../components/forms/case-form'
 import LoginForm        from '../components/forms/login-form'
 import ClientForm       from '../components/forms/client-form'
@@ -51,11 +52,12 @@ class FormWrapper extends React.Component {
 
   _getFormClass(){
     switch (this.state.resource_type){
-      case 'registration' : return RegistrationFrom
-      case 'login'        : return LoginForm
+      case 'jobs'         : return JobForm
       case 'cases'        : return CaseForm
+      case 'login'        : return LoginForm
       case 'clients'      : return ClientForm
       case 'contacts'     : return ContactForm
+      case 'registration' : return RegistrationFrom
     }
   }
 

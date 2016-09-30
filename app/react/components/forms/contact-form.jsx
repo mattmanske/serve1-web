@@ -1,7 +1,9 @@
 //-----------  Imports  -----------//
 
-import React             from 'react'
-import { Input, Select } from 'formsy-react-components'
+import React     from 'react'
+import { Input } from 'formsy-react-components'
+
+import Select    from '../inputs/formsy-select'
 
 //-----------  Class Setup  -----------//
 

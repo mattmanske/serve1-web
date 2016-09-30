@@ -1,8 +1,9 @@
 //-----------  Imports  -----------//
 
 import React       from 'react'
-import ReactSelect from 'react-select'
 import { HOC }     from 'formsy-react'
+
+import ReactSelect from 'react-select'
 
 //-----------  Class Setup  -----------//
 

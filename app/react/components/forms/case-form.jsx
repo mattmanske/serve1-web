@@ -3,7 +3,7 @@
 import React               from 'react'
 import { Input, Checkbox } from 'formsy-react-components'
 
-import Select              from '../formsy-select'
+import Select              from '../inputs/formsy-select'
 
 //-----------  Class Setup  -----------//
 
