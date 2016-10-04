@@ -28,6 +28,9 @@ Rails.application.routes.draw do
   end
 
   authenticated :user do
+    get 'dashboard/fill_data'
+    get 'dashboard/clear_data'
+    
     root :to => 'dashboard#index', :as => :organization_root
   end
 

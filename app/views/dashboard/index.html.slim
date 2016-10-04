@@ -10,12 +10,12 @@
           .col-xs-3
             i.fa.fa-comments.fa-5x
           .col-xs-9.text-right
-            .huge 26
-            div Active Jobs
+            .huge= @case_count
+            div Cases
       a href="#"
       .panel-footer
-        span.pull-left View Details
-        span.pull-right
+        = link_to 'View Cases', cases_path, class: 'pull-left'
+        = link_to cases_path, class: 'pull-right' do
           i.fa.fa-arrow-circle-right
         .clearfix
   .col-lg-3.col-md-6
@@ -25,12 +25,12 @@
           .col-xs-3
             i.fa.fa-tasks.fa-5x
           .col-xs-9.text-right
-            .huge 12
-            div Completed Jobs
+            .huge= @job_count
+            div Jobs
       a href="#"
       .panel-footer
-        span.pull-left View Details
-        span.pull-right
+        = link_to 'View Jobs', jobs_path, class: 'pull-left'
+        = link_to jobs_path, class: 'pull-right' do
           i.fa.fa-arrow-circle-right
         .clearfix
   .col-lg-3.col-md-6
@@ -40,12 +40,12 @@
           .col-xs-3
             i.fa.fa-shopping-cart.fa-5x
           .col-xs-9.text-right
-            .huge 124
-            div Unassigned Jobs
+            .huge= @service_count
+            div Services
       a href="#"
       .panel-footer
-        span.pull-left View Details
-        span.pull-right
+        = link_to 'View Services', services_path, class: 'pull-left'
+        = link_to services_path, class: 'pull-right' do
           i.fa.fa-arrow-circle-right
         .clearfix
   .col-lg-3.col-md-6
@@ -55,15 +55,20 @@
           .col-xs-3
             i.fa.fa-support.fa-5x
           .col-xs-9.text-right
-            .huge 13
-            div Ageing Cases
+            .huge= @client_count
+            div Clients
       a href="#"
       .panel-footer
-        span.pull-left View Details
-        span.pull-right
+        = link_to 'View Clients', clients_path, class: 'pull-left'
+        = link_to clients_path, class: 'pull-right' do
           i.fa.fa-arrow-circle-right
         .clearfix
 
 .row
   .col-lg-12
     = link_to 'Add New Case', new_case_path, class: 'btn btn-lg btn-primary'
+    br
+    br
+    .btn-group.btn-group-sm
+      = link_to 'Fill Data', dashboard_fill_data_path, class: 'btn btn-default'
+      = link_to 'Reset Data', dashboard_clear_data_path, class: 'btn btn-default'
