@@ -123,13 +123,14 @@ class TableWrapper extends React.Component {
 
   render(){
     const { data, tableWidth, tableHeight, sortIndex, columnDirs } = this.state
-    const title = this._getTitle()
+    const title   = this._getTitle()
+    const records = data.length
 
     return (
       <div className="table-wrapper">
         <div className="table-header row">
           <div className="col-sm-7">
-            <h1 className="pull-left">{title}</h1>
+            <h1 className="pull-left">{title} <small><i>({records})</i></small></h1>
           </div>
           <div className="col-sm-5">
             <div className="input-group">
@@ -155,7 +156,7 @@ class TableWrapper extends React.Component {
             width={tableWidth}
             height={tableHeight}
             rowHeight={50}
-            rowsCount={data.length}
+            rowsCount={records}
             headerHeight={35}
             >
 

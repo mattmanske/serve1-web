@@ -8,7 +8,7 @@ class PartiesController < ApplicationController
     @parties = Party.all
 
     respond_to do |format|
-      format.html
+      format.html { render react_component: 'TableWrapper', props: table_props }
       format.json { render :json => select_format(@parties) }
     end
   end
@@ -84,6 +84,22 @@ class PartiesController < ApplicationController
           :counties       => counties_path,
           :municipalities => municipalities_path
         },
+      }
+    end
+
+    # Setup table
+    def table_props
+      {
+        :sort_col => :id,
+        :type     => 'parties',
+        :rows     => @parties.map { |p| PartySerializer.new(p) },
+        :columns => {
+          :id            => 'ID',
+          :service_count => 'Service Count',
+          :name          => 'Name',
+          :location      => 'Location',
+          :actions       => ''
+        }.to_a
       }
     end
 end

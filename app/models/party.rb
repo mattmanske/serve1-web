@@ -16,4 +16,12 @@ class Party < ActiveRecord::Base
   def municipality
     Municipality.find(self.municipality_id)
   end
+
+  def service_count
+    Service.where(party_id: self.id).count
+  end
+
+  def location
+    [self.municipality.name, self.county.name, self.state.two_digit_code].reject(&:blank?).join(', ')
+  end
 end

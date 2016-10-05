@@ -44,13 +44,12 @@
       li
         a href="#"
           i.fa.fa-group.fa-fw
-          | Clients & Invoicing
+          | Clients & Parties
           span.fa.arrow
         ul.nav.nav-second-level
           li= link_to "Clients", clients_path
           li= link_to "Client Contacts", client_contacts_path
-          li
-            a Invoicing
+          li= link_to "Serving Parties", parties_path
 
       li= link_to clients_path do
         i.fa.fa-gears.fa-fw
