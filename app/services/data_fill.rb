@@ -17,7 +17,7 @@ private
         :key     => ['CL-', Faker::Address.building_number].join(),
         :name    => Faker::Company.name,
         :email   => Faker::Internet.safe_email,
-        :address => [Faker::Address.street_address, Faker::Address.city].join(', '),
+        :address => [Faker::Address.street_address, Faker::Address.city, Faker::Address.state_abbr].join(', '),
         :phone   => Faker::PhoneNumber.cell_phone
       })
 
@@ -115,7 +115,7 @@ private
 
       party = Party.create({
         :name            => [true, false].sample ? Faker::Name.name_with_middle : Faker::Company.name,
-        :address         => [Faker::Address.street_address, Faker::Address.city].join(', '),
+        :address         => [Faker::Address.street_address, Faker::Address.city, Faker::Address.state_abbr].join(', '),
         :state_id        => 60,
         :county_id       => county.id,
         :municipality_id => municipality.id

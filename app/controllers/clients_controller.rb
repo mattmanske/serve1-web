@@ -1,14 +1,14 @@
 class ClientsController < ApplicationController
   before_action :set_client, only: [:show, :edit, :update, :destroy]
 
-  respond_to :json, only: [:index, :edit, :new, :create]
+  respond_to :json, only: [:index, :edit, :new, :create, :destroy]
 
   # GET /clients
   def index
     @clients = Client.all.order(:name)
 
     respond_to do |format|
-      format.html
+      format.html { render react_component: 'TableWrapper', props: table_props }
       format.json { render :json => select_format(@clients) }
     end
   end
@@ -51,7 +51,11 @@ class ClientsController < ApplicationController
   # DELETE /clients/1
   def destroy
     @client.destroy
-    redirect_to clients_url, notice: 'Client was successfully destroyed.'
+
+    respond_to do |format|
+      format.html { redirect_to clients_url, notice: 'Client was successfully destroyed.' }
+      format.json
+    end
   end
 
   private
@@ -71,6 +75,23 @@ class ClientsController < ApplicationController
         :resource      => @client,
         :resource_type => 'clients',
         :action        => polymorphic_path(@client),
+      }
+    end
+
+    # Setup table
+    def table_props
+      {
+        :sort_col => :name,
+        :type     => 'clients',
+        :rows     => @clients.map { |c| ClientSerializer.new(c) },
+        :columns => {
+          :key     => 'ID',
+          :name    => 'Name',
+          :email   => 'Email',
+          :address => 'Address',
+          :phone   => 'Phone #',
+          :actions => ''
+        }.to_a
       }
     end
 end

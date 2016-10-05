@@ -22,6 +22,8 @@ GEM
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
     active_link_to (1.0.3)
       actionpack
+    active_model_serializers (0.9.5)
+      activemodel (>= 3.2)
     activejob (4.2.7.1)
       activesupport (= 4.2.7.1)
       globalid (>= 0.3.0)
@@ -226,6 +228,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_link_to
+  active_model_serializers (~> 0.9.3)
   apartment (~> 1.2.0)
   autoprefixer-rails (~> 6.4.1)
   bourbon (~> 5.0.0.beta.6)

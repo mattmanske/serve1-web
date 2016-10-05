@@ -26,6 +26,7 @@
     "babel-preset-stage-1": "^6.5.0",
     "css-loader": "^0.23.0",
     "extract-text-webpack-plugin": "^1.0.0",
+    "fixed-data-table-2": "^0.7.4",
     "flat": "^2.0.1",
     "forever": "^0.15.0",
     "formsy-react": "^0.18.1",

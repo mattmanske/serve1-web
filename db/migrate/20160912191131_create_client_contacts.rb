@@ -1,7 +1,7 @@
 class CreateClientContacts < ActiveRecord::Migration
   def change
     create_table :client_contacts do |t|
-      t.references :client, index: true, foreign_key: true
+      t.references :client, index: true, foreign_key: true, on_delete: :cascade
       t.string :first_name, null: false, default: ''
       t.string :last_name,  null: false, default: ''
       t.string :email,      null: false
