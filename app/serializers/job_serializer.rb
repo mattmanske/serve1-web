@@ -10,10 +10,6 @@ class JobSerializer < ActiveModel::Serializer
     object.case.title
   end
 
-  def sent_date
-    object.sent_date || '-'
-  end
-
   def notes
     truncate(object.notes)
   end

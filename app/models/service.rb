@@ -13,7 +13,15 @@ class Service < ActiveRecord::Base
     self.key
   end
 
+  def status_name
+    self.status.titlecase
+  end
+
+  def service_type_name
+    self.service_type.titlecase if self.service_type
+  end
+
   def date_served
-    self.service_date.strftime("%b #{self.service_date.day.ordinalize}, %y") if self.service_date
+    self.service_date.strftime("%b #{self.service_date.day.ordinalize}, %Y") if self.service_date
   end
 end

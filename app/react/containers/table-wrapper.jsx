@@ -36,6 +36,7 @@ class TableWrapper extends React.Component {
 
   componentDidMount(){
     this._updateSize()
+    console.log(this.props.rows[0]);
     $(window).resize(this._onResize)
   }
 
@@ -179,7 +180,7 @@ class TableWrapper extends React.Component {
                   }
                   cell={({rowIndex, ...props}) => (
                     <BasicCell
-                      data={data[sortIndex[rowIndex]][col_key]}
+                      data={data[sortIndex[rowIndex]][col_key] || '-'}
                       editRow={this._updateData}
                       //deleteRow={this._deleteData}
                       />

@@ -5,10 +5,10 @@ class ServicesController < ApplicationController
 
   # GET /services
   def index
-    @services = Service.all
+    @services = Service.all.order(created_at: :desc)
 
     respond_to do |format|
-      format.html
+      format.html { render react_component: 'TableWrapper', props: table_props }
       format.json { render :json => select_format(@services) }
     end
   end
@@ -87,6 +87,27 @@ class ServicesController < ApplicationController
         :modal_urls => {
           :parties => new_party_path
         }
+      }
+    end
+
+    # Setup table
+    def table_props
+      {
+        :sort_col => :created_at,
+        :type     => 'services',
+        :rows     => @services.map { |s| ServiceSerializer.new(s) },
+        :columns => {
+          :job_key           => 'Job',
+          :status_name       => 'Status',
+          :party_name        => 'Party',
+          :person_name       => 'Person',
+          :person_title      => 'Title',
+          :attempts          => 'Attempts',
+          :service_type_name => 'Service Type',
+          :date_served       => 'Service Date',
+          :notes             => 'Notes',
+          :actions           => ''
+        }.to_a
       }
     end
 end

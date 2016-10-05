@@ -5,7 +5,7 @@ class JobsController < ApplicationController
 
   # GET /jobs
   def index
-    @jobs = Job.all.order(:date_received)
+    @jobs = Job.all.order(date_received: :desc)
 
     respond_to do |format|
       format.html { render react_component: 'TableWrapper', props: table_props }

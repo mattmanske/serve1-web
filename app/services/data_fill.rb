@@ -79,16 +79,16 @@ private
         :amount_cents  => ([30, 45, 50, 75].sample)*100
       })
 
-      create_services(job, rand(2..9)) unless (status == 0)
+      create_services(job, rand(2..9)) unless (status == 'received')
     end
   end
 
   def create_services(job, count)
     count.times do |index|
       party  = create_party(index)
-      status = (job.status == 1) ? [0..2].sample : 3
+      status = (job.status == 'dispatched') ? [:dispatched, :in_progress, :blocked].sample : :served
       type   = Service.service_types[Service.service_types.keys.sample]
-      served = (status == 3)
+      served = (status == :served)
 
       service = Service.create({
         :job_id             => job.id,
@@ -100,8 +100,8 @@ private
         :person_capacity    => (served) ? Faker::Company.profession.capitalize : nil,
         :person_description => (served) ? Faker::Lorem.paragraph : nil,
         :service_date       => (served) ? Faker::Date.backward(7) : nil,
-        :attempts           => (served) ? [1..4].sample : nil,
-        :mileage            => (served) ? [5..54].sample : nil,
+        :attempts           => (served) ? [*1..4].sample : nil,
+        :mileage            => (served) ? [*5..54].sample : nil,
         :notes              => (served) ? Faker::Lorem.paragraph : nil,
         :payment_cents      => (served) ? ([10, 15, 20, 25, 30].sample)*100 : nil
       })
