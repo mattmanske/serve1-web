@@ -11,11 +11,15 @@ class Job < ActiveRecord::Base
     self.key
   end
 
+  def status_name
+    self.status.titlecase
+  end
+
   def recieved_date
-    self.date_received.strftime("%b #{self.date_received.day.ordinalize}, %y") if self.date_received
+    self.date_received.strftime("%b #{self.date_received.day.ordinalize}, %Y") if self.date_received
   end
 
   def sent_date
-    self.date_sent.strftime("%b #{self.date_sent.day.ordinalize}, %y") if self.date_sent
+    self.date_sent.strftime("%b #{self.date_sent.day.ordinalize}, %Y") if self.date_sent
   end
 end

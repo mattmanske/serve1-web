@@ -5,10 +5,10 @@ class JobsController < ApplicationController
 
   # GET /jobs
   def index
-    @jobs = Job.all
+    @jobs = Job.all.order(:date_received)
 
     respond_to do |format|
-      format.html
+      format.html { render react_component: 'TableWrapper', props: table_props }
       format.json { render :json => select_format(@jobs) }
     end
   end
@@ -78,6 +78,24 @@ class JobsController < ApplicationController
           :cases  => cases,
           :status => status,
         }
+      }
+    end
+
+    # Setup table
+    def table_props
+      {
+        :sort_col => :recieved_date,
+        :type     => 'jobs',
+        :rows     => @jobs.map { |j| JobSerializer.new(j) },
+        :columns => {
+          :key           => 'ID',
+          :status_name   => 'Status',
+          :case_title    => 'Case',
+          :recieved_date => 'Date Recieved',
+          :sent_date     => 'Date Sent',
+          :notes         => 'Notes',
+          :actions       => ''
+        }.to_a
       }
     end
 end
