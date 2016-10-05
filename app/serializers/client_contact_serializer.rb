@@ -1,7 +1,8 @@
 class ClientContactSerializer < ActiveModel::Serializer
   root false
 
-  attributes :id, :client_name, :name, :email, :address, :phone, :actions
+  attributes :id, :client_name, :name, :email, :address,
+             :phone, :actions
 
   def client_name
     object.client.name

@@ -8,7 +8,7 @@ class CasesController < ApplicationController
     @cases = Case.all.order(:key)
 
     respond_to do |format|
-      format.html
+      format.html { render react_component: 'TableWrapper', props: table_props }
       format.json { render :json => select_format(@cases) }
     end
   end
@@ -93,6 +93,23 @@ class CasesController < ApplicationController
           :clients  => new_client_path,
           :contacts => new_client_contact_path
         }
+      }
+    end
+
+    # Setup table
+    def table_props
+      {
+        :sort_col => :key,
+        :type     => 'cases',
+        :rows     => @cases.map { |c| CaseSerializer.new(c) },
+        :columns => {
+          :key          => 'ID',
+          :title        => 'Case',
+          :location     => 'Location',
+          :court_name   => 'Court',
+          :contact_name => 'Client Contact',
+          :actions      => ''
+        }.to_a
       }
     end
 end

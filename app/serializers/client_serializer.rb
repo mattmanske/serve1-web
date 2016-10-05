@@ -1,7 +1,8 @@
 class ClientSerializer < ActiveModel::Serializer
   root false
 
-  attributes :id, :key, :name, :email, :address, :phone, :actions
+  attributes :id, :key, :name, :email, :address, :phone,
+             :actions
 
   def actions
     {
