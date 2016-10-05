@@ -1,13 +1,13 @@
 class ClientSerializer < ActiveModel::Serializer
-  self.root = false
+  root false
 
   attributes :id, :key, :name, :email, :address, :phone, :actions
 
   def actions
     {
-      :view   => client_path(self.id),
-      :edit   => edit_client_path(self.id, format: :json),
-      # :delete => client_path(self.id)
+      :view => client_path(object.id),
+      :edit => edit_client_path(object.id, format: :json),
+      # :delete => client_path(object.id)
     }
   end
 end

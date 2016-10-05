@@ -10,7 +10,7 @@ class ClientContactsController < ApplicationController
     @client_contacts = apply_scopes(ClientContact).all.to_a.sort_by(&:name)
 
     respond_to do |format|
-      format.html
+      format.html { render react_component: 'TableWrapper', props: table_props }
       format.json { render :json => select_format(@client_contacts) }
     end
   end
@@ -79,6 +79,23 @@ class ClientContactsController < ApplicationController
         :selections    => {
           :clients => clients
         }
+      }
+    end
+
+    # Setup table
+    def table_props
+      {
+        :sort_col => :name,
+        :type     => 'contacts',
+        :rows     => @client_contacts.map { |c| ClientContactSerializer.new(c) },
+        :columns => {
+          :client_name => 'Client',
+          :name        => 'Name',
+          :email       => 'Email',
+          :address     => 'Address',
+          :phone       => 'Phone #',
+          :actions     => ''
+        }.to_a
       }
     end
 end

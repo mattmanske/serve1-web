@@ -1,4 +1,4 @@
-$(document).on('ready', function(event) {
+$(document).on('ready turbolinks:load', function(event) {
   $('#side-menu').metisMenu();
 });
 
@@ -24,19 +24,22 @@ $(function() {
         }
     });
 
-    var url = window.location;
-    // var element = $('ul.nav a').filter(function() {
-    //     return this.href == url;
-    // }).addClass('active').parent().parent().addClass('in').parent();
-    var element = $('ul.nav a').filter(function() {
+    $(window).bind('turbolinks:load', function(event) {
+      $('ul.nav a.active').removeClass('active')
+      var url = window.location;
+      // var element = $('ul.nav a').filter(function() {
+      //     return this.href == url;
+      // }).addClass('active').parent().parent().addClass('in').parent();
+      var element = $('ul.nav a').filter(function() {
         return this.href == url;
-    }).addClass('active').parent();
+      }).addClass('active').parent();
 
-    while (true) {
+      while (true) {
         if (element.is('li')) {
-            element = element.parent().addClass('in').parent();
+          element = element.parent().addClass('in').parent();
         } else {
-            break;
+          break;
         }
-    }
+      }
+    });
 });
