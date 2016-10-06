@@ -25,10 +25,12 @@ Rails.application.routes.draw do
     resources :clients, shallow: true do
       resources :client_contacts
     end
+    resources :client_contacts, only: [:index]
 
     resources :services, shallow: true do
       resources :affidavits
     end
+    resources :affidavits, only: [:index]
   end
 
   authenticated :user do

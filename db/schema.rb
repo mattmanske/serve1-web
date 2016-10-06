@@ -29,7 +29,6 @@ ActiveRecord::Schema.define(version: 20160912215738) do
 
   create_table "attachments", force: :cascade do |t|
     t.integer  "service_id"
-    t.string   "url",        null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

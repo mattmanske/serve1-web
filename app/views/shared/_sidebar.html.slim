@@ -29,8 +29,8 @@
           | Documents
           span.fa.arrow
         ul.nav.nav-second-level
-          li= link_to 'Affidavits', organization_root_path
-          li= link_to 'Other Documents', organization_root_path
+          li= link_to 'Affidavits', affidavits_path
+          li= link_to 'Other Documents', documents_path
 
       li
         a href="#"
@@ -48,6 +48,7 @@
           span.fa.arrow
         ul.nav.nav-second-level
           li= link_to "Clients", clients_path
+          li= link_to "Client Contacts", client_contacts_path
           li= link_to "Serving Parties", parties_path
 
       li= link_to clients_path do

@@ -1,12 +1,13 @@
 class AffidavitsController < ApplicationController
   before_action :set_affidavit, only: [:show, :edit, :update, :destroy]
 
-  respond_to :json, only: [:index, :show, :new, :create]
+  respond_to :json, only: [:show, :new, :create]
   respond_to :pdf, only: [:show]
 
   # GET /affidavits
   def index
-    @affidavits = Affidavit.all
+    @affidavits = Affidavit.all.order(updated_at: :desc)
+    render react_component: 'TableWrapper', props: table_props
   end
 
   # GET /affidavits/1
@@ -88,6 +89,24 @@ class AffidavitsController < ApplicationController
         :selection_urls => {
           :counties => counties_path
         },
+      }
+    end
+
+
+    # Setup table
+    def table_props
+      {
+        :sort_col => :updated_at,
+        :type     => 'affidavits',
+        :rows     => @affidavits.map { |a| AffidavitSerializer.new(a) },
+        :columns => {
+          :job_key      => 'Job',
+          :case_name    => 'Case',
+          :party_name   => 'Party',
+          :person_name  => 'Person',
+          :person_title => 'Title',
+          :actions      => ''
+        }.to_a
       }
     end
 end

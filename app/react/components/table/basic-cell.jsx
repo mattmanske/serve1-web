@@ -29,10 +29,17 @@ class BasicCell extends React.Component {
   }
 
   _linkGenerator(type, path){
+    let props = { className: 'btn btn-default' }
+
     if (path && path.includes('json'))
-      return <a onClick={this._modalPopup.bind(this, type, path)} className="btn btn-default">{type}</a>
+      props.onClick = this._modalPopup.bind(this, type, path)
     else
-      return <a href={path} className="btn btn-default">{type}</a>
+      props.href = path
+
+    if ('download' == type)
+      props.download = true
+
+    return <a {...props}>{type}</a>
   }
 
   _redirectTo(resource, props){
@@ -69,7 +76,8 @@ class BasicCell extends React.Component {
       <div className="btn-group btn-group-sm">
         {data.view && this._linkGenerator('view', data.view)}
         {data.edit && this._linkGenerator('edit', data.edit)}
-        {data.pdf  && this._linkGenerator('pdf', data.pdf)}
+        {data.pdf && this._linkGenerator('pdf', data.pdf)}
+        {data.download && this._linkGenerator('download', data.download)}
         {/*{data.delete && <a onClick={this._deleteRecord} className="btn btn-default">delete</a>}*/}
       </div>
     )

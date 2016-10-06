@@ -6,8 +6,6 @@ class CreateAffidavits < ActiveRecord::Migration
       t.integer :notary_state_id, null: false
       t.integer :notary_county_id, null: false
 
-      t.string :url
-
       t.timestamps null: false
     end
 

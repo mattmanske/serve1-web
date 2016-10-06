@@ -59,6 +59,7 @@ class TableWrapper extends React.Component {
       case 'clients'      : return 'Clients'
       case 'contacts'     : return 'Client Contacts'
       case 'services'     : return 'Services'
+      case 'affidavits'   : return 'Affidavits'
     }
   }
 
@@ -154,7 +155,7 @@ class TableWrapper extends React.Component {
           <Table
             width={tableWidth}
             height={tableHeight}
-            rowHeight={50}
+            rowHeight={60}
             rowsCount={records}
             headerHeight={35}
             >
@@ -167,13 +168,13 @@ class TableWrapper extends React.Component {
               let flex  = null
               switch (index){
                 case 0:
-                  width = 75
+                  width = 85
                   break
                 case (columns.length - 1):
-                  width = 150
+                  width = 185
                   break
                 default:
-                  width = (tableWidth - 225) / (columns.length - 2)
+                  width = (tableWidth - 270) / (columns.length - 2)
                   flex  = (index - 1)
               }
 
