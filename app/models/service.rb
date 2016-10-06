@@ -5,7 +5,8 @@ class Service < ActiveRecord::Base
   belongs_to :job
   belongs_to :party
 
-  has_many :affidavits
+  has_one :affidavit
+
   has_many :documents
   has_many :attachments
 

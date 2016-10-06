@@ -18,6 +18,7 @@ import PartyForm        from '../components/forms/party-form'
 import ClientForm       from '../components/forms/client-form'
 import ContactForm      from '../components/forms/contact-form'
 import ServiceForm      from '../components/forms/service-form'
+import AffidavitForm    from '../components/forms/affidavit-form'
 import RegistrationFrom from '../components/forms/registration-form'
 
 //-----------  Init  -----------//
@@ -61,6 +62,7 @@ class FormWrapper extends React.Component {
       case 'clients'      : return ClientForm
       case 'contacts'     : return ContactForm
       case 'services'     : return ServiceForm
+      case 'affidavits'   : return AffidavitForm
       case 'registration' : return RegistrationFrom
     }
   }
@@ -74,7 +76,7 @@ class FormWrapper extends React.Component {
   }
 
   _parseQuery(url, query){
-    const uri = URI(url)
+    const uri = new URI(url)
 
     if (query){
       if (query.id){
@@ -113,9 +115,16 @@ class FormWrapper extends React.Component {
   }
 
   _onSubmitSuccess = (body) => {
-    if (this.state.callback) { return this.state.callback(body.resource) } // If callback present, send new resource
-    if (body.redirect){ return window.location.href = body.redirect }      // If redirect present, push new browser location
-    this.setState({ resource: body.resource })                             // Else, refresh resource object
+    // If callback present, send new resource
+    if (_.isFunction(this.state.callback))
+      return this.state.callback(body.resource)
+
+    // If redirect present, push new browser location
+    if (body.redirect)
+      return window.location.href = body.redirect
+
+    // Else, refresh resource object
+    this.setState({ resource: body.resource })
   }
 
   _onSubmitFailure = (body, error, invalidate) => {

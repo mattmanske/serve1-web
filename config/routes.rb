@@ -18,13 +18,17 @@ Rails.application.routes.draw do
 
   authenticate :user do
     resources :documents
-    resources :affidavits
     resources :parties
     resources :jobs
     resources :cases
-    resources :client_contacts
-    resources :clients
-    resources :services
+
+    resources :clients, shallow: true do
+      resources :client_contacts
+    end
+
+    resources :services, shallow: true do
+      resources :affidavits
+    end
   end
 
   authenticated :user do

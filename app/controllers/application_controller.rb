@@ -14,6 +14,10 @@ class ApplicationController < ActionController::Base
     user_signed_in? ? current_user.organization.state_id || nil : nil
   end
 
+  def default_county
+    user_signed_in? ? current_user.organization.county_id || nil : nil
+  end
+
   protected
 
   def enforce_subdomains

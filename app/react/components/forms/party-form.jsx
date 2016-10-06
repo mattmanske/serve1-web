@@ -97,7 +97,7 @@ class PartyForm extends React.Component {
             />
         </fieldset>
 
-        <button className="btn btn-lg btn-default pull-right"
+        <button className="btn btn-default pull-right"
           type="submit"
           disabled={!this.props.can_submit}
         >

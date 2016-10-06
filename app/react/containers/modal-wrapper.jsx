@@ -29,13 +29,17 @@ class ModalWrapper extends React.Component {
   //-----------  Event Handling  -----------//
 
   _insertForm = (msg, data) => {
-    this.setState({ form_props: data.props, submit_callback: data.callback }, () => {
+    const { props, callback } = data
+
+    this.setState({ form_props: props, submit_callback: callback }, () => {
       $(this.refs.formModal).modal('show')
     })
   }
 
   _submitCallback = (resource) => {
-    this.state.submit_callback(resource)
+    const { submit_callback } = this.state
+
+    if (_.isFunction(submit_callback)){ submit_callback(resource, this.state.form_props) }
     this._closeModal()
   }
 

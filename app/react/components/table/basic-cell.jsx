@@ -1,5 +1,6 @@
 //-----------  Imports  -----------//
 
+import URI         from 'urijs'
 import PubSub      from 'pubsub-js'
 import request     from 'superagent'
 import requestCSRF from 'superagent-rails-csrf'
@@ -27,14 +28,26 @@ class BasicCell extends React.Component {
     return !(err || !res.ok)
   }
 
+  _linkGenerator(type, path){
+    if (path && path.includes('json'))
+      return <a onClick={this._modalPopup.bind(this, type, path)} className="btn btn-default">{type}</a>
+    else
+      return <a href={path} className="btn btn-default">{type}</a>
+  }
+
+  _redirectTo(resource, props){
+    const uri = new URI(props.resource_type).segment(resource.id.toString()).suffix('pdf')
+    return window.location.href = uri.valueOf()
+  }
+
   //-----------  Event Handler  -----------//
 
-  _editRecord = () => {
-    const { data, editRow } = this.props
+  _modalPopup = (type, path) => {
+    const callback = ('pdf' == type) ? this._redirectTo : this.props.editRow
 
-    request.get(data.edit).end( (err, res) => {
+    request.get(path).end( (err, res) => {
       if (this._isSuccess(err, res)){
-        PubSub.publish('modal.load', { props: res.body, callback: editRow })
+        PubSub.publish('modal.load', { props: res.body, callback: callback })
       }
     })
   }
@@ -54,9 +67,9 @@ class BasicCell extends React.Component {
 
     const cell_body = ('object' != typeof data) ? data : (
       <div className="btn-group btn-group-sm">
-        {data.view && <a href={data.view} className="btn btn-default">view</a>}
-        {data.edit && <a onClick={this._editRecord} className="btn btn-default">edit</a>}
-        {data.pdf && <a href={data.pdf} className="btn btn-default">pdf</a>}
+        {data.view && this._linkGenerator('view', data.view)}
+        {data.edit && this._linkGenerator('edit', data.edit)}
+        {data.pdf  && this._linkGenerator('pdf', data.pdf)}
         {/*{data.delete && <a onClick={this._deleteRecord} className="btn btn-default">delete</a>}*/}
       </div>
     )

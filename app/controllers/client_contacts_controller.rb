@@ -22,7 +22,8 @@ class ClientContactsController < ApplicationController
 
   # GET /client_contacts/new
   def new
-    @client_contact = ClientContact.new({ client_id: params[:client] })
+    @client = Client.find(params[:client_id])
+    @client_contact = ClientContact.new({ client_id: @client_id })
     form_repsonse(form_props)
   end
 
@@ -75,7 +76,7 @@ class ClientContactsController < ApplicationController
       {
         :resource      => @client_contact,
         :resource_type => 'contacts',
-        :action        => polymorphic_path(@client_contact),
+        :action        => polymorphic_path([@client, @client_contact]),
         :selections    => {
           :clients => clients
         }

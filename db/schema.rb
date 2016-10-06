@@ -18,11 +18,11 @@ ActiveRecord::Schema.define(version: 20160912215738) do
 
   create_table "affidavits", force: :cascade do |t|
     t.integer  "service_id"
-    t.integer  "state_id",   null: false
-    t.string   "court",      null: false
+    t.integer  "notary_state_id",  null: false
+    t.integer  "notary_county_id", null: false
     t.string   "url"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
   end
 
   add_index "affidavits", ["service_id"], name: "index_affidavits_on_service_id", using: :btree
