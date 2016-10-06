@@ -1,5 +1,4 @@
 class AffidavitSerializer < ActiveModel::Serializer
-  root false
 
   attributes :id, :job_key, :case_name, :party_name,
              :person_name, :person_title, :actions

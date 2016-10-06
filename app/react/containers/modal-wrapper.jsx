@@ -12,8 +12,8 @@ import FormWrapper from './form-wrapper'
 class ModalWrapper extends React.Component {
 
   state = {
-    form_props      : {},
-    submit_callback : null
+    formProps : {},
+    onClose   : null
   }
 
   componentDidMount(){
@@ -31,15 +31,17 @@ class ModalWrapper extends React.Component {
   _insertForm = (msg, data) => {
     const { props, callback } = data
 
-    this.setState({ form_props: props, submit_callback: callback }, () => {
+    this.setState({ formProps: props, onClose: callback }, () => {
       $(this.refs.formModal).modal('show')
     })
   }
 
-  _submitCallback = (resource) => {
-    const { submit_callback } = this.state
+  _submitCallback = (body) => {
+    const { resource, selections } = body
 
-    if (_.isFunction(submit_callback)){ submit_callback(resource, this.state.form_props) }
+    if (_.isFunction(this.state.onClose))
+      this.state.onClose.call(this, resource.id, selections)
+
     this._closeModal()
   }
 
@@ -48,13 +50,13 @@ class ModalWrapper extends React.Component {
   }
 
   _clearState = () => {
-    this.setState({ form_props: {}, submit_callback: null })
+    this.setState({ formProps: {}, onClose: null })
   }
 
   //-----------  HTML Element Render  -----------//
 
   render(){
-    const show_modal = !_.isEmpty(this.state.form_props)
+    const show_modal = !_.isEmpty(this.state.formProps)
 
     return (
       <div className="modal fade" ref="formModal" role="dialog">
@@ -65,7 +67,7 @@ class ModalWrapper extends React.Component {
             </div>
 
             <div className="modal-body">
-              {show_modal && <FormWrapper {...this.state.form_props} callback={this._submitCallback}></FormWrapper>}
+              {show_modal && <FormWrapper {...this.state.formProps} callback={this._submitCallback}></FormWrapper>}
             </div>
 
             <div className="modal-footer"></div>

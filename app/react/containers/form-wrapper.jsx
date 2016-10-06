@@ -1,7 +1,6 @@
 //-----------  Imports  -----------//
 
 import _                from 'lodash'
-import URI              from 'urijs'
 import flat             from 'flat'
 import PubSub           from 'pubsub-js'
 import request          from 'superagent'
@@ -21,6 +20,8 @@ import ServiceForm      from '../components/forms/service-form'
 import AffidavitForm    from '../components/forms/affidavit-form'
 import RegistrationFrom from '../components/forms/registration-form'
 
+import { ajaxSuccess }  from '../helpers/helpers'
+
 //-----------  Init  -----------//
 
 requestCSRF(request)
@@ -30,31 +31,27 @@ requestCSRF(request)
 class FormWrapper extends React.Component {
 
   state = {
-    resource       : this._cleanNulls(this.props.resource), // Object being edited
-    resource_type  : this.props.resource_type,              // Subform model type
-    action         : this.props.action,                     // Form submit action
-    modal_urls     : this.props.modal_urls || {},           // Modal subform fetch URL
-    selection_urls : this.props.selection_urls || {},       // Selection fetch URLs
-    selections     : this.props.selections || {},           // Default selection arrays
-    callback       : this.props.callback || null,           // Submit callback URL (overrides redirect)
-    can_submit     : false,                                 // Submit validation state
-    global_errors  : ''                                     // Non-specific, gloabl error state
+    type         : this.props.type,                       // Subform model type
+    action       : this.props.action,                     // Form submit action
+    resource     : this._cleanNulls(this.props.resource), // Object being edited
+    selections   : this.props.selections || {},           // Default selection arrays
+    callback     : this.props.callback || null,           // Submit callback URL (overrides redirect)
+    canSubmit    : false,
+    globalErrors : null
   }
 
   static propTypes = {
-    resource       : React.PropTypes.object.isRequired,
-    resource_type  : React.PropTypes.string.isRequired,
-    action         : React.PropTypes.string.isRequired,
-    modal_urls     : React.PropTypes.object,
-    selection_urls : React.PropTypes.object,
-    selections     : React.PropTypes.object,
-    callback       : React.PropTypes.func
+    type       : React.PropTypes.string.isRequired,
+    action     : React.PropTypes.string.isRequired,
+    resource   : React.PropTypes.object.isRequired,
+    selections : React.PropTypes.object,
+    callback   : React.PropTypes.func
   }
 
   //-----------  Helpers  -----------//
 
   _getFormClass(){
-    switch (this.state.resource_type){
+    switch (this.state.type){
       case 'jobs'         : return JobForm
       case 'cases'        : return CaseForm
       case 'login'        : return LoginForm
@@ -71,32 +68,14 @@ class FormWrapper extends React.Component {
     return _.mapValues(resource, (val) => { return (null === val) ? undefined : val })
   }
 
-  _isSuccess(err, res){
-    return !(err || !res.ok)
-  }
-
-  _parseQuery(url, query){
-    const uri = new URI(url)
-
-    if (query){
-      if (query.id){
-        uri.segment(-1, query.id.toString()).segment('edit')
-        delete query.id
-      }
-      uri.addSearch(query)
-    }
-
-    return uri.suffix('json').valueOf()
-  }
-
   //-----------  Formsy Validation Handlers  -----------//
 
   _enableSubmit = () => {
-    this.setState({ can_submit: true })
+    this.setState({ canSubmit: true })
   }
 
   _disableSubmit = () => {
-    this.setState({ can_submit: false })
+    this.setState({ canSubmit: false })
   }
 
   //-----------  Formsy Submission Handlers  -----------//
@@ -106,18 +85,18 @@ class FormWrapper extends React.Component {
   }
 
   _onSubmit = (model, reset, invalidate) => {
-    this.setState({ global_errors: '' })
+    this.setState({ globalErrors: null })
 
     const type = !!(this.state.resource.id) ? 'PATCH' : 'POST'
     request(type, this.state.action).send(model).setCsrfToken().end( (err, res) => {
-      this._isSuccess(err, res) ? this._onSubmitSuccess(res.body) : this._onSubmitFailure(res.body, err, invalidate)
+      ajaxSuccess(err, res) ? this._onSubmitSuccess(res.body) : this._onSubmitFailure(res.body, err, invalidate)
     })
   }
 
   _onSubmitSuccess = (body) => {
     // If callback present, send new resource
     if (_.isFunction(this.state.callback))
-      return this.state.callback(body.resource)
+      return this.state.callback(body)
 
     // If redirect present, push new browser location
     if (body.redirect)
@@ -128,47 +107,46 @@ class FormWrapper extends React.Component {
   }
 
   _onSubmitFailure = (body, error, invalidate) => {
-    const errors        = flat.flatten(body, { safe : true })
-    const global_errors = errors.global || 'Something went wrong. Try again.'
+    const errors  = flat.flatten(body, { safe : true })
+    const globals = errors.global || 'Something went wrong. Try again.'
 
     delete errors.global
 
-    this.setState({ global_errors: global_errors })
+    this.setState({ globalErrors: globals })
     invalidate(errors)
   }
 
   //-----------  Subform Modal Handlers  -----------//
 
-  _loadModal = (model, attribute, query) => {
-    const modal_url = this._parseQuery(this.state.modal_urls[model], query)
-    const callback  = this._refreshSelection.bind(this, model, query, attribute)
-
-    if ('' === modal_url){ return false }
-
-    request.get(modal_url).end( (err, res) => {
-      if (this._isSuccess(err, res)){
-        PubSub.publish('modal.load', { props: res.body, callback: callback })
-      }
+  _loadModal = (url, attribute) => {
+    request.get(url).end( (err, res) => {
+      if (!ajaxSuccess(err, res)){ return false }
+      const callback = this._updateResource.bind(this, attribute)
+      PubSub.publish('modal.load', { props: res.body, callback: callback })
     })
+  }
+
+  _updateResource = (attribute, resource_id, selections) => {
+    this.setState( update(this.state, {
+      resource   : { [attribute]: { $set: resource_id }},
+      selections : { $merge: selections }
+    }))
   }
 
   //-----------  Selection Refresh Handlers  -----------//
 
-  _refreshSelection = (model, query, attribute, resource) => {
-    const selection_url = this._parseQuery(this.state.selection_urls[model], query)
-    let newState = this.state
-
-    if ('' === selection_url){ return false }
-
-    request.get(selection_url).end( (err, res) => {
-      if (this._isSuccess(err, res)){
-        if (resource && attribute)
-          newState = update(newState, { resource: { [attribute]: { $set: resource.id }} })
-        if (model && res.body)
-          newState = update(newState, { selections: { [model]: { $set: res.body }} })
-        this.setState(newState)
-      }
+  _refreshSelection = (url, selection, callback) => {
+    request.get(url).end( (err, res) => {
+      callback()
+      if (!ajaxSuccess(err, res)){ return false }
+      this._updateSelection(selection, res.body)
     })
+  }
+
+  _updateSelection = (selection, selections) => {
+    this.setState( update(this.state, {
+      selections: { [selection]: { $set: selections }}
+    }))
   }
 
   //-----------  HTML Element Render  -----------//
@@ -185,12 +163,11 @@ class FormWrapper extends React.Component {
         >
 
         <FormClass {...this.state}
-          load_modal={this._loadModal}
-          refresh_selection={this._refreshSelection}
+          loadModal={this._loadModal}
+          refreshSelection={this._refreshSelection}
           />
 
-        <h4 className="label label-danger">{this.state.global_errors}</h4>
-
+        <h4 className="label label-danger">{this.state.globalErrors}</h4>
     </Formsy.Form>
     )
   }

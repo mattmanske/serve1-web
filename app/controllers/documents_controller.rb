@@ -45,14 +45,13 @@ class DocumentsController < ApplicationController
     redirect_to documents_url, notice: 'Document was successfully destroyed.'
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_document
-      @document = Document.find(params[:id])
-    end
+private
 
-    # Only allow a trusted parameter "white list" through.
-    def document_params
-      params.require(:document).permit(:service_id, :title, :document_type)
-    end
+  def set_document
+    @document = Document.find(params[:id])
+  end
+
+  def document_params
+    params.require(:document).permit(:service_id, :title, :document_type)
+  end
 end

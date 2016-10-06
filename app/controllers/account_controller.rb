@@ -22,28 +22,28 @@ class AccountController < Devise::RegistrationsController
     end
   end
 
-  private
+private
 
-    def account_params
-      params.require(:user).permit(:email, :first_name, :last_name, :password, :password_confirmation)
-    end
+  def account_params
+    params.require(:user).permit(:email, :first_name, :last_name, :password, :password_confirmation)
+  end
 
-    def organization_params
-      params.require(:organization).permit(:name, :subdomain, :state_id, :county_id)
-    end
+  def organization_params
+    params.require(:organization).permit(:name, :subdomain, :state_id, :county_id)
+  end
 
-    def form_props
-      states   = select_format State.all.order(:name)
-      counties = select_format County.where(state: 60).order(:name)
+  def form_props
+    states   = select_format State.all.order(:name)
+    counties = select_format County.where(state: 60).order(:name)
 
-      {
-        :resource      => @user,
-        :resource_type => 'registration',
-        :action        => registration_path(:user),
-        :selections => {
-          :states   => states,
-          :counties => counties
-        }
+    {
+      :type     => 'registration',
+      :resource => @user,
+      :action   => registration_path(:user),
+      :selections => {
+        :states   => states,
+        :counties => counties
       }
-    end
+    }
+  end
 end

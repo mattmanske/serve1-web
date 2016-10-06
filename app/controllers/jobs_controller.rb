@@ -54,48 +54,45 @@ class JobsController < ApplicationController
     redirect_to jobs_url, notice: 'Job was successfully destroyed.'
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_job
-      @job = Job.find(params[:id])
-    end
+private
 
-    # Only allow a trusted parameter "white list" through.
-    def job_params
-      params.require(:job).permit(:key, :case_id, :status, :date_sent, :date_received, :amount_cents, :notes)
-    end
+  def set_job
+    @job = Job.find(params[:id])
+  end
 
-    # Setup form
-    def form_props
-      cases  = select_format Case.all().order(:key)
-      status = select_format Job.statuses.keys, :to_s, :titlecase
+  def job_params
+    params.require(:job).permit(:key, :case_id, :status, :date_sent, :date_received, :amount_cents, :notes)
+  end
 
-      {
-        :resource      => @job,
-        :resource_type => 'jobs',
-        :action        => polymorphic_path(@job),
-        :selections => {
-          :cases  => cases,
-          :status => status,
-        }
+  def form_props
+    cases  = select_format Case.all().order(:key)
+    status = select_format Job.statuses.keys, :to_s, :titlecase
+
+    {
+      :type     => 'jobs',
+      :resource => @job,
+      :action   => polymorphic_path(@job),
+      :selections => {
+        :cases  => cases,
+        :status => status,
       }
-    end
+    }
+  end
 
-    # Setup table
-    def table_props
-      {
-        :sort_col => :recieved_date,
-        :type     => 'jobs',
-        :rows     => @jobs.map { |j| JobSerializer.new(j) },
-        :columns => {
-          :key           => 'ID',
-          :status_name   => 'Status',
-          :case_title    => 'Case',
-          :recieved_date => 'Date Recieved',
-          :sent_date     => 'Date Sent',
-          :notes         => 'Notes',
-          :actions       => ''
-        }.to_a
-      }
-    end
+  def table_props
+    {
+      :sort_col => :recieved_date,
+      :type     => 'jobs',
+      :rows     => @jobs.map { |j| JobSerializer.new(j) },
+      :columns => {
+        :key           => 'ID',
+        :status_name   => 'Status',
+        :case_title    => 'Case',
+        :recieved_date => 'Date Recieved',
+        :sent_date     => 'Date Sent',
+        :notes         => 'Notes',
+        :actions       => ''
+      }.to_a
+    }
+  end
 end

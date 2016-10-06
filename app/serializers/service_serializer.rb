@@ -1,7 +1,6 @@
 include ActionView::Helpers::TextHelper
 
 class ServiceSerializer < ActiveModel::Serializer
-  root false
 
   attributes :id, :job_key, :status_name, :party_name,
              :person_name, :person_title, :attempts,

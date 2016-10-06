@@ -6,6 +6,8 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+ActiveModel::Serializer.root = false
+
 module Serve1
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -24,8 +26,8 @@ module Serve1
     config.active_record.raise_in_transactional_callbacks = true
 
     config.generators do |g|
-      g.stylesheets     false
-      g.javascripts     false
+      g.stylesheets false
+      g.javascripts false
     end
   end
 end

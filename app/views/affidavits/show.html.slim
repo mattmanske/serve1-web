@@ -4,17 +4,11 @@ p
   strong Service:
   = @affidavit.service
 p
-  strong Caption type:
-  = @affidavit.caption_type
-p
-  strong Court:
-  = @affidavit.court
-p
   strong State:
-  = @affidavit.state
+  = @affidavit.notary_state
 p
-  strong Url:
-  = @affidavit.url
+  strong County:
+  = @affidavit.notary_county
 
 = link_to 'Edit', edit_affidavit_path(@affidavit)
 '|

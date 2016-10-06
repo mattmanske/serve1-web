@@ -112,13 +112,6 @@ class TableWrapper extends React.Component {
     }))
   }
 
-  // _deleteData = (resource) => {
-  //   const index = _.findIndex(this.state.data, { id: resource.id })
-  //   this.setState( update( this.state, {
-  //     data: { $splice: [[index, 1]] }
-  //   }))
-  // }
-
   //-----------  HTML Element Render  -----------//
 
   render(){
@@ -197,7 +190,6 @@ class TableWrapper extends React.Component {
                     <BasicCell
                       data={data[sortIndex[rowIndex]][col_key] || '-'}
                       editRow={this._updateData}
-                      //deleteRow={this._deleteData}
                       />
                   )}
                 />

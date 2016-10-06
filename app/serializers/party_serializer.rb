@@ -1,5 +1,4 @@
 class PartySerializer < ActiveModel::Serializer
-  root false
 
   attributes :id, :service_count, :name, :location, :actions
 

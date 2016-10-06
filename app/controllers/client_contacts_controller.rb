@@ -3,11 +3,11 @@ class ClientContactsController < ApplicationController
 
   respond_to :json, only: [:index, :show, :new, :create]
 
-  has_scope :client
+  has_scope :client_id
 
   # GET /client_contacts
   def index
-    @client_contacts = apply_scopes(ClientContact).all.to_a.sort_by(&:name)
+    @client_contacts = apply_scopes(ClientContact).all.order(:first_name)
 
     respond_to do |format|
       format.html { render react_component: 'TableWrapper', props: table_props }
@@ -37,7 +37,7 @@ class ClientContactsController < ApplicationController
     @client_contact = ClientContact.new(client_contact_params)
 
     if @client_contact.save
-      render json: { resource: @client_contact, redirect: client_contacts_path() }
+      render json: { resource: @client_contact, redirect: client_contacts_path(), selections: associated_selections }
     else
       render json: { client_contact: @client_contact.errors }, status: :unprocessable_entity
     end
@@ -46,7 +46,7 @@ class ClientContactsController < ApplicationController
   # PATCH/PUT /client_contacts/1
   def update
     if @client_contact.update(client_contact_params)
-      render json: { resource: @client_contact, redirect: client_contacts_path() }
+      render json: { resource: @client_contact, redirect: client_contacts_path(), selections: associated_selections }
     else
       render json: { client_contact: @client_contact.errors }, status: :unprocessable_entity
     end
@@ -58,45 +58,50 @@ class ClientContactsController < ApplicationController
     redirect_to client_contacts_url, notice: 'Client contact was successfully destroyed.'
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_client_contact
-      @client_contact = ClientContact.find(params[:id])
-    end
+private
 
-    # Only allow a trusted parameter "white list" through.
-    def client_contact_params
-      params.require(:client_contact).permit(:client_id, :first_name, :last_name, :email, :address, :phone)
-    end
+  def set_client_contact
+    @client_contact = ClientContact.find(params[:id])
+  end
 
-    # Setup form
-    def form_props
-      clients = select_format Client.all().order(:name)
+  def client_contact_params
+    params.require(:client_contact).permit(:client_id, :first_name, :last_name, :email, :address, :phone)
+  end
 
-      {
-        :resource      => @client_contact,
-        :resource_type => 'contacts',
-        :action        => polymorphic_path([@client, @client_contact]),
-        :selections    => {
-          :clients => clients
-        }
+  def associated_selections
+    contacts = ClientContact.where(client_id: @client_contact.client_id).order(:first_name)
+
+    {
+      :contacts => select_format(contacts)
+    }
+  end
+
+  def form_props
+    clients = select_format Client.all().order(:name)
+
+    {
+      :type     => 'contacts',
+      :resource => @client_contact,
+      :action   => polymorphic_path([@client, @client_contact]),
+      :selections => {
+        :clients => clients
       }
-    end
+    }
+  end
 
-    # Setup table
-    def table_props
-      {
-        :sort_col => :name,
-        :type     => 'contacts',
-        :rows     => @client_contacts.map { |c| ClientContactSerializer.new(c) },
-        :columns => {
-          :client_name => 'Client',
-          :name        => 'Name',
-          :email       => 'Email',
-          :address     => 'Address',
-          :phone       => 'Phone #',
-          :actions     => ''
-        }.to_a
-      }
-    end
+  def table_props
+    {
+      :sort_col => :name,
+      :type     => 'contacts',
+      :rows     => @client_contacts.map { |c| ClientContactSerializer.new(c) },
+      :columns => {
+        :client_name => 'Client',
+        :name        => 'Name',
+        :email       => 'Email',
+        :address     => 'Address',
+        :phone       => 'Phone #',
+        :actions     => ''
+      }.to_a
+    }
+  end
 end

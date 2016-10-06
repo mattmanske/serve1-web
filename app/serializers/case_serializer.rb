@@ -1,5 +1,4 @@
 class CaseSerializer < ActiveModel::Serializer
-  root false
 
   attributes :id, :key, :title, :location, :court_name,
              :contact_name, :actions

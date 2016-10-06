@@ -16,7 +16,7 @@ class RegistrationFrom extends React.Component {
   static propTypes = {
     resource   : React.PropTypes.object.isRequired,
     selections : React.PropTypes.object.isRequired,
-    can_submit : React.PropTypes.bool.isRequired
+    canSubmit  : React.PropTypes.bool.isRequired
   }
 
   state = {
@@ -139,7 +139,7 @@ class RegistrationFrom extends React.Component {
 
         <button className="btn btn-default pull-right"
           type="submit"
-          disabled={!this.props.can_submit}
+          disabled={!this.props.canSubmit}
         >
           Create Account
         </button>

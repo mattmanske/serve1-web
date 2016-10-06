@@ -58,60 +58,53 @@ class ServicesController < ApplicationController
     redirect_to services_url, notice: 'Service was successfully destroyed.'
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_service
-      @service = Service.find(params[:id])
-    end
+private
 
-    # Only allow a trusted parameter "white list" through.
-    def service_params
-      params.require(:service).permit(:job_id, :party_id, :status, :service_type, :service_date, :person_name, :person_title, :person_capacity, :attempts, :mileage, :payment_cents, :notes)
-    end
+  def set_service
+    @service = Service.find(params[:id])
+  end
 
-    def form_props
-      jobs    = select_format Job.all()
-      parties = select_format Party.all().order(:name)
-      status  = select_format Service.statuses.keys, :to_s, :titlecase
-      types   = select_format Service.service_types.keys, :to_s, :titlecase
+  def service_params
+    params.require(:service).permit(:job_id, :party_id, :status, :service_type, :service_date, :person_name, :person_title, :person_capacity, :attempts, :mileage, :payment_cents, :notes)
+  end
 
-      {
-        :resource      => @service,
-        :resource_type => 'services',
-        :action        => polymorphic_path(@service),
-        :selections => {
-          :jobs    => jobs,
-          :status  => status,
-          :types   => types,
-          :parties => parties
-        },
-        :selection_urls => {
-          :parties => parties_path
-        },
-        :modal_urls => {
-          :parties => new_party_path
-        }
+  def form_props
+    jobs    = select_format Job.all()
+    parties = select_format Party.all().order(:name)
+    status  = select_format Service.statuses.keys, :to_s, :titlecase
+    types   = select_format Service.service_types.keys, :to_s, :titlecase
+
+    {
+      :type     => 'services',
+      :resource => @service,
+      :action   => polymorphic_path(@service),
+      :selections => {
+        :jobs    => jobs,
+        :status  => status,
+        :types   => types,
+        :parties => parties
       }
-    end
+    }
+  end
 
-    # Setup table
-    def table_props
-      {
-        :sort_col => :created_at,
-        :type     => 'services',
-        :rows     => @services.map { |s| ServiceSerializer.new(s) },
-        :columns => {
-          :job_key           => 'Job',
-          :status_name       => 'Status',
-          :party_name        => 'Party',
-          :person_name       => 'Person',
-          :person_title      => 'Title',
-          :attempts          => 'Attempts',
-          :service_type_name => 'Service Type',
-          :date_served       => 'Service Date',
-          :notes             => 'Notes',
-          :actions           => ''
-        }.to_a
-      }
-    end
+  # Setup table
+  def table_props
+    {
+      :sort_col => :created_at,
+      :type     => 'services',
+      :rows     => @services.map { |s| ServiceSerializer.new(s) },
+      :columns => {
+        :job_key           => 'Job',
+        :status_name       => 'Status',
+        :party_name        => 'Party',
+        :person_name       => 'Person',
+        :person_title      => 'Title',
+        :attempts          => 'Attempts',
+        :service_type_name => 'Service Type',
+        :date_served       => 'Service Date',
+        :notes             => 'Notes',
+        :actions           => ''
+      }.to_a
+    }
+  end
 end

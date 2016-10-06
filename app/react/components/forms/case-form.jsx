@@ -1,9 +1,21 @@
 //-----------  Imports  -----------//
 
+
 import React               from 'react'
 import { Input, Checkbox } from 'formsy-react-components'
 
 import Select              from '../inputs/formsy-select'
+import { getVal, getUrl }  from '../../helpers/helpers'
+
+//-----------  Definitions  -----------//
+
+const NEW_CLIENT_URL                = '/clients/new.json'
+const EDIT_CLIENT_URL               = '/clients/${client_id}/edit.json'
+const NEW_CLIENT_CONTACT_URL        = '/clients/${client_id}/client_contacts/new.json'
+const EDIT_CLIENT_CONTACT_URL       = '/client_contacts/${contact_id}/edit.json'
+
+const CLIENT_CONTACT_SELECTIONS_URL = '/clients/${client_id}/client_contacts.json'
+const COUNTY_SELECTION_URL          = '/states/${state_id}/counties.json'
 
 //-----------  Class Setup  -----------//
 
@@ -12,59 +24,61 @@ class CaseForm extends React.Component {
   displayName: 'CaseForm'
 
   static propTypes = {
-    resource          : React.PropTypes.object.isRequired,
-    selections        : React.PropTypes.object.isRequired,
-    modal_urls        : React.PropTypes.object.isRequired,
-    selection_urls    : React.PropTypes.object.isRequired,
-    can_submit        : React.PropTypes.bool.isRequired,
-    load_modal        : React.PropTypes.func.isRequired,
-    refresh_selection : React.PropTypes.func.isRequired
+    resource         : React.PropTypes.object.isRequired,
+    selections       : React.PropTypes.object.isRequired,
+    canSubmit       : React.PropTypes.bool.isRequired,
+    loadModal        : React.PropTypes.func.isRequired,
+    refreshSelection : React.PropTypes.func.isRequired
   }
 
-  componentWillReceiveProps(nextProps){
-    if (this.props.resource.client_id != nextProps.resource.client_id){
-      this.props.refresh_selection('contacts', { client: nextProps.resource.client_id })
-    }
-  }
-
-  //-----------  Helpers  -----------//
-
-  _getVal(ref){
-    return this.refs[ref] && this.refs[ref].getValue()
+  state = {
+    contactsLoading: false,
+    countiesLoading: false
   }
 
   //-----------  Modal Load Events  -----------//
 
   _newClientModal = () => {
-    this.props.load_modal('clients', 'client_id')
+    const modal_url = NEW_CLIENT_URL
+    this.props.loadModal(modal_url, 'client_id')
   }
 
   _editClientModal = () => {
-    const client_id = this._getVal('client_id')
-    this.props.load_modal('clients', 'client_id', { id: client_id })
+    const client_id = getVal('client_id', this.refs)
+    const modal_url = getUrl(EDIT_CLIENT_URL, { client_id: client_id })
+    this.props.loadModal(modal_url, 'client_id')
   }
 
   _newContactModal = () => {
-    const client_id = this._getVal('client_id')
-    this.props.load_modal('contacts', 'client_contact_id', { client: client_id })
+    const client_id = getVal('client_id', this.refs)
+    const modal_url = getUrl(NEW_CLIENT_CONTACT_URL, { client_id: client_id })
+    this.props.loadModal(modal_url, 'client_contact_id')
   }
 
   _editContactModal = () => {
-    const client_id  = this._getVal('client_id')
-    const contact_id = this._getVal('client_contact_id')
-    this.props.load_modal('contacts', 'client_contact_id', { id: contact_id, client: client_id })
+    const contact_id = getVal('client_contact_id', this.refs)
+    const modal_url  = getUrl(EDIT_CLIENT_CONTACT_URL, { contact_id: contact_id})
+    this.props.loadModal(modal_url, 'client_contact_id')
   }
 
   //-----------  Selection Update Events  -----------//
 
   _updateContactSelections = (value) => {
+    const select_url = getUrl(CLIENT_CONTACT_SELECTIONS_URL, { client_id: value })
+    const callback = () => this.setState({ contactsLoading: false })
+
     this.refs.client_contact_id.resetValue()
-    this.props.refresh_selection('contacts', { client: value })
+    this.setState({ contactsLoading: true })
+    this.props.refreshSelection(select_url, 'contacts', callback)
   }
 
   _updateCountySelections = (value) => {
+    const select_url = getUrl(COUNTY_SELECTION_URL, { state_id: value })
+    const callback = () => this.setState({ countiesLoading: false })
+
     this.refs.county_id.resetValue()
-    this.props.refresh_selection('counties', { state: value })
+    this.setState({ countiesLoading: true })
+    this.props.refreshSelection(select_url, 'counties', callback)
   }
 
   //-----------  HTML Element Render  -----------//
@@ -73,15 +87,16 @@ class CaseForm extends React.Component {
     const { clients, contacts, states, counties, court_types } = this.props.selections
     const resource = this.props.resource
 
-    const has_client_id  = !this._getVal('client_id')
-    const has_contact_id = !this._getVal('client_contact_id')
-    const has_state_id   = !this._getVal('state_id')
+    const has_client_id  = !getVal('client_id', this.refs)
+    const has_contact_id = !getVal('client_contact_id', this.refs)
+    const has_state_id   = !getVal('state_id', this.refs)
 
-    const title = `${resource.id ? 'Edit' : 'Create'} Case`
+    const title_text  = `${resource.id ? 'Edit' : 'Create'} Case`
+    const button_text = `${resource.id ? 'Update' : 'Save'} Case`
 
     return (
       <div className="child-form case-form">
-        <h1>{title}</h1>
+        <h1>{title_text}</h1>
 
         <fieldset>
           {/* Client */}
@@ -107,6 +122,7 @@ class CaseForm extends React.Component {
             name="case.client_contact_id"
             value={resource.client_contact_id}
             options={contacts}
+            isLoading={this.state.contactsLoading}
             />
 
           <a className="btn btn-sm btn-default" onClick={this._newContactModal} disabled={has_client_id}>
@@ -145,6 +161,7 @@ class CaseForm extends React.Component {
             name="case.county_id"
             value={resource.county_id}
             options={counties}
+            isLoading={this.state.countiesLoading}
             />
 
           {/* Court Type */}
@@ -188,9 +205,9 @@ class CaseForm extends React.Component {
 
         <button className="btn btn-default pull-right"
           type="submit"
-          disabled={!this.props.can_submit}
+          disabled={!this.props.canSubmit}
         >
-          Save
+          {button_text}
         </button>
       </div>
     )

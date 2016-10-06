@@ -1,7 +1,6 @@
 include ActionView::Helpers::TextHelper
 
 class JobSerializer < ActiveModel::Serializer
-  root false
 
   attributes :id, :key, :status_name, :case_title, :notes,
              :recieved_date, :sent_date, :actions

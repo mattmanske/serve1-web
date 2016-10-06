@@ -14,7 +14,7 @@ class ContactForm extends React.Component {
   static propTypes = {
     resource   : React.PropTypes.object.isRequired,
     selections : React.PropTypes.object.isRequired,
-    can_submit : React.PropTypes.bool.isRequired
+    canSubmit  : React.PropTypes.bool.isRequired
   }
 
   //-----------  HTML Element Render  -----------//
@@ -25,11 +25,12 @@ class ContactForm extends React.Component {
 
     const has_client_id = !!(resource.client_id)
 
-    const title = `${resource.id ? 'Edit' : 'Create'} Client Contact`
+    const title_text  = `${resource.id ? 'Edit' : 'Create'} Client Contact`
+    const button_text = `${resource.id ? 'Update' : 'Save'} Client Contact`
 
     return (
       <div className="child-form contact-form">
-        <h1>{title}</h1>
+        <h1>{title_text}</h1>
 
         <fieldset>
           {/* Client */}
@@ -90,9 +91,9 @@ class ContactForm extends React.Component {
 
         <button className="btn btn-default pull-right"
           type="submit"
-          disabled={!this.props.can_submit}
+          disabled={!this.props.canSubmit}
         >
-          Save
+          {button_text}
         </button>
       </div>
     )

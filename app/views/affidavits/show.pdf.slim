@@ -1,1 +1,28 @@
-h1= @affidavit.id
+.affidavit-caption
+  - if ('municipal_court' == @affidavit.service.job.case.court_type)
+    = render "affidavits/captions/municipal_court"
+  - elsif ('department_of_workforce_development' == @affidavit.service.job.case.court_type)
+    = render "affidavits/captions/department_of_workforce_development"
+  - else
+    = render "affidavits/captions/index"
+
+.affidavit-divider
+hr
+h6 Affidavit of Service
+hr
+
+small Body Template
+
+.affidavit-body
+  = render "affidavits/bodies/#{@affidavit.service.service_type}"
+
+.affidavit-footer
+hr
+h6 Notary
+hr
+
+span State:&nbsp;
+span= @affidavit.notary_state
+br
+span County:&nbsp;
+span= @affidavit.notary_county

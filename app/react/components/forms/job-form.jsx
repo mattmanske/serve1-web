@@ -5,6 +5,7 @@ import { Input, Textarea } from 'formsy-react-components'
 
 import Select              from '../inputs/formsy-select'
 import DateInput           from '../inputs/formsy-date'
+import { getVal }          from '../../helpers/helpers'
 
 //-----------  Class Setup  -----------//
 
@@ -15,13 +16,7 @@ class JobForm extends React.Component {
   static propTypes = {
     resource   : React.PropTypes.object.isRequired,
     selections : React.PropTypes.object.isRequired,
-    can_submit : React.PropTypes.bool.isRequired
-  }
-
-  //-----------  Helpers  -----------//
-
-  _getVal(ref){
-    return this.refs[ref] && this.refs[ref].getValue()
+    canSubmit  : React.PropTypes.bool.isRequired
   }
 
   //-----------  HTML Element Render  -----------//
@@ -30,13 +25,14 @@ class JobForm extends React.Component {
     const { cases, status } = this.props.selections
     const resource = this.props.resource
 
-    const is_completed = ('completed' == this._getVal('status'))
+    const is_completed = ('completed' == getVal('status', this.refs))
 
-    const title = `${resource.id ? 'Edit' : 'Create'} Job`
+    const title_text  = `${resource.id ? 'Edit' : 'Create'} Job`
+    const button_text = `${resource.id ? 'Update' : 'Save'} Job`
 
     return (
       <div className="child-form job-form">
-        <h1>{title}</h1>
+        <h1>{title_text}</h1>
 
         <fieldset>
           {/* Case */}
@@ -112,9 +108,9 @@ class JobForm extends React.Component {
 
         <button className="btn btn-default pull-right"
           type="submit"
-          disabled={!this.props.can_submit}
+          disabled={!this.props.canSubmit}
         >
-          Save
+          {button_text}
         </button>
       </div>
     )

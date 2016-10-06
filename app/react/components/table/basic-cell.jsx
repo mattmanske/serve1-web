@@ -1,12 +1,14 @@
 //-----------  Imports  -----------//
 
-import URI         from 'urijs'
-import PubSub      from 'pubsub-js'
-import request     from 'superagent'
-import requestCSRF from 'superagent-rails-csrf'
+import URI             from 'urijs'
+import PubSub          from 'pubsub-js'
+import request         from 'superagent'
+import requestCSRF     from 'superagent-rails-csrf'
 
-import React       from 'react'
-import { Cell }    from 'fixed-data-table-2'
+import React           from 'react'
+import { Cell }        from 'fixed-data-table-2'
+
+import { ajaxSuccess } from '../../helpers/helpers'
 
 //-----------  Init  -----------//
 
@@ -53,19 +55,10 @@ class BasicCell extends React.Component {
     const callback = ('pdf' == type) ? this._redirectTo : this.props.editRow
 
     request.get(path).end( (err, res) => {
-      if (this._isSuccess(err, res)){
-        PubSub.publish('modal.load', { props: res.body, callback: callback })
-      }
+      if (!ajaxSuccess(err, res)){ return false }
+      PubSub.publish('modal.load', { props: res.body, callback: callback })
     })
   }
-
-  // _deleteRecord = () => {
-  //   const { data, deleteRow } = this.props
-  //
-  //   request.del(data.delete).setCsrfToken().end( (err, res) => {
-  //     if (this._isSuccess(err, res)){ deleteRow(data) }
-  //   })
-  // }
 
   //-----------  HTML Element Render  -----------//
 
@@ -78,7 +71,6 @@ class BasicCell extends React.Component {
         {data.edit && this._linkGenerator('edit', data.edit)}
         {data.pdf && this._linkGenerator('pdf', data.pdf)}
         {data.download && this._linkGenerator('download', data.download)}
-        {/*{data.delete && <a onClick={this._deleteRecord} className="btn btn-default">delete</a>}*/}
       </div>
     )
 

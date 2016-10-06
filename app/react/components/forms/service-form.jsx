@@ -5,6 +5,12 @@ import { Input, Textarea } from 'formsy-react-components'
 
 import Select              from '../inputs/formsy-select'
 import DateInput           from '../inputs/formsy-date'
+import { getVal, getUrl }  from '../../helpers/helpers'
+
+//-----------  Definitions  -----------//
+
+const NEW_PARTY_MODAL  = '/parties/new.json'
+const EDIT_PARTY_MODAL = '/parties/${party_id}/edit.json'
 
 //-----------  Class Setup  -----------//
 
@@ -15,25 +21,21 @@ class ServiceForm extends React.Component {
   static propTypes = {
     resource   : React.PropTypes.object.isRequired,
     selections : React.PropTypes.object.isRequired,
-    can_submit : React.PropTypes.bool.isRequired,
-    load_modal : React.PropTypes.func.isRequired
-  }
-
-  //-----------  Helpers  -----------//
-
-  _getVal(ref){
-    return this.refs[ref] && this.refs[ref].getValue()
+    canSubmit  : React.PropTypes.bool.isRequired,
+    loadModal  : React.PropTypes.func.isRequired
   }
 
   //-----------  Modal Load Events  -----------//
 
   _newPartyModal = () => {
-    this.props.load_modal('parties', 'party_id')
+    const modal_url = NEW_PARTY_MODAL
+    this.props.loadModal(modal_url, 'party_id')
   }
 
   _editPartyModal = () => {
-    const party_id = this._getVal('party_id')
-    this.props.load_modal('parties', 'party_id', { id: party_id })
+    const party_id  = getVal('party_id', this.refs)
+    const modal_url = getUrl(EDIT_PARTY_MODAL, { party_id: party_id })
+    this.props.loadModal(modal_url, 'party_id')
   }
 
   //-----------  HTML Element Render  -----------//
@@ -42,15 +44,16 @@ class ServiceForm extends React.Component {
     const { jobs, parties, status, types } = this.props.selections
     const resource = this.props.resource
 
-    const is_served    = ('served' == this._getVal('status'))
+    const is_served    = ('served' == getVal('status', this.refs))
     const service_type = is_served ? resource.service_type : undefined
-    const has_party_id = !this._getVal('party_id')
+    const has_party_id = !getVal('party_id', this.refs)
 
-    const title = `${resource.id ? 'Edit' : 'Create'} Service`
+    const title_text  = `${resource.id ? 'Edit' : 'Create'} Service`
+    const button_text = `${resource.id ? 'Update' : 'Save'} Service`
 
     return (
       <div className="child-form service-form">
-        <h1>{title}</h1>
+        <h1>{title_text}</h1>
 
         <fieldset>
           {/* Job */}
@@ -186,9 +189,9 @@ class ServiceForm extends React.Component {
 
         <button className="btn btn-default pull-right"
           type="submit"
-          disabled={!this.props.can_submit}
+          disabled={!this.props.canSubmit}
         >
-          Save
+          {button_text}
         </button>
       </div>
     )

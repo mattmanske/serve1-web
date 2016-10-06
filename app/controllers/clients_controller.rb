@@ -33,7 +33,7 @@ class ClientsController < ApplicationController
     @client = Client.new(client_params)
 
     if @client.save
-      render json: { resource: @client, redirect: clients_path() }
+      render json: { resource: @client, redirect: clients_path(), selections: associated_selections }
     else
       render json: { client: @client.errors }, status: :unprocessable_entity
     end
@@ -42,7 +42,7 @@ class ClientsController < ApplicationController
   # PATCH/PUT /clients/1
   def update
     if @client.update(client_params)
-      render json: { resource: @client, redirect: clients_path() }
+      render json: { resource: @client, redirect: clients_path(), selections: associated_selections }
     else
       render json: { client: @client.errors }, status: :unprocessable_entity
     end
@@ -58,40 +58,47 @@ class ClientsController < ApplicationController
     end
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_client
-      @client = Client.find(params[:id])
-    end
+private
 
-    # Only allow a trusted parameter "white list" through.
-    def client_params
-      params.require(:client).permit(:key, :name, :address, :phone, :email)
-    end
+  def set_client
+    @client = Client.find(params[:id])
+  end
 
-    # Setup form
-    def form_props
-      {
-        :resource      => @client,
-        :resource_type => 'clients',
-        :action        => polymorphic_path(@client),
-      }
-    end
+  def client_params
+    params.require(:client).permit(:key, :name, :address, :phone, :email)
+  end
 
-    # Setup table
-    def table_props
-      {
-        :sort_col => :name,
-        :type     => 'clients',
-        :rows     => @clients.map { |c| ClientSerializer.new(c) },
-        :columns => {
-          :key     => 'ID',
-          :name    => 'Name',
-          :email   => 'Email',
-          :address => 'Address',
-          :phone   => 'Phone #',
-          :actions => ''
-        }.to_a
-      }
-    end
+  def associated_selections
+    clients  = Client.all.order(:name)
+    contacts = ClientContact.where(client_id: params[:id]).order(:first_name)
+
+    {
+      :clients  => select_format(clients),
+      :contacts => select_format(contacts)
+    }
+  end
+
+  def form_props
+    {
+      :type     => 'clients',
+      :resource => @client,
+      :action   => polymorphic_path(@client)
+    }
+  end
+
+  def table_props
+    {
+      :sort_col => :name,
+      :type     => 'clients',
+      :rows     => @clients.map { |c| ClientSerializer.new(c) },
+      :columns => {
+        :key     => 'ID',
+        :name    => 'Name',
+        :email   => 'Email',
+        :address => 'Address',
+        :phone   => 'Phone #',
+        :actions => ''
+      }.to_a
+    }
+  end
 end

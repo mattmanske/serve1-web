@@ -105,7 +105,17 @@ private
         :notes              => (served) ? Faker::Lorem.paragraph : nil,
         :payment_cents      => (served) ? ([10, 15, 20, 25, 30].sample)*100 : nil
       })
+
+      create_affidavit(service) if (served)
     end
+  end
+
+  def create_affidavit(service)
+    affidavit = Affidavit.create({
+      :service_id       => service.id,
+      :notary_state_id  => 60,
+      :notary_county_id => 13,
+    })
   end
 
   def create_party(index)

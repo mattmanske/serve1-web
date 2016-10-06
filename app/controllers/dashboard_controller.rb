@@ -1,4 +1,5 @@
 class DashboardController < ApplicationController
+
   def index
     @case_count    = Case.count
     @job_count     = Job.count

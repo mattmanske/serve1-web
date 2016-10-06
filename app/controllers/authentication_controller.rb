@@ -21,17 +21,17 @@ class AuthenticationController < Devise::SessionsController
     end
   end
 
-  private
+private
 
-    def invalid_login_attempt
-      render json: { global: 'Username or password are incorrect.', user: { email: '', password: '' } }, status: :unauthorized
-    end
+  def invalid_login_attempt
+    render json: { global: 'Username or password are incorrect.', user: { email: '', password: '' } }, status: :unauthorized
+  end
 
-    def form_props
-      {
-        :resource      => @user,
-        :resource_type => 'login',
-        :action        => session_path(:user),
-      }
-    end
+  def form_props
+    {
+      :type     => 'login',
+      :resource => @user,
+      :action   => session_path(:user),
+    }
+  end
 end

@@ -5,7 +5,7 @@ class ClientContact < ActiveRecord::Base
   validates :last_name,  presence: true
   validates :email,      presence: true
 
-  scope :client, -> client { where(:client => client) }
+  scope :client_id, -> client { where(:client => client) }
 
   def name
     [self.first_name, self.last_name].reject(&:blank?).join(" ")

@@ -4,9 +4,11 @@ class AffidavitsController < ApplicationController
   respond_to :json, only: [:show, :new, :create]
   respond_to :pdf, only: [:show]
 
+  has_scope :service_id
+
   # GET /affidavits
   def index
-    @affidavits = Affidavit.all.order(updated_at: :desc)
+    @affidavits = apply_scopes(Affidavit).all.order(updated_at: :desc)
     render react_component: 'TableWrapper', props: table_props
   end
 
@@ -62,51 +64,44 @@ class AffidavitsController < ApplicationController
     redirect_to affidavits_url, notice: 'Affidavit was successfully destroyed.'
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_affidavit
-      @affidavit = Affidavit.find(params[:id])
-    end
+private
 
-    # Only allow a trusted parameter "white list" through.
-    def affidavit_params
-      params.require(:affidavit).permit(:service_id, :notary_state_id, :notary_county_id)
-    end
+  def set_affidavit
+    @affidavit = Affidavit.find(params[:id])
+  end
 
-    # Setup form
-    def form_props
-      states   = select_format State.all.order(:name)
-      counties = select_format County.where(state: @affidavit.notary_state_id).order(:name)
+  def affidavit_params
+    params.require(:affidavit).permit(:service_id, :notary_state_id, :notary_county_id)
+  end
 
-      {
-        :resource      => @affidavit,
-        :resource_type => 'affidavits',
-        :action        => polymorphic_path([@service, @affidavit]),
-        :selections => {
-          :states   => states,
-          :counties => counties
-        },
-        :selection_urls => {
-          :counties => counties_path
-        },
+  def form_props
+    states   = select_format State.all.order(:name)
+    counties = select_format County.where(state: @affidavit.notary_state_id).order(:name)
+
+    {
+      :type     => 'affidavits',
+      :resource => @affidavit,
+      :action   => polymorphic_path([@service, @affidavit]),
+      :selections => {
+        :states   => states,
+        :counties => counties
       }
-    end
+    }
+  end
 
-
-    # Setup table
-    def table_props
-      {
-        :sort_col => :updated_at,
-        :type     => 'affidavits',
-        :rows     => @affidavits.map { |a| AffidavitSerializer.new(a) },
-        :columns => {
-          :job_key      => 'Job',
-          :case_name    => 'Case',
-          :party_name   => 'Party',
-          :person_name  => 'Person',
-          :person_title => 'Title',
-          :actions      => ''
-        }.to_a
-      }
-    end
+  def table_props
+    {
+      :sort_col => :updated_at,
+      :type     => 'affidavits',
+      :rows     => @affidavits.map { |a| AffidavitSerializer.new(a) },
+      :columns => {
+        :job_key      => 'Job',
+        :case_name    => 'Case',
+        :party_name   => 'Party',
+        :person_name  => 'Person',
+        :person_title => 'Title',
+        :actions      => ''
+      }.to_a
+    }
+  end
 end

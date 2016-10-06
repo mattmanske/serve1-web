@@ -1,9 +1,7 @@
 class MunicipalitiesController < ApplicationController
-  respond_to :json, only: [:index]
+  has_scope :county_id
 
-  has_scope :county
-
-  # GET /municipalities
+  # GET /counties/:county_id/municipalities
   def index
     @municipalities = apply_scopes(Municipality).all.order(:name)
     render :json => select_format(@municipalities, :id, :title)

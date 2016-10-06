@@ -5,7 +5,7 @@ class Municipality < ActiveRecord::Base
   validates :category, presence: true
   validates :name,     presence: true, uniqueness: { case_sensitive: false, scope: [:county_id, :category] }
 
-  scope :county, -> county { where(:county => county) }
+  scope :county_id, -> county { where(:county => county) }
 
   def title
     [self.category, self.name].reject(&:blank?).join(' of ')

@@ -54,62 +54,50 @@ class CasesController < ApplicationController
     redirect_to cases_url, notice: 'Case was successfully destroyed.'
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_case
-      @case = Case.find(params[:id])
-    end
+private
 
-    # Only allow a trusted parameter "white list" through.
-    def case_params
-      params.require(:case).permit(:key, :client_id, :client_contact_id, :state_id, :county_id, :court_type, :plantiff, :plantiff_et_al, :defendant, :defendant_et_al)
-    end
+  def set_case
+    @case = Case.find(params[:id])
+  end
 
-    # Setup form
-    def form_props
-      clients     = select_format Client.all().order(:name)
-      contacts    = select_format ClientContact.where(client: @case.client_id).to_a.sort_by(&:name)
-      states      = select_format State.all.order(:name)
-      counties    = select_format County.where(state: @case.state_id).order(:name)
-      court_types = select_format Case.court_types.keys, :to_s, :titlecase
+  def case_params
+    params.require(:case).permit(:key, :client_id, :client_contact_id, :state_id, :county_id, :court_type, :plantiff, :plantiff_et_al, :defendant, :defendant_et_al)
+  end
 
-      {
-        :resource      => @case,
-        :resource_type => 'cases',
-        :action        => polymorphic_path(@case),
-        :selections => {
-          :clients     => clients,
-          :contacts    => contacts,
-          :states      => states,
-          :counties    => counties,
-          :court_types => court_types
-        },
-        :selection_urls => {
-          :clients  => clients_path,
-          :contacts => client_contacts_path,
-          :counties => counties_path
-        },
-        :modal_urls => {
-          :clients  => new_client_path,
-          :contacts => new_client_contact_path
-        }
+  def form_props
+    clients     = select_format Client.all().order(:name)
+    contacts    = select_format ClientContact.where(client: @case.client_id).to_a.sort_by(&:name)
+    states      = select_format State.all.order(:name)
+    counties    = select_format County.where(state: @case.state_id).order(:name)
+    court_types = select_format Case.court_types.keys, :to_s, :titlecase
+
+    {
+      :type     => 'cases',
+      :resource => @case,
+      :action   => polymorphic_path(@case),
+      :selections => {
+        :clients     => clients,
+        :contacts    => contacts,
+        :states      => states,
+        :counties    => counties,
+        :court_types => court_types
       }
-    end
+    }
+  end
 
-    # Setup table
-    def table_props
-      {
-        :sort_col => :key,
-        :type     => 'cases',
-        :rows     => @cases.map { |c| CaseSerializer.new(c) },
-        :columns => {
-          :key          => 'ID',
-          :title        => 'Case',
-          :location     => 'Location',
-          :court_name   => 'Court',
-          :contact_name => 'Client Contact',
-          :actions      => ''
-        }.to_a
-      }
-    end
+  def table_props
+    {
+      :sort_col => :key,
+      :type     => 'cases',
+      :rows     => @cases.map { |c| CaseSerializer.new(c) },
+      :columns => {
+        :key          => 'ID',
+        :title        => 'Case',
+        :location     => 'Location',
+        :court_name   => 'Court',
+        :contact_name => 'Client Contact',
+        :actions      => ''
+      }.to_a
+    }
+  end
 end

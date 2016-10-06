@@ -4,7 +4,9 @@ class ApplicationController < ActionController::Base
   before_action :enforce_subdomains
   before_action :configure_permitted_parameters, if: :devise_controller?
 
-  # layout proc { |c| c.request.content_type =~ /json/ ? false : 'application' }
+  def default_serializer_options
+    { root: false }
+  end
 
   def default_url_options
     { subdomain: user_signed_in? ? current_user.tenant : 'www' }
@@ -52,7 +54,7 @@ class ApplicationController < ActionController::Base
     )
   end
 
-  private
+private
 
   def form_repsonse(props)
     respond_to do |format|

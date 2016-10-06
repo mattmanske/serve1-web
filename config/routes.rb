@@ -13,8 +13,11 @@ Rails.application.routes.draw do
     :registrations => 'account'
   }
 
-  resources :counties
-  resources :municipalities
+  resources :states, only: [:index], shallow: true do
+    resources :counties, only: [:index] do
+      resources :municipalities, only: [:index]
+    end
+  end
 
   authenticate :user do
     resources :documents

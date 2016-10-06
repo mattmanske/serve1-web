@@ -1,9 +1,15 @@
 //-----------  Imports  -----------//
 
-import React     from 'react'
-import { Input } from 'formsy-react-components'
+import React              from 'react'
+import { Input }          from 'formsy-react-components'
 
-import Select    from '../inputs/formsy-select'
+import Select             from '../inputs/formsy-select'
+import { getVal, getUrl } from '../../helpers/helpers'
+
+//-----------  Definitions  -----------//
+
+const COUNTY_SELECTION_URL       = '/states/${state_id}/counties.json'
+const MUNICIPALITY_SELECTION_URL = '/counties/${county_id}/municipalities.json'
 
 //-----------  Class Setup  -----------//
 
@@ -12,28 +18,34 @@ class PartyForm extends React.Component {
   displayName: 'PartyForm'
 
   static propTypes = {
-    resource       : React.PropTypes.object.isRequired,
-    selections     : React.PropTypes.object.isRequired,
-    selection_urls : React.PropTypes.object.isRequired,
-    can_submit     : React.PropTypes.bool.isRequired
+    resource   : React.PropTypes.object.isRequired,
+    selections : React.PropTypes.object.isRequired,
+    canSubmit  : React.PropTypes.bool.isRequired
   }
 
-  //-----------  Helpers  -----------//
-
-  _getVal(ref){
-    return this.refs[ref] && this.refs[ref].getValue()
+  state = {
+    countiesLoading       : false,
+    municipalitiesLoading : false
   }
 
   //-----------  Selection Update Events  -----------//
 
   _updateCountySelections = (value) => {
+    const select_url = getUrl(COUNTY_SELECTION_URL, { state_id: value })
+    const callback = () => this.setState({ countiesLoading: false })
+
     this.refs.county_id.resetValue()
-    this.props.refresh_selection('counties', { state: value })
+    this.setState({ countiesLoading: true })
+    this.props.refreshSelection(select_url, 'counties', callback)
   }
 
   _updateMunicipalitySelections = (value) => {
+    const select_url = getUrl(MUNICIPALITY_SELECTION_URL, { county_id: value })
+    const callback = () => this.setState({ municipalitiesLoading: false })
+
     this.refs.municipality_id.resetValue()
-    this.props.refresh_selection('municipalities', { county: value })
+    this.setState({ municipalitiesLoading: true })
+    this.props.refreshSelection(select_url, 'municipalities', callback)
   }
 
   //-----------  HTML Element Render  -----------//
@@ -42,14 +54,15 @@ class PartyForm extends React.Component {
     const { states, counties, municipalities } = this.props.selections
     const resource = this.props.resource
 
-    const has_state_id  = !this._getVal('state_id')
-    const has_county_id = !this._getVal('county_id')
+    const has_state_id  = !getVal('state_id', this.refs)
+    const has_county_id = !getVal('county_id', this.refs)
 
-    const title = `${resource.id ? 'Edit' : 'Create'} Party`
+    const title_text  = `${resource.id ? 'Edit' : 'Create'} Party`
+    const button_text = `${resource.id ? 'Update' : 'Save'} Party`
 
     return (
       <div className="child-form party-form">
-        <h1>{title}</h1>
+        <h1>{title_text}</h1>
 
         <fieldset>
           {/* Name */}
@@ -78,6 +91,7 @@ class PartyForm extends React.Component {
             value={resource.county_id}
             options={counties}
             onChange={this._updateMunicipalitySelections}
+            isLoading={this.state.countiesLoading}
             />
 
           {/* Party Municipality */}
@@ -86,6 +100,7 @@ class PartyForm extends React.Component {
             name="party.municipality_id"
             value={resource.municipality_id}
             options={municipalities}
+            isLoading={this.state.municipalitiesLoading}
             />
 
           {/* Address */}
@@ -99,9 +114,9 @@ class PartyForm extends React.Component {
 
         <button className="btn btn-default pull-right"
           type="submit"
-          disabled={!this.props.can_submit}
+          disabled={!this.props.canSubmit}
         >
-          Save
+          {button_text}
         </button>
       </div>
     )

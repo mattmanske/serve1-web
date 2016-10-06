@@ -10,8 +10,8 @@ class ClientForm extends React.Component {
   displayName: 'ClientForm'
 
   static propTypes = {
-    resource   : React.PropTypes.object.isRequired,
-    can_submit : React.PropTypes.bool.isRequired
+    resource  : React.PropTypes.object.isRequired,
+    canSubmit : React.PropTypes.bool.isRequired
   }
 
   //-----------  HTML Element Render  -----------//
@@ -19,11 +19,12 @@ class ClientForm extends React.Component {
   render(){
     const resource = this.props.resource
 
-    const title = `${resource.id ? 'Edit' : 'Create'} Client`
+    const title_text  = `${resource.id ? 'Edit' : 'Create'} Client`
+    const button_text = `${resource.id ? 'Update' : 'Save'} Client`
 
     return (
       <div className="child-form client-form">
-        <h1>{title}</h1>
+        <h1>{title_text}</h1>
 
         <fieldset>
           {/* Client ID */}
@@ -76,9 +77,9 @@ class ClientForm extends React.Component {
 
         <button className="btn btn-default pull-right"
           type="submit"
-          disabled={!this.props.can_submit}
+          disabled={!this.props.canSubmit}
         >
-          Save
+          {button_text}
         </button>
       </div>
     )
