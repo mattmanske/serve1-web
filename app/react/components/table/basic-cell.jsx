@@ -56,6 +56,7 @@ class BasicCell extends React.Component {
       <div className="btn-group btn-group-sm">
         {data.view && <a href={data.view} className="btn btn-default">view</a>}
         {data.edit && <a onClick={this._editRecord} className="btn btn-default">edit</a>}
+        {data.pdf && <a href={data.pdf} className="btn btn-default">pdf</a>}
         {/*{data.delete && <a onClick={this._deleteRecord} className="btn btn-default">delete</a>}*/}
       </div>
     )

@@ -9,10 +9,6 @@ class Service < ActiveRecord::Base
   has_many :documents
   has_many :attachments
 
-  def name
-    self.key
-  end
-
   def status_name
     self.status.titlecase
   end

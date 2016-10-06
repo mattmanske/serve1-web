@@ -1,5 +1,5 @@
 class ServicesController < ApplicationController
-  before_action :set_service, only: [:show, :edit, :update, :destroy]
+  before_action :set_service, only: [:show, :edit, :update, :destroy, :pdf]
 
   respond_to :json, only: [:index, :edit, :new, :create]
 
@@ -15,6 +15,10 @@ class ServicesController < ApplicationController
 
   # GET /services/1
   def show
+    respond_to do |format|
+      format.html
+      format.pdf { render pdf: 'affidavit', layout: 'pdf.html', show_as_html: params[:debug].present? }
+    end
   end
 
   # GET /services/new

@@ -24,6 +24,7 @@ class ServiceSerializer < ActiveModel::Serializer
     {
       :view => service_path(object.id),
       :edit => edit_service_path(object.id, format: :json),
+      **((object.status == 'served') ? {:pdf  => service_path(object.id, format: :pdf)} : {})
       # :delete => service_path(object.id)
     }
   end

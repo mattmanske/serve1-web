@@ -19,18 +19,18 @@ Rails.application.routes.draw do
   authenticate :user do
     resources :documents
     resources :affidavits
-    resources :services
     resources :parties
     resources :jobs
     resources :cases
     resources :client_contacts
     resources :clients
+    resources :services
   end
 
   authenticated :user do
     get 'dashboard/fill_data'
     get 'dashboard/clear_data'
-    
+
     root :to => 'dashboard#index', :as => :organization_root
   end
 

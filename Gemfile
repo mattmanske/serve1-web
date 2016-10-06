@@ -25,6 +25,8 @@ gem 'sdoc',                     '~> 0.4.0', group: :doc
 gem 'slim-rails',               '~> 3.0.1'
 gem 'turbolinks'
 gem 'uglifier',                 '>= 1.3.0'
+gem 'wicked_pdf',               '~> 1.1.0'
+gem 'wkhtmltopdf-binary',       '~> 0.9.9'
 
 group :development, :test do
   gem 'dotenv-rails'

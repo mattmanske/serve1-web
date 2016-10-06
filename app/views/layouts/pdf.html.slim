@@ -1,0 +1,9 @@
+doctype html
+
+html
+  head
+    title= page_title
+    = wicked_pdf_stylesheet_link_tag 'pdf'
+
+  body.pdf-template
+    = yield

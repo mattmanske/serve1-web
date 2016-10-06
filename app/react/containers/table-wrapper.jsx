@@ -36,7 +36,6 @@ class TableWrapper extends React.Component {
 
   componentDidMount(){
     this._updateSize()
-    console.log(this.props.rows[0]);
     $(window).resize(this._onResize)
   }
 
@@ -161,14 +160,28 @@ class TableWrapper extends React.Component {
             >
 
             {this.props.columns.map((column, index, columns) => {
-              const width     = (tableWidth / columns.length)
               const col_key   = column[0]
               const col_title = column[1]
+
+              let width = 0
+              let flex  = null
+              switch (index){
+                case 0:
+                  width = 75
+                  break
+                case (columns.length - 1):
+                  width = 150
+                  break
+                default:
+                  width = (tableWidth - 225) / (columns.length - 2)
+                  flex  = (index - 1)
+              }
 
               return (
                 <Column
                   key={col_key}
                   width={width}
+                  flexGrow={flex}
                   columnKey={col_key}
                   header={
                     <SortHeader
