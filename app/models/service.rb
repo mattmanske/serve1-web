@@ -21,4 +21,8 @@ class Service < ActiveRecord::Base
   def date_served
     self.service_date.strftime("%b #{self.service_date.day.ordinalize}, %Y") if self.service_date
   end
+
+  def time_served
+    '12:00pm' if self.service_date
+  end
 end

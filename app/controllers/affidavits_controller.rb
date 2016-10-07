@@ -14,6 +14,12 @@ class AffidavitsController < ApplicationController
 
   # GET /affidavits/1
   def show
+    @server   = current_user
+    @service  = @affidavit.service
+    @party    = @service.party
+    @case     = @service.job.case
+    @attempts = Service.where(job_id: @service.job_id).all()
+
     respond_to do |format|
       format.json { render :json => props }
       format.pdf  { render pdf: 'affidavit', layout: 'pdf.html', show_as_html: params[:debug].present? }

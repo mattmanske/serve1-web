@@ -1,1 +1,21 @@
-h1 General Caption
+.affidavit-caption__header
+
+  strong.affidavit-caption__state= "State of #{@case.state.name}"
+
+  strong.affidavit-caption__court= @case.court_name
+
+  strong.affidavit-caption__county= "#{@case.county.name} County"
+
+.affidavit-caption__plantiff
+  strong= @case.plantiff
+  - if @case.plantiff_et_al
+    span= ", et. al."
+
+.affidavit-caption__case
+  span v.
+  span= "Case No. #{@case.key}"
+
+.affidavit-caption__defendant
+  strong= @case.defendant
+  - if @case.defendant_et_al
+    span= ", et. al."

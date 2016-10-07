@@ -1,1 +1,27 @@
-h1 Department of Workforce Development (Workers Comp??)
+.affidavit-caption__header
+
+
+  strong.affidavit-caption__court
+    | Department of Workforce Development
+    br
+    | Worker's Compensation Division
+
+strong= "State of #{@case.state.name}"
+br
+strong= "#{@case.county.name} County"
+br
+br
+
+.affidavit-caption__plantiff
+  strong= @case.plantiff
+  - if @case.plantiff_et_al
+    span= ", et. al."
+
+.affidavit-caption__case
+  span v.
+  span= "WC Claim #{@case.key}"
+
+.affidavit-caption__defendant
+  strong= @case.defendant
+  - if @case.defendant_et_al
+    span= ", et. al."

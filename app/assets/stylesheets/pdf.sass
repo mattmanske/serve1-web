@@ -1,2 +1,103 @@
+$border: 1px solid black
+
+body
+  font-size: 12pt
+  line-height: 1.4
+  min-height: 210mm
+  position: relative
+  padding-bottom: 50mm
+  letter-spacing: 0.33pt
+  font-family: "Times New Roman", Georgia, serif
+
 h1
   color: red
+
+strong
+  font-weight: normal
+  text-transform: uppercase
+
+ul
+  padding-left: 1.15em
+
+.affidavit-caption
+
+  .affidavit-caption__header
+    margin: 1em 0
+    text-align: center
+    position: relative
+    padding: 0.5em 5em
+
+    .affidavit-caption__state
+      left: 0
+      top: 0.5em
+      position: absolute
+
+    .affidavit-caption__county
+      right: 0
+      top: 0.5em
+      position: absolute
+
+  .affidavit-caption__plantiff,
+  .affidavit-caption__defendant
+    line-height: 3
+
+  .affidavit-caption__plantiff
+    border-top: $border
+    padding-top: 1em
+
+  .affidavit-caption__defendant
+    clear: both
+
+  .affidavit-caption__case
+
+    span:first-child
+      float: left
+
+    span:last-child
+      float: right
+
+.affidavit-divider
+  margin: 1em 0
+  padding: 0.33em 0
+  text-align: center
+  border-top: $border
+  border-bottom: $border
+
+.affidavit-declaration
+  width: 40%
+  margin: 2em 0 1.5em
+
+  span,
+  strong
+    display: block
+    position: relative
+
+    &::after
+      left: 100%
+      width: 2em
+      content: ') ss.'
+      position: absolute
+
+    &:first-child::after,
+    &:last-child::after
+      content: ')'
+
+.affidavit-body
+  margin-bottom: 2em
+
+  p
+    line-height: 1.67
+    letter-spacing: 0.5pt
+
+.affidavit-footer
+  bottom: 0
+  width: 100%
+  position: absolute
+
+  .affidavit-footer__right
+    margin-left: 60%
+    border-top: $border
+    padding-top: 0.5em
+
+  .affidavit-footer__left
+    margin-top: 1em

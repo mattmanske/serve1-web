@@ -1,1 +1,10 @@
-h1 Municipal Court (Notice of Claims??)
+.affidavit-caption__header
+
+  strong.affidavit-caption__court
+    | Notice of claim and injury and claim
+    br
+    | pursuant to Wis. Stats. 893.80
+    br
+    = "regarding #{@case.plantiff}"
+    - if @case.plantiff_et_al
+      span= ", et. al."

@@ -1,1 +1,11 @@
-h1 Attempted Service
+= "#{@server.name}, an adult resident of the State of #{@server.organization.state.name}, not a party to this action, being duly sworn under oath deposes and says that a copy of the attached <<DOCUMENTS SERVED>> was received on <<DATE RECEIVED>>, from #{@case.client.name} and an attempt* was made to serve the within #{@party.name}. "
+
+- if @attempts
+  = "Such service was not completed after the following due diligence:"
+  ul
+    - @attempts.each do |attempt|
+      li
+        = "#{attempt.date_served}, #{attempt.time_served}, #{@party.location} "
+        - if attempt.notes
+          ' -
+          = attempt.notes
