@@ -20,10 +20,10 @@ Rails.application.routes.draw do
   end
 
   authenticate :user do
-    resources :documents
-    resources :parties
-    resources :jobs
     resources :cases
+    resources :jobs
+    resources :parties
+    resources :documents
 
     resources :clients, shallow: true do
       resources :client_contacts
@@ -34,6 +34,9 @@ Rails.application.routes.draw do
       resources :affidavits
     end
     resources :affidavits, only: [:index]
+
+    get 'organization/edit' => 'organizations#edit'
+    patch 'organization' => 'organizations#update'
   end
 
   authenticated :user do

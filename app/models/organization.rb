@@ -11,7 +11,11 @@ class Organization < ActiveRecord::Base
 
   after_create :create_tenant
 
-  private
+  def location
+    [self.county.name, self.state.two_digit_code].reject(&:blank?).join(', ')
+  end
+
+private
 
   def create_tenant
     Apartment::Tenant.create(self.subdomain)

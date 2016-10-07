@@ -19,6 +19,7 @@ import ContactForm      from '../components/forms/contact-form'
 import ServiceForm      from '../components/forms/service-form'
 import AffidavitForm    from '../components/forms/affidavit-form'
 import RegistrationFrom from '../components/forms/registration-form'
+import OrganizationForm from '../components/forms/organization-form'
 
 import { ajaxSuccess }  from '../helpers/helpers'
 
@@ -61,6 +62,7 @@ class FormWrapper extends React.Component {
       case 'services'     : return ServiceForm
       case 'affidavits'   : return AffidavitForm
       case 'registration' : return RegistrationFrom
+      case 'organization' : return OrganizationForm
     }
   }
 
