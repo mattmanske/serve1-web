@@ -1,11 +1,6 @@
 class CaseSerializer < ActiveModel::Serializer
 
-  attributes :id, :key, :title, :location, :court_name,
-             :contact_name, :actions
-
-  def contact_name
-    [object.client_contact.name, object.client.name].reject(&:blank?).join(', ')
-  end
+  attributes :id, :number, :title, :location, :court_name, :actions
 
   def actions
     {

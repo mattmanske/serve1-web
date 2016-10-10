@@ -1,25 +1,30 @@
 class Job < ActiveRecord::Base
   enum status: { received: 0, dispatched: 1, completed: 2, sent: 3, closed: 4 }
 
-  belongs_to :case
   has_many :services
 
-  validates :status, presence: true
-  validates :key,    presence: true, uniqueness: { case_sensitive: false, scope: :case_id }
+  belongs_to :case
+  belongs_to :client
+  belongs_to :client_contact
+
+  validates :number,         presence: true
+  validates :status,         presence: true
+  validates :client,         presence: true
+  validates :client_contact, presence: true
 
   def name
-    self.key
+    self.number
   end
 
   def status_name
     self.status.titlecase
   end
 
-  def recieved_date
-    self.date_received.strftime("%b #{self.date_received.day.ordinalize}, %Y") if self.date_received
+  def date_received
+    self.received_at.strftime("%b #{self.received_at.day.ordinalize}, %Y") if self.received_at
   end
 
-  def sent_date
-    self.date_sent.strftime("%b #{self.date_sent.day.ordinalize}, %Y") if self.date_sent
+  def date_sent
+    self.sent_at.strftime("%b #{self.sent_at.day.ordinalize}, %Y") if self.sent_at
   end
 end

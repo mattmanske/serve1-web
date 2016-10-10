@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  service_id: 
+  organization_user_id: 
+  address: MyString
+  attempted_at: 2016-10-10 18:16:11
+  successful: false
+  mileage: 1
+  payment: 
+  notes: MyText
+
+two:
+  service_id: 
+  organization_user_id: 
+  address: MyString
+  attempted_at: 2016-10-10 18:16:11
+  successful: false
+  mileage: 1
+  payment: 
+  notes: MyText

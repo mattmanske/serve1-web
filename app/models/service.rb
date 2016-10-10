@@ -6,9 +6,7 @@ class Service < ActiveRecord::Base
   belongs_to :party
 
   has_one :affidavit
-
-  has_many :documents
-  has_many :attachments
+  has_many :attempts
 
   def status_name
     self.status.titlecase
@@ -18,11 +16,23 @@ class Service < ActiveRecord::Base
     self.service_type.titlecase if self.service_type
   end
 
+  def service_date
+    self.attempts.last().attempted_at
+  end
+
   def date_served
     self.service_date.strftime("%b #{self.service_date.day.ordinalize}, %Y") if self.service_date
   end
 
   def time_served
-    '12:00pm' if self.service_date
+    self.service_date.strftime("%I:%M%p") if self.service_date
+  end
+
+  def attempts
+    self.attempts.count
+  end
+
+  def mileage
+    self.attempts.sum(:milage)
   end
 end

@@ -41,23 +41,24 @@ class OrganizationForm extends React.Component {
 
           {/* Address */}
           <Textarea required ref="address"
-            rows={2}
-            placeholder={"123 Main St.\nNew York, NY, 12345"}
-            label="Full Address"
+            rows={3}
+            label="Mailing Address"
             name="organization.address"
             value={resource.address}
             validations="isExisty"
             validationError="Must enter an address."
+            placeholder={"123 Main St.\nSuite 4567\nNew York, NY, 12345"}
             />
 
           {/* Phone */}
-          <Input required ref="phone"
+          <Input ref="phone"
             type="text"
             label="Phone"
             name="organization.phone"
             value={resource.phone}
             validations="isExisty"
             validationError="Must enter a phone number."
+            placeholder={"(555) 555-5555"}
             />
 
           {/* State */}

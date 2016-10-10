@@ -9,13 +9,7 @@ import { getVal, getUrl }  from '../../helpers/helpers'
 
 //-----------  Definitions  -----------//
 
-const NEW_CLIENT_URL                = '/clients/new.json'
-const EDIT_CLIENT_URL               = '/clients/${client_id}/edit.json'
-const NEW_CLIENT_CONTACT_URL        = '/clients/${client_id}/client_contacts/new.json'
-const EDIT_CLIENT_CONTACT_URL       = '/client_contacts/${contact_id}/edit.json'
-
-const CLIENT_CONTACT_SELECTIONS_URL = '/clients/${client_id}/client_contacts.json'
-const COUNTY_SELECTION_URL          = '/states/${state_id}/counties.json'
+const COUNTY_SELECTION_URL = '/states/${state_id}/counties.json'
 
 //-----------  Class Setup  -----------//
 
@@ -26,51 +20,15 @@ class CaseForm extends React.Component {
   static propTypes = {
     resource         : React.PropTypes.object.isRequired,
     selections       : React.PropTypes.object.isRequired,
-    canSubmit       : React.PropTypes.bool.isRequired,
-    loadModal        : React.PropTypes.func.isRequired,
+    canSubmit        : React.PropTypes.bool.isRequired,
     refreshSelection : React.PropTypes.func.isRequired
   }
 
   state = {
-    contactsLoading: false,
     countiesLoading: false
   }
 
-  //-----------  Modal Load Events  -----------//
-
-  _newClientModal = () => {
-    const modal_url = NEW_CLIENT_URL
-    this.props.loadModal(modal_url, 'client_id')
-  }
-
-  _editClientModal = () => {
-    const client_id = getVal('client_id', this.refs)
-    const modal_url = getUrl(EDIT_CLIENT_URL, { client_id: client_id })
-    this.props.loadModal(modal_url, 'client_id')
-  }
-
-  _newContactModal = () => {
-    const client_id = getVal('client_id', this.refs)
-    const modal_url = getUrl(NEW_CLIENT_CONTACT_URL, { client_id: client_id })
-    this.props.loadModal(modal_url, 'client_contact_id')
-  }
-
-  _editContactModal = () => {
-    const contact_id = getVal('client_contact_id', this.refs)
-    const modal_url  = getUrl(EDIT_CLIENT_CONTACT_URL, { contact_id: contact_id})
-    this.props.loadModal(modal_url, 'client_contact_id')
-  }
-
   //-----------  Selection Update Events  -----------//
-
-  _updateContactSelections = (value) => {
-    const select_url = getUrl(CLIENT_CONTACT_SELECTIONS_URL, { client_id: value })
-    const callback = () => this.setState({ contactsLoading: false })
-
-    this.refs.client_contact_id.resetValue()
-    this.setState({ contactsLoading: true })
-    this.props.refreshSelection(select_url, 'contacts', callback)
-  }
 
   _updateCountySelections = (value) => {
     const select_url = getUrl(COUNTY_SELECTION_URL, { state_id: value })
@@ -84,12 +42,10 @@ class CaseForm extends React.Component {
   //-----------  HTML Element Render  -----------//
 
   render(){
-    const { clients, contacts, states, counties, court_types } = this.props.selections
+    const { states, counties, court_types } = this.props.selections
     const resource = this.props.resource
 
-    const has_client_id  = !getVal('client_id', this.refs)
-    const has_contact_id = !getVal('client_contact_id', this.refs)
-    const has_state_id   = !getVal('state_id', this.refs)
+    const has_state_id = !getVal('state_id', this.refs)
 
     const title_text  = `${resource.id ? 'Edit' : 'Create'} Case`
     const button_text = `${resource.id ? 'Update' : 'Save'} Case`
@@ -99,51 +55,12 @@ class CaseForm extends React.Component {
         <h1>{title_text}</h1>
 
         <fieldset>
-          {/* Client */}
-          <Select required ref="client_id"
-            autoFocus={true}
-            label="Client"
-            name="case.client_id"
-            value={resource.client_id}
-            options={clients}
-            onChange={this._updateContactSelections}
-            />
-
-          <a className="btn btn-sm btn-default" onClick={this._newClientModal}>
-            <i className="fa fa-plus fa-fw" />
-            Add New Client
-          </a>
-
-          {!has_client_id && <small onClick={this._editClientModal}><a>Edit</a></small>}
-
-          {/* Client Contact */}
-          <Select required disabled={has_client_id} ref="client_contact_id"
-            label="Client Contact"
-            name="case.client_contact_id"
-            value={resource.client_contact_id}
-            options={contacts}
-            isLoading={this.state.contactsLoading}
-            />
-
-          <a className="btn btn-sm btn-default" onClick={this._newContactModal} disabled={has_client_id}>
-            <i className="fa fa-plus fa-fw" />
-            Add New Client Contact
-          </a>
-
-          {!has_contact_id && <small onClick={this._editContactModal}><a>Edit</a></small>}
-        </fieldset>
-
-        <fieldset>
-          <legend>Case Details</legend>
-
-          {/* Case ID */}
-          <Input required ref="key"
+          {/* Case Number */}
+          <Input ref="number"
             type="text"
-            label="Internal ID"
-            name="case.key"
-            value={resource.key}
-            validations="isExisty"
-            validationError="Must enter a case ID."
+            label="Case Number"
+            name="case.number"
+            value={resource.number}
             />
 
           {/* Case State */}

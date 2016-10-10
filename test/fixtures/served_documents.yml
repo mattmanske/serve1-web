@@ -2,8 +2,8 @@
 
 one:
   service_id: 
-  url: MyString
+  document_id: 
 
 two:
   service_id: 
-  url: MyString
+  document_id: 

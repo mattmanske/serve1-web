@@ -21,7 +21,6 @@ Rails.application.routes.draw do
 
   authenticate :user do
     resources :cases
-    resources :jobs
     resources :parties
     resources :documents
 
@@ -30,10 +29,15 @@ Rails.application.routes.draw do
     end
     resources :client_contacts, only: [:index]
 
-    resources :services, shallow: true do
-      resources :affidavits
+    resources :jobs, shallow: true do
+      resources :services, shallow: true do
+        resources :attempts
+        resources :affidavits
+      end
     end
     resources :affidavits, only: [:index]
+    resources :attempts, only: [:index]
+    resources :services, only: [:index]
 
     get 'organization/edit' => 'organizations#edit'
     patch 'organization' => 'organizations#update'

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160912215738) do
+ActiveRecord::Schema.define(version: 20161010231611) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,38 +20,42 @@ ActiveRecord::Schema.define(version: 20160912215738) do
     t.integer  "service_id"
     t.integer  "notary_state_id",  null: false
     t.integer  "notary_county_id", null: false
+    t.text     "header"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
   end
 
-  add_index "affidavits", ["service_id"], name: "index_affidavits_on_service_id", unique: true, using: :btree
+  add_index "affidavits", ["service_id"], name: "index_affidavits_on_service_id", using: :btree
 
-  create_table "attachments", force: :cascade do |t|
+  create_table "attempts", force: :cascade do |t|
     t.integer  "service_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer  "user_id",                       null: false
+    t.string   "address",                       null: false
+    t.datetime "attempted_at",                  null: false
+    t.boolean  "successful",    default: false, null: false
+    t.integer  "mileage"
+    t.text     "notes"
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.integer  "payment_cents"
   end
 
-  add_index "attachments", ["service_id"], name: "index_attachments_on_service_id", using: :btree
+  add_index "attempts", ["service_id"], name: "index_attempts_on_service_id", using: :btree
 
   create_table "cases", force: :cascade do |t|
-    t.string   "key",                               null: false
-    t.integer  "client_id"
-    t.integer  "client_contact_id"
-    t.integer  "state_id",                          null: false
-    t.integer  "county_id",                         null: false
-    t.integer  "court_type",                        null: false
-    t.string   "plantiff",                          null: false
-    t.boolean  "plantiff_et_al",    default: false, null: false
-    t.string   "defendant",                         null: false
-    t.boolean  "defendant_et_al",   default: false, null: false
-    t.datetime "created_at",                        null: false
-    t.datetime "updated_at",                        null: false
+    t.string   "number"
+    t.integer  "state_id",                        null: false
+    t.integer  "county_id",                       null: false
+    t.integer  "court_type",                      null: false
+    t.string   "plantiff",                        null: false
+    t.boolean  "plantiff_et_al",  default: false, null: false
+    t.string   "defendant",                       null: false
+    t.boolean  "defendant_et_al", default: false, null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
   end
 
-  add_index "cases", ["client_contact_id"], name: "index_cases_on_client_contact_id", using: :btree
-  add_index "cases", ["client_id"], name: "index_cases_on_client_id", using: :btree
-  add_index "cases", ["key"], name: "index_cases_on_key", unique: true, using: :btree
+  add_index "cases", ["number"], name: "index_cases_on_number", unique: true, using: :btree
 
   create_table "client_contacts", force: :cascade do |t|
     t.integer  "client_id"
@@ -88,30 +92,24 @@ ActiveRecord::Schema.define(version: 20160912215738) do
   add_index "counties", ["name", "state_id"], name: "index_counties_on_name_and_state_id", unique: true, using: :btree
   add_index "counties", ["state_id"], name: "index_counties_on_state_id", using: :btree
 
-  create_table "documents", force: :cascade do |t|
-    t.integer  "service_id"
-    t.integer  "document_type", default: 0, null: false
-    t.string   "title",                     null: false
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-  end
-
-  add_index "documents", ["service_id"], name: "index_documents_on_service_id", using: :btree
-
   create_table "jobs", force: :cascade do |t|
-    t.string   "key",                       null: false
+    t.string   "number",                        null: false
     t.integer  "case_id"
-    t.integer  "status",        default: 0, null: false
-    t.datetime "date_sent"
-    t.datetime "date_received"
+    t.integer  "client_id"
+    t.integer  "client_contact_id"
+    t.integer  "status",            default: 0, null: false
+    t.datetime "received_at"
+    t.datetime "sent_at"
     t.text     "notes"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
     t.integer  "amount_cents"
   end
 
   add_index "jobs", ["case_id"], name: "index_jobs_on_case_id", using: :btree
-  add_index "jobs", ["key", "case_id"], name: "index_jobs_on_key_and_case_id", unique: true, using: :btree
+  add_index "jobs", ["client_contact_id"], name: "index_jobs_on_client_contact_id", using: :btree
+  add_index "jobs", ["client_id"], name: "index_jobs_on_client_id", using: :btree
+  add_index "jobs", ["number"], name: "index_jobs_on_number", unique: true, using: :btree
 
   create_table "municipalities", force: :cascade do |t|
     t.string   "name"
@@ -167,10 +165,6 @@ ActiveRecord::Schema.define(version: 20160912215738) do
     t.string   "person_title"
     t.string   "person_capacity"
     t.string   "person_description"
-    t.datetime "service_date"
-    t.integer  "attempts"
-    t.integer  "mileage"
-    t.text     "notes"
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
     t.integer  "payment_cents"
@@ -209,13 +203,12 @@ ActiveRecord::Schema.define(version: 20160912215738) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   add_foreign_key "affidavits", "services"
-  add_foreign_key "attachments", "services"
-  add_foreign_key "cases", "client_contacts"
-  add_foreign_key "cases", "clients"
+  add_foreign_key "attempts", "services"
   add_foreign_key "client_contacts", "clients"
   add_foreign_key "counties", "states"
-  add_foreign_key "documents", "services"
   add_foreign_key "jobs", "cases"
+  add_foreign_key "jobs", "client_contacts"
+  add_foreign_key "jobs", "clients"
   add_foreign_key "municipalities", "counties"
   add_foreign_key "organizations", "counties"
   add_foreign_key "organizations", "states"

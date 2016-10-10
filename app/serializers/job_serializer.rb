@@ -2,11 +2,15 @@ include ActionView::Helpers::TextHelper
 
 class JobSerializer < ActiveModel::Serializer
 
-  attributes :id, :key, :status_name, :case_title, :notes,
-             :recieved_date, :sent_date, :actions
+  attributes :id, :number, :status_name, :case_title, :contact_name, :notes,
+             :date_received, :date_sent, :actions
 
   def case_title
-    object.case.title
+    object.case ? object.case.title : '-'
+  end
+
+  def contact_name
+    object.client_contact.name
   end
 
   def notes

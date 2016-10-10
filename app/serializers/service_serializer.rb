@@ -2,13 +2,13 @@ include ActionView::Helpers::TextHelper
 
 class ServiceSerializer < ActiveModel::Serializer
 
-  attributes :id, :job_key, :status_name, :party_name,
+  attributes :id, :job_number, :status_name, :party_name,
              :person_name, :person_title, :attempts,
              :service_type_name, :date_served, :notes,
              :actions
 
-  def job_key
-    object.job.key
+  def job_number
+    object.job.number
   end
 
   def party_name

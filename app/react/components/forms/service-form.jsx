@@ -94,14 +94,6 @@ class ServiceForm extends React.Component {
 
         <fieldset>
           <legend>Service Detials</legend>
-
-          {/* Service Date */}
-          <DateInput disabled={!is_served} ref="service_date"
-            label="Service Date"
-            name="service.service_date"
-            value={resource.service_date}
-            />
-
           {/* Service Type */}
           <Select disabled={!is_served} ref="service_type"
             label="Service Type"
@@ -109,18 +101,6 @@ class ServiceForm extends React.Component {
             value={service_type}
             options={types}
             />
-
-          {/* Attempts */}
-          <Input disabled={!is_served} ref="attempts"
-            type="number"
-            label="Attempts"
-            name="service.attempts"
-            value={resource.attempts}
-            />
-        </fieldset>
-
-        <fieldset>
-          <legend>Service Person</legend>
 
           {/* Person Name */}
           <Input disabled={!is_served} ref="person_name"
@@ -153,37 +133,6 @@ class ServiceForm extends React.Component {
             label="Description"
             name="service.person_description"
             value={resource.person_description}
-            />
-        </fieldset>
-
-        <fieldset>
-          <legend>Service Notes</legend>
-
-          {/* Milage */}
-          <Input disabled={!is_served} ref="mileage"
-            type="number"
-            label="Milage"
-            name="service.mileage"
-            value={resource.mileage}
-            min={0}
-            />
-
-          {/* Payment */}
-          <Input disabled={!is_served} ref="payment_cents"
-            type="number"
-            label="Payment"
-            name="service.payment_cents"
-            value={resource.payment_cents}
-            min={0}
-            />
-
-          {/* Notes */}
-          <Textarea disabled={!is_served} ref="notes"
-            rows={3}
-            type="number"
-            label="Notes"
-            name="service.notes"
-            value={resource.notes}
             />
         </fieldset>
 

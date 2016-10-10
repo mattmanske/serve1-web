@@ -1,11 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  key: MyString
-  client_id: 
-  client_contact_id: 
+  number: MyString
   state_id: 
-  county_id: 
+  county_id:
   court_type: 1
   plantiff: MyString
   plantiff_et_al: false
@@ -13,11 +11,9 @@ one:
   defendant_et_al: false
 
 two:
-  key: MyString
-  client_id: 
-  client_contact_id: 
-  state_id: 
-  county_id: 
+  number: MyString
+  state_id:
+  county_id:
   court_type: 1
   plantiff: MyString
   plantiff_et_al: false

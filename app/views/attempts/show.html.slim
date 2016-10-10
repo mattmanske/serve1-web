@@ -1,0 +1,30 @@
+p#notice = notice
+
+p
+  strong Service:
+  = @attempt.service
+p
+  strong Organization user:
+  = @attempt.organization_user
+p
+  strong Address:
+  = @attempt.address
+p
+  strong Attempted at:
+  = @attempt.attempted_at
+p
+  strong Successful:
+  = @attempt.successful
+p
+  strong Mileage:
+  = @attempt.mileage
+p
+  strong Payment:
+  = @attempt.payment
+p
+  strong Notes:
+  = @attempt.notes
+
+= link_to 'Edit', edit_attempt_path(@attempt)
+'|
+= link_to 'Back', attempts_path

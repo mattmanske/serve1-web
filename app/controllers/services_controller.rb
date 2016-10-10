@@ -65,7 +65,7 @@ private
   end
 
   def service_params
-    params.require(:service).permit(:job_id, :party_id, :status, :service_type, :service_date, :person_name, :person_title, :person_capacity, :attempts, :mileage, :payment_cents, :notes)
+    params.require(:service).permit(:job_id, :party_id, :status, :service_type, :service_date, :person_name, :person_title, :person_capacity)
   end
 
   def form_props
@@ -94,15 +94,13 @@ private
       :type     => 'services',
       :rows     => @services.map { |s| ServiceSerializer.new(s) },
       :columns => {
-        :job_key           => 'Job',
+        :job_number        => 'Job #',
         :status_name       => 'Status',
         :party_name        => 'Party',
         :person_name       => 'Person',
         :person_title      => 'Title',
         :attempts          => 'Attempts',
         :service_type_name => 'Service Type',
-        :date_served       => 'Service Date',
-        :notes             => 'Notes',
         :actions           => ''
       }.to_a
     }

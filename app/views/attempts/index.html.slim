@@ -1,0 +1,35 @@
+h1 Listing attempts
+
+table
+  thead
+    tr
+      th Service
+      th Organization user
+      th Address
+      th Attempted at
+      th Successful
+      th Mileage
+      th Payment
+      th Notes
+      th
+      th
+      th
+
+  tbody
+    - @attempts.each do |attempt|
+      tr
+        td = attempt.service
+        td = attempt.organization_user
+        td = attempt.address
+        td = attempt.attempted_at
+        td = attempt.successful
+        td = attempt.mileage
+        td = attempt.payment
+        td = attempt.notes
+        td = link_to 'Show', attempt
+        td = link_to 'Edit', edit_attempt_path(attempt)
+        td = link_to 'Destroy', attempt, data: {:confirm => 'Are you sure?'}, :method => :delete
+
+br
+
+= link_to 'New Attempt', new_attempt_path

@@ -1,11 +1,11 @@
 //-----------  Imports  -----------//
 
-import _         from 'lodash'
+import _                   from 'lodash'
 
-import React     from 'react'
-import { Input } from 'formsy-react-components'
+import React               from 'react'
+import { Input, Textarea } from 'formsy-react-components'
 
-import Select    from '../inputs/formsy-select'
+import Select              from '../inputs/formsy-select'
 
 //-----------  Class Setup  -----------//
 
@@ -100,7 +100,7 @@ class RegistrationFrom extends React.Component {
           {/* Organization Name */}
           <Input required ref="name"
             type="text"
-            label="Organization Name"
+            label="Company Name"
             name="organization.name"
             value={resource.name}
             validations="isExisty"
@@ -111,7 +111,7 @@ class RegistrationFrom extends React.Component {
           {/* Organization Subdomain */}
           <Input required disabled ref="subdomain"
             type="text"
-            label="Organization Subdomain"
+            label="Subdomain"
             name="organization.subdomain"
             value={this.state.subdomain}
             validations="isExisty"
@@ -120,9 +120,31 @@ class RegistrationFrom extends React.Component {
             addonAfter={'.serve1.com'}
           />
 
+          {/* Address */}
+          <Textarea required ref="address"
+            rows={3}
+            label="Mailing Address"
+            name="organization.address"
+            value={resource.address}
+            validations="isExisty"
+            validationError="Must enter an address."
+            placeholder={"123 Main St.\nSuite 4567\nCity, ST, 12345"}
+            />
+
+          {/* Phone */}
+          <Input ref="phone"
+            type="text"
+            label="Phone"
+            name="organization.phone"
+            value={resource.phone}
+            validations="isExisty"
+            validationError="Must enter a phone number."
+            placeholder={"(555) 555-5555"}
+            />
+
           {/* Organization State */}
           <Select required disabled ref="state_id"
-            label="Organization State"
+            label="State"
             name="organization.state_id"
             value={resource.state_id}
             options={states}
@@ -130,7 +152,7 @@ class RegistrationFrom extends React.Component {
 
           {/* Organization County */}
           <Select required ref="county_id"
-            label="Organization County"
+            label="County"
             name="organization.county_id"
             value={resource.county_id}
             options={counties}

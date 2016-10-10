@@ -20,7 +20,6 @@
           span.fa.arrow
         ul.nav.nav-second-level
           li= link_to "Jobs", jobs_path
-          li= link_to "Cases", cases_path
           li= link_to "Services", services_path
 
       li
@@ -30,7 +29,6 @@
           span.fa.arrow
         ul.nav.nav-second-level
           li= link_to 'Affidavits', affidavits_path
-          li= link_to 'Other Documents', documents_path
 
       li
         a href="#"
@@ -38,19 +36,19 @@
           | Logs
           span.fa.arrow
         ul.nav.nav-second-level
-          li= link_to 'Server Logs', organization_root_path
-          li= link_to 'Other Logs', organization_root_path
+          li= link_to 'Server Logs', attempts_path
 
       li
         a href="#"
           i.fa.fa-group.fa-fw
-          | Clients & Parties
+          | Cases, Clients & Parties
           span.fa.arrow
         ul.nav.nav-second-level
+          li= link_to "Cases", cases_path
           li= link_to "Clients", clients_path
           li= link_to "Client Contacts", client_contacts_path
           li= link_to "Serving Parties", parties_path
 
-      li= link_to clients_path do
+      li= link_to organization_edit_path do
         i.fa.fa-gears.fa-fw
         | Organization Settings

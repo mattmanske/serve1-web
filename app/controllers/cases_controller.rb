@@ -5,7 +5,7 @@ class CasesController < ApplicationController
 
   # GET /cases
   def index
-    @cases = Case.all.order(:key)
+    @cases = Case.all.order(:number)
 
     respond_to do |format|
       format.html { render react_component: 'TableWrapper', props: table_props }
@@ -61,12 +61,10 @@ private
   end
 
   def case_params
-    params.require(:case).permit(:key, :client_id, :client_contact_id, :state_id, :county_id, :court_type, :plantiff, :plantiff_et_al, :defendant, :defendant_et_al)
+    params.require(:case).permit(:number, :state_id, :county_id, :court_type, :plantiff, :plantiff_et_al, :defendant, :defendant_et_al)
   end
 
   def form_props
-    clients     = select_format Client.all().order(:name)
-    contacts    = select_format ClientContact.where(client: @case.client_id).to_a.sort_by(&:name)
     states      = select_format State.all.order(:name)
     counties    = select_format County.where(state: @case.state_id).order(:name)
     court_types = select_format Case.court_types.keys, :to_s, :titlecase
@@ -76,8 +74,6 @@ private
       :resource => @case,
       :action   => polymorphic_path(@case),
       :selections => {
-        :clients     => clients,
-        :contacts    => contacts,
         :states      => states,
         :counties    => counties,
         :court_types => court_types
@@ -87,15 +83,14 @@ private
 
   def table_props
     {
-      :sort_col => :key,
+      :sort_col => :number,
       :type     => 'cases',
       :rows     => @cases.map { |c| CaseSerializer.new(c) },
       :columns => {
-        :key          => 'ID',
+        :number       => 'Number',
         :title        => 'Case',
         :location     => 'Location',
         :court_name   => 'Court',
-        :contact_name => 'Client Contact',
         :actions      => ''
       }.to_a
     }

@@ -12,11 +12,6 @@ class CreateServices < ActiveRecord::Migration
       t.string :person_capacity
       t.string :person_description
 
-      t.datetime :service_date
-      t.integer :attempts
-      t.integer :mileage
-      t.text :notes
-
       t.timestamps null: false
     end
 

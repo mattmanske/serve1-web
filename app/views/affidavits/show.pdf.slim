@@ -27,7 +27,7 @@
   .affidavit-footer__right
     = "#{@server.name}, Process Server"
     br
-    = @server.organization.address.gsub(/\n/, '<br/>').html_safe
+    = @server.organization.address.gsub(/\n/, '<br/>')
     br
     = @server.organization.phone
 

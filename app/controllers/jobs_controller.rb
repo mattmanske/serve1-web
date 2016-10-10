@@ -5,7 +5,7 @@ class JobsController < ApplicationController
 
   # GET /jobs
   def index
-    @jobs = Job.all.order(date_received: :desc)
+    @jobs = Job.all.order(received_at: :desc)
 
     respond_to do |format|
       format.html { render react_component: 'TableWrapper', props: table_props }
@@ -19,7 +19,7 @@ class JobsController < ApplicationController
 
   # GET /jobs/new
   def new
-    @job = Job.new({ case_id: params[:case], date_received: Date.today, status: :received })
+    @job = Job.new({ received_at: Date.today, status: :received })
     form_repsonse(form_props)
   end
 
@@ -61,34 +61,39 @@ private
   end
 
   def job_params
-    params.require(:job).permit(:key, :case_id, :status, :date_sent, :date_received, :amount_cents, :notes)
+    params.require(:job).permit(:number, :case_id, :status, :client_id, :client_contact_id, :received_at, :sent_at, :notes)
   end
 
   def form_props
-    cases  = select_format Case.all().order(:key)
-    status = select_format Job.statuses.keys, :to_s, :titlecase
+    cases    = select_format Case.all().order(:key)
+    status   = select_format Job.statuses.keys, :to_s, :titlecase
+    clients  = select_format Client.all().order(:name)
+    contacts = select_format ClientContact.where(client: @job.client_id).to_a.sort_by(&:name)
 
     {
       :type     => 'jobs',
       :resource => @job,
       :action   => polymorphic_path(@job),
       :selections => {
-        :cases  => cases,
-        :status => status,
+        :cases    => cases,
+        :status   => status,
+        :clients  => clients,
+        :contacts => contacts,
       }
     }
   end
 
   def table_props
     {
-      :sort_col => :recieved_date,
+      :sort_col => :received_date,
       :type     => 'jobs',
       :rows     => @jobs.map { |j| JobSerializer.new(j) },
       :columns => {
-        :key           => 'ID',
+        :number        => 'Number',
         :status_name   => 'Status',
         :case_title    => 'Case',
-        :recieved_date => 'Date Recieved',
+        :contact_name  => 'Client Contact',
+        :date_received => 'Date Received',
         :sent_date     => 'Date Sent',
         :notes         => 'Notes',
         :actions       => ''

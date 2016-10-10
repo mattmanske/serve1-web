@@ -1,12 +1,9 @@
 class Case < ActiveRecord::Base
-  enum court_type: { municipal_court: 0, circuit_court: 1, district_court: 2, court_of_appeals: 3, supreme_court: 4, department_of_workforce_development: 5 }
+  enum court_type: { other: 0, municipal_court: 1, circuit_court: 2, district_court: 3, court_of_appeals: 4, supreme_court: 5, department_of_workforce_development: 6 }
 
-  has_many :jobs, inverse_of: :cases, dependent: :destroy
+  has_many :jobs
 
-  belongs_to :client
-  belongs_to :client_contact
-
-  validates :key,       presence: true, uniqueness: { case_sensitive: false }
+  validates :number,    uniqueness: true, allow_nil: true
   validates :plantiff,  presence: true
   validates :defendant, presence: true
   validates :state_id,  presence: true
@@ -21,7 +18,7 @@ class Case < ActiveRecord::Base
   end
 
   def name
-    [self.key, self.title].reject(&:blank?).join(', ')
+    [self.number, self.title].reject(&:blank?).join(', ')
   end
 
   def title

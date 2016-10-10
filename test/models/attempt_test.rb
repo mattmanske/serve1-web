@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class CountiesControllerTest < ActionController::TestCase
+class AttemptTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class MunicipalitiesControllerTest < ActionController::TestCase
+class ServedDocumentTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

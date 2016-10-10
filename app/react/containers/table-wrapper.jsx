@@ -59,6 +59,7 @@ class TableWrapper extends React.Component {
       case 'clients'      : return 'Clients'
       case 'contacts'     : return 'Client Contacts'
       case 'services'     : return 'Services'
+      case 'attempts'     : return 'Attempts'
       case 'affidavits'   : return 'Affidavits'
     }
   }
