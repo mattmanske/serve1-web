@@ -7,6 +7,8 @@ class Service < ActiveRecord::Base
 
   has_one :affidavit
   has_many :attempts
+  has_many :service_documents
+  has_many :documents, through: :service_documents
 
   def status_name
     self.status.titlecase
@@ -28,8 +30,8 @@ class Service < ActiveRecord::Base
     self.service_date.strftime("%I:%M%p") if self.service_date
   end
 
-  def attempts
-    self.attempts.count
+  def attempts_count
+    self.attempts.size
   end
 
   def mileage

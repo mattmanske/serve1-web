@@ -5,7 +5,8 @@
   ul
     - @attempts.each do |attempt|
       li
-        = "#{attempt.date_served}, #{attempt.time_served}, #{@party.location} "
+        = "#{attempt.date_attempted}, #{attempt.time_attempted}, #{attempt.address} "
         - if attempt.notes
           ' -
           = attempt.notes
+w

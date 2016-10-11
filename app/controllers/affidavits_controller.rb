@@ -18,7 +18,7 @@ class AffidavitsController < ApplicationController
     @service  = @affidavit.service
     @party    = @service.party
     @case     = @service.job.case
-    @attempts = Service.where(job_id: @service.job_id).all()
+    @attempts = @service.attempts.where(successful: false)
 
     respond_to do |format|
       format.json { render :json => props }

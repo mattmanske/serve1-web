@@ -35,6 +35,8 @@ class RegistrationFrom extends React.Component {
     const { states, counties } = this.props.selections
     const resource = this.props.resource
 
+    console.log(this.props);
+
     return (
       <div className="child-form registration-form">
         <h1>Sign Up</h1>

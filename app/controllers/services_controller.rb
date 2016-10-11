@@ -99,7 +99,7 @@ private
         :party_name        => 'Party',
         :person_name       => 'Person',
         :person_title      => 'Title',
-        :attempts          => 'Attempts',
+        :attempts_count    => 'Attempts',
         :service_type_name => 'Service Type',
         :actions           => ''
       }.to_a

@@ -1,8 +1,8 @@
 .affidavit-caption
-  - if ('municipal_court' == @affidavit.service.job.case.court_type)
-    = render "affidavits/captions/municipal_court"
-  - elsif ('department_of_workforce_development' == @affidavit.service.job.case.court_type)
+  - if ('department_of_workforce_development' == @affidavit.service.job.case.try(:court_type))
     = render "affidavits/captions/department_of_workforce_development"
+  - elsif (@affidavit.service.job.case.blank?)
+    = render "affidavits/captions/no_case"
   - else
     = render "affidavits/captions/index"
 
@@ -26,10 +26,12 @@
 
   .affidavit-footer__right
     = "#{@server.name}, Process Server"
-    br
-    = @server.organization.address.gsub(/\n/, '<br/>')
-    br
-    = @server.organization.phone
+    - if @server.organization.address
+      br
+      = @server.organization.address.gsub(/\n/, '<br/>')
+    - if @server.organization.phone
+      br
+      = @server.organization.phone
 
   .affidavit-footer__left
     | Subscribed and sworn to before me

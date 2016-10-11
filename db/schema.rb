@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161010231611) do
+ActiveRecord::Schema.define(version: 20161011055928) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -92,6 +92,12 @@ ActiveRecord::Schema.define(version: 20161010231611) do
   add_index "counties", ["name", "state_id"], name: "index_counties_on_name_and_state_id", unique: true, using: :btree
   add_index "counties", ["state_id"], name: "index_counties_on_state_id", using: :btree
 
+  create_table "documents", force: :cascade do |t|
+    t.string   "name",       null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "jobs", force: :cascade do |t|
     t.string   "number",                        null: false
     t.integer  "case_id"
@@ -156,6 +162,17 @@ ActiveRecord::Schema.define(version: 20161010231611) do
     t.datetime "updated_at",      null: false
   end
 
+  create_table "service_documents", force: :cascade do |t|
+    t.integer  "service_id"
+    t.integer  "document_id"
+    t.integer  "type",        null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "service_documents", ["document_id"], name: "index_service_documents_on_document_id", using: :btree
+  add_index "service_documents", ["service_id"], name: "index_service_documents_on_service_id", using: :btree
+
   create_table "services", force: :cascade do |t|
     t.integer  "job_id"
     t.integer  "party_id"
@@ -212,6 +229,8 @@ ActiveRecord::Schema.define(version: 20161010231611) do
   add_foreign_key "municipalities", "counties"
   add_foreign_key "organizations", "counties"
   add_foreign_key "organizations", "states"
+  add_foreign_key "service_documents", "documents"
+  add_foreign_key "service_documents", "services"
   add_foreign_key "services", "jobs"
   add_foreign_key "services", "parties"
   add_foreign_key "users", "organizations"

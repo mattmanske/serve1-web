@@ -5,6 +5,4 @@
     br
     | pursuant to Wis. Stats. 893.80
     br
-    = "regarding #{@case.plantiff}"
-    - if @case.plantiff_et_al
-      span= ", et. al."
+    = "regarding #{@party.name}"

@@ -3,9 +3,8 @@ include ActionView::Helpers::TextHelper
 class ServiceSerializer < ActiveModel::Serializer
 
   attributes :id, :job_number, :status_name, :party_name,
-             :person_name, :person_title, :attempts,
-             :service_type_name, :date_served, :notes,
-             :actions
+             :person_name, :person_title, :attempts_count,
+             :service_type_name, :date_served, :actions
 
   def job_number
     object.job.number
@@ -13,10 +12,6 @@ class ServiceSerializer < ActiveModel::Serializer
 
   def party_name
     object.party.name
-  end
-
-  def notes
-    truncate(object.notes)
   end
 
   def actions

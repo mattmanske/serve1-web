@@ -4,11 +4,11 @@ class AffidavitSerializer < ActiveModel::Serializer
              :person_name, :person_title, :actions
 
   def job_key
-    object.service.job.key
+    object.service.job.number
   end
 
   def case_name
-    object.service.job.case.name
+    object.service.job.case.try(:name)
   end
 
   def party_name
