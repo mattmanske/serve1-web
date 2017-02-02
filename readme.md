@@ -31,7 +31,17 @@ $ foreman run rake db:create db:migrate db:seed
 Serve1 uses Puma as the default webserver instead of the rails default, webrick. Start up your server with:
 
 ```
+npm run start-hot-dev
 foreman start
 ```
 
 _**NOTE:** This application relies on subdomains to identify the proper data tenants. Instead of visiting `http://localhost:3000` for your local server, you'll need to use `http://lvh.me:3000`_
+
+
+### React Generators
+
+Package comes with a generator for new React components & containers. Run the following and it will pop up a shot prompt that will generate new component bundles and register them within the RWR framework.
+
+```
+npm run generate
+```

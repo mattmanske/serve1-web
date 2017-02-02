@@ -1,0 +1,31 @@
+//-----------  Imports  -----------//
+
+import './styles/index.sass'
+
+import React, { PropTypes } from 'react'
+import cx                   from 'bem-classnames'
+
+//-----------  Definitions  -----------//
+
+const block = '{{ kebabCase name }}'
+
+//-----------  {{ titleCase name }} Component  -----------//
+
+const {{ properCase name }} = (props) => {
+  const blockCx = cx({ name: block }, props, props.className)
+
+  return (
+    <div className={blockCx}>
+    </div>
+  )
+}
+
+//-----------  Prop Types  -----------//
+
+{{ properCase name }}.propTypes = {}
+
+{{ properCase name }}.defaultProps = {}
+
+//-----------  Export  -----------//
+
+export default {{ properCase name }}

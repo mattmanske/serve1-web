@@ -21,9 +21,13 @@ html
   body class=body_class
 
     #wrapper
-      = render 'shared/header'
+      = react_component('GlobalHeader', { user: User.last })
 
       #page-wrapper
         = yield
 
       = render 'shared/footer'
+
+
+      - if Rails.env.development?
+        script src='http://localhost:8080/assets/react_bundle.js'

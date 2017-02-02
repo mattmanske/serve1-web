@@ -11,15 +11,15 @@ module.exports = {
   module: {
     loaders: [
       {
-        key: 'jsx',
-        test: /\.jsx?$/,
-        exclude: /(node_modules)/,
-        loaders: ['babel']
+        key     : 'jsx',
+        test    : /\.jsx?$/,
+        exclude : /(node_modules)/,
+        loaders : ['babel']
       },
       {
-        key: 'style',
-        test: /\.s?css$/,
-        loader: ExtractTextPlugin.extract('css!sass')
+        key    : 'style',
+        test   : /\.sass?$/,
+        loader : ExtractTextPlugin.extract('css!sass')
       }
     ]
   },
